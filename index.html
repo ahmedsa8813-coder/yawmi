@@ -4,1065 +4,916 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>يومي — الاتحاد كروب</title>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="يومي">
-  <meta name="theme-color" content="#d4a843">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="يومي">
+<meta name="theme-color" content="#1976D2">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap');
 :root {
-  --bg: #07070f;
-  --gold: #d4a843;
-  --gold2: #f0c060;
-  --orange: #c75c1a;
-  --surface: #0f0f1a;
-  --card: #141428;
-  --border: rgba(212,168,67,0.15);
-  --text: #e8e8f0;
-  --muted: #5a5a7a;
-  --green: #27ae60;
-  --blue: #2980b9;
-  --red: #e74c3c;
-  --purple: #8e44ad;
+  --bg:#F0F4FF; --white:#FFFFFF; --blue:#1976D2; --blue2:#2196F3;
+  --blue-light:#E3F2FD; --blue-mid:#BBDEFB; --text:#1A237E; --text2:#424242;
+  --muted:#90A4AE; --green:#2E7D32; --green-light:#E8F5E9; --red:#C62828;
+  --red-light:#FFEBEE; --gold:#F57F17; --gold-light:#FFF8E1;
+  --border:#E3F2FD; --shadow:0 2px 12px rgba(25,118,210,0.10);
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text2);min-height:100vh;max-width:480px;margin:0 auto}
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+/* ===== MAIN NAV (bottom) ===== */
+.main-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px;box-shadow:0 -4px 20px rgba(25,118,210,0.08)}
+.main-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted);cursor:pointer;font-family:'Tajawal';font-size:0.62rem;font-weight:500;transition:all 0.2s;padding:4px 0}
+.main-btn.active{color:var(--blue)}
+.main-btn .ico{font-size:1.5rem}
 
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  max-width: 480px;
-  margin: 0 auto;
-}
+/* ===== MAIN SECTIONS ===== */
+.section{display:none}
+.section.active{display:flex;flex-direction:column;min-height:100vh}
 
-/* NAV */
-.nav {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px;
-  background: rgba(10,10,20,0.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: flex; z-index: 100;
-  padding: 8px 0 20px;
-}
-.nav-btn {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; gap: 4px;
-  background: none; border: none;
-  color: var(--muted); cursor: pointer;
-  font-family: 'Tajawal'; font-size: 0.65rem;
-  transition: color 0.2s; padding: 4px 0;
-}
-.nav-btn.active { color: var(--gold); }
-.nav-btn .icon { font-size: 1.3rem; }
+/* ===== SIDE TABS ===== */
+.layout{display:flex;flex:1;padding-bottom:80px}
+.sidebar{width:72px;flex-shrink:0;background:var(--white);border-left:1px solid var(--border);padding:12px 6px;display:flex;flex-direction:column;gap:8px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;background:transparent;border:none;cursor:pointer;font-family:'Tajawal';font-size:0.58rem;color:var(--muted);font-weight:600;width:100%;transition:all 0.2s;line-height:1.3}
+.side-btn .sico{font-size:1.4rem}
+.side-btn.active{background:var(--blue);color:white;box-shadow:0 3px 10px rgba(25,118,210,0.3)}
+.content{flex:1;padding:16px 14px;overflow-y:auto;min-width:0}
 
-/* PAGES */
-.page { display: none; padding: 20px 16px 100px; }
-.page.active { display: block; }
+/* ===== CARDS ===== */
+.card{background:var(--white);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card-title{font-size:0.7rem;letter-spacing:1px;color:var(--blue);font-weight:700;margin-bottom:10px;text-transform:uppercase}
+.page-title{font-size:1.1rem;font-weight:900;color:var(--text);margin-bottom:14px;padding-top:4px}
 
-/* HEADER */
-.page-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 20px;
-}
-.page-header h2 { font-size: 1.2rem; font-weight: 800; }
-.date-badge {
-  background: rgba(212,168,67,0.1);
-  border: 1px solid var(--border);
-  border-radius: 99px; padding: 4px 12px;
-  font-size: 0.72rem; color: var(--gold);
-  font-family: 'Tajawal';
-}
+/* ===== INPUTS ===== */
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text2);font-family:'Cairo';font-size:0.85rem;outline:none;transition:border 0.2s;margin-bottom:8px}
+.inp:focus{border-color:var(--blue);background:white}
+.sel{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text2);font-family:'Cairo';font-size:0.82rem;outline:none;margin-bottom:8px}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.btn-primary{padding:12px;border-radius:12px;background:var(--blue);border:none;color:white;font-family:'Cairo';font-size:0.88rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 3px 10px rgba(25,118,210,0.25)}
+.btn-sm{padding:9px 14px;border-radius:10px;background:var(--blue-light);border:1.5px solid var(--blue-mid);color:var(--blue);font-family:'Cairo';font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-add{width:40px;height:40px;border-radius:10px;background:var(--blue);border:none;color:white;font-size:1.4rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:2px}
+.btn-del:hover{color:var(--red)}
 
-/* CARDS */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-}
-.card-title {
-  font-size: 0.68rem; letter-spacing: 1.5px;
-  color: var(--gold); font-weight: 700;
-  margin-bottom: 12px;
-}
+/* ===== TYPE TOGGLE ===== */
+.type-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.type-btn{padding:10px;border-radius:10px;background:var(--bg);border:2px solid var(--border);font-family:'Cairo';font-size:0.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.type-btn.inc{background:var(--green-light);border-color:#81C784;color:var(--green)}
+.type-btn.exp{background:var(--red-light);border-color:#EF9A9A;color:var(--red)}
 
-/* BIG QUESTION */
-.big-q {
-  background: linear-gradient(135deg, rgba(212,168,67,0.1), rgba(199,92,26,0.08));
-  border: 1px solid var(--gold);
-  border-radius: 16px; padding: 18px;
-  margin-bottom: 16px;
-}
-.big-q p { font-size: 0.82rem; color: var(--muted); font-family: 'Tajawal'; margin-bottom: 10px; }
-.big-q textarea {
-  width: 100%; background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px; color: var(--text);
-  font-family: 'Cairo'; font-size: 0.88rem;
-  resize: none; min-height: 70px; outline: none;
-}
-.big-q textarea:focus { border-color: var(--gold); }
+/* ===== SUMMARY CARDS ===== */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sum-card{border-radius:14px;padding:12px;text-align:center}
+.sum-card.inc{background:var(--green-light)}
+.sum-card.exp{background:var(--red-light)}
+.sum-card.net{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;grid-column:span 2;padding:14px}
+.sum-lbl{font-size:0.65rem;font-weight:700;font-family:'Tajawal';margin-bottom:4px}
+.sum-lbl.inc{color:var(--green)}
+.sum-lbl.exp{color:var(--red)}
+.sum-lbl.net{color:rgba(255,255,255,0.85)}
+.sum-amt{font-size:1.2rem;font-weight:900}
+.sum-amt.inc{color:var(--green)}
+.sum-amt.exp{color:var(--red)}
+.sum-amt.net{color:white;font-size:1.4rem}
 
-/* TASKS */
-.task-item {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px; border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.05);
-  margin-bottom: 8px; cursor: pointer;
-  transition: background 0.15s;
-  background: rgba(255,255,255,0.02);
-}
-.task-item:hover { background: rgba(255,255,255,0.04); }
-.task-item.done { opacity: 0.5; }
-.task-item.done .task-title { text-decoration: line-through; }
+/* ===== GOAL BAR ===== */
+.goal-row{margin-bottom:12px}
+.goal-hd{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:5px}
+.goal-lbl{font-weight:700;color:var(--text2)}
+.goal-val{font-weight:700;color:var(--blue)}
+.goal-bar{background:var(--blue-light);border-radius:99px;height:9px;overflow:hidden}
+.goal-fill{height:100%;border-radius:99px;transition:width 0.8s}
+.fill-blue{background:linear-gradient(to left,var(--blue2),var(--blue))}
+.fill-green{background:linear-gradient(to left,#43A047,#2E7D32)}
+.fill-gold{background:linear-gradient(to left,#FFA000,#F57F17)}
+.fill-purple{background:linear-gradient(to left,#7B1FA2,#512DA8)}
 
-.check {
-  width: 22px; height: 22px; flex-shrink: 0;
-  border-radius: 6px; border: 2px solid rgba(212,168,67,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; transition: all 0.2s; margin-top: 1px;
-  cursor: pointer;
-}
-.check.done { background: var(--green); border-color: var(--green); color: white; }
+/* ===== TASK ITEM ===== */
+.task-item{display:flex;gap:8px;align-items:flex-start;padding:11px;border-radius:12px;border:1.5px solid var(--border);margin-bottom:7px;cursor:pointer;transition:all 0.15s;background:var(--white)}
+.task-item:hover{background:var(--blue-light);border-color:var(--blue2)}
+.task-item.done{opacity:0.45}
+.task-item.done .tl{text-decoration:line-through}
+.chk{width:22px;height:22px;flex-shrink:0;border-radius:6px;border:2px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;font-size:0.75rem;background:white;transition:all 0.2s}
+.chk.done{background:var(--blue);border-color:var(--blue);color:white}
+.tl{font-size:0.85rem;font-weight:600;color:var(--text2)}
+.tc{font-size:0.62rem;padding:2px 7px;border-radius:99px;font-weight:700;display:inline-block;margin-top:3px}
+.tc-biz{background:var(--blue-light);color:var(--blue)}
+.tc-personal{background:#EDE7F6;color:#512DA8}
+.tc-health{background:var(--green-light);color:var(--green)}
+.tc-urgent{background:var(--red-light);color:var(--red)}
 
-.task-body { flex: 1; }
-.task-title { font-size: 0.85rem; font-weight: 600; }
-.task-cat {
-  font-size: 0.65rem; padding: 2px 7px; border-radius: 99px;
-  font-weight: 700; display: inline-block; margin-top: 3px;
-}
-.cat-biz { background: rgba(212,168,67,0.15); color: var(--gold); }
-.cat-personal { background: rgba(41,128,185,0.15); color: var(--blue); }
-.cat-health { background: rgba(39,174,96,0.15); color: var(--green); }
-.cat-urgent { background: rgba(231,76,60,0.15); color: var(--red); }
+/* ===== HABIT GRID ===== */
+.habit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.habit-card{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all 0.2s}
+.habit-card.done{background:var(--green-light);border-color:#81C784}
+.habit-card.done .hn{color:var(--green)}
+.hi{font-size:1.6rem;margin-bottom:4px}
+.hn{font-size:0.75rem;font-weight:700;color:var(--text2)}
+.hd{font-size:0.62rem;color:var(--muted);font-family:'Tajawal'}
 
-/* ADD TASK */
-.add-task {
-  display: flex; gap: 8px; margin-bottom: 8px;
-}
-.add-task input {
-  flex: 1; background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px 12px; color: var(--text);
-  font-family: 'Cairo'; font-size: 0.85rem; outline: none;
-}
-.add-task input:focus { border-color: var(--gold); }
-.add-btn {
-  width: 42px; height: 42px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--gold), var(--orange));
-  border: none; color: white; font-size: 1.3rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+/* ===== SCHEDULE ===== */
+.sched-item{display:flex;gap:8px;align-items:center;padding:11px;border-radius:11px;border:1.5px solid var(--border);margin-bottom:7px;background:var(--white);cursor:pointer;transition:all 0.15s}
+.sched-item.done{opacity:0.4}
+.sched-time{font-size:0.75rem;font-weight:700;color:var(--blue);width:44px;flex-shrink:0}
+.sched-bar{width:4px;height:32px;border-radius:2px;flex-shrink:0}
+.sched-title{flex:1;font-size:0.82rem;font-weight:600;color:var(--text2)}
 
-.cat-select {
-  width: 100%; background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 8px 12px; color: var(--text);
-  font-family: 'Cairo'; font-size: 0.82rem; outline: none;
-  margin-bottom: 8px;
-}
+/* ===== ORDER CARD ===== */
+.order-card{background:var(--bg);border-radius:11px;padding:11px;margin-bottom:7px;border:1.5px solid var(--border)}
 
-/* HABITS */
-.habits-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
-.habit-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 12px; padding: 14px;
-  text-align: center; cursor: pointer;
-  transition: all 0.2s;
-}
-.habit-card.done {
-  background: rgba(39,174,96,0.1);
-  border-color: rgba(39,174,96,0.4);
-}
-.habit-icon { font-size: 1.8rem; margin-bottom: 6px; }
-.habit-name { font-size: 0.78rem; font-weight: 700; margin-bottom: 2px; }
-.habit-streak { font-size: 0.65rem; color: var(--muted); font-family: 'Tajawal'; }
-.habit-card.done .habit-name { color: var(--green); }
+/* ===== ENERGY ===== */
+.energy-row{display:flex;gap:6px}
+.energy-btn{flex:1;padding:9px 2px;border-radius:9px;background:var(--bg);border:2px solid var(--border);color:var(--muted);font-family:'Cairo';font-size:0.68rem;cursor:pointer;text-align:center;transition:all 0.2s;font-weight:600}
+.energy-btn.sel{background:var(--blue-light);border-color:var(--blue);color:var(--blue);font-weight:700}
 
-/* GOALS / FINANCE */
-.goal-row {
-  margin-bottom: 14px;
-}
-.goal-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.goal-label { font-size: 0.8rem; font-weight: 700; }
-.goal-vals { font-size: 0.75rem; color: var(--gold); font-weight: 700; }
-.goal-bar { background: rgba(255,255,255,0.07); border-radius: 99px; height: 10px; overflow: hidden; }
-.goal-fill { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
-.fill-gold { background: linear-gradient(to left, var(--orange), var(--gold2)); }
-.fill-green { background: linear-gradient(to left, #1e8449, var(--green)); }
-.fill-blue { background: linear-gradient(to left, #1a5276, var(--blue)); }
-.fill-purple { background: linear-gradient(to left, #6c3483, var(--purple)); }
+/* ===== MOTIVATION ===== */
+.motivation{background:var(--gold-light);border-right:4px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:12px;font-size:0.8rem;color:var(--gold);font-style:italic;line-height:1.5;font-weight:600}
 
-.fin-input-row { display: flex; gap: 8px; margin-top: 10px; }
-.fin-input {
-  flex: 1; background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 9px 12px; color: var(--text);
-  font-family: 'Cairo'; font-size: 0.82rem; outline: none;
-}
-.fin-btn {
-  padding: 9px 16px; border-radius: 8px;
-  background: rgba(212,168,67,0.15);
-  border: 1px solid var(--border);
-  color: var(--gold); font-family: 'Cairo'; font-size: 0.82rem;
-  cursor: pointer; font-weight: 700;
-}
+/* ===== BIG Q ===== */
+.big-q{background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(25,118,210,0.2)}
+.big-q p{font-size:0.8rem;color:rgba(255,255,255,0.85);font-family:'Tajawal';margin-bottom:8px}
+.big-q textarea{width:100%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;padding:9px;color:white;font-family:'Cairo';font-size:0.85rem;resize:none;min-height:65px;outline:none}
+.big-q textarea::placeholder{color:rgba(255,255,255,0.55)}
 
-/* STATS */
-.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
-.stat {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px; padding: 12px; text-align: center;
-}
-.stat-num { font-size: 1.4rem; font-weight: 900; color: var(--gold2); }
-.stat-lbl { font-size: 0.65rem; color: var(--muted); font-family: 'Tajawal'; margin-top: 2px; }
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--blue-light);border-radius:11px;padding:10px;text-align:center}
+.stat-num{font-size:1.3rem;font-weight:900;color:var(--blue)}
+.stat-lbl{font-size:0.62rem;color:var(--muted);font-family:'Tajawal';margin-top:2px}
 
-/* WEEKLY REVIEW */
-.review-item { margin-bottom: 12px; }
-.review-label { font-size: 0.78rem; color: var(--muted); font-family: 'Tajawal'; margin-bottom: 6px; }
-.review-input {
-  width: 100%; background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 10px; color: var(--text);
-  font-family: 'Cairo'; font-size: 0.82rem; resize: none;
-  min-height: 60px; outline: none;
-}
-.review-input:focus { border-color: var(--gold); }
-
-/* ENERGY METER */
-.energy-row { display: flex; gap: 8px; }
-.energy-btn {
-  flex: 1; padding: 10px 4px; border-radius: 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  color: var(--muted); font-family: 'Cairo'; font-size: 0.75rem;
-  cursor: pointer; text-align: center; transition: all 0.2s;
-}
-.energy-btn.sel { background: rgba(212,168,67,0.15); border-color: var(--gold); color: var(--gold); font-weight: 700; }
+/* ===== REVIEW ===== */
+.rev-lbl{font-size:0.78rem;color:var(--muted);font-family:'Tajawal';margin-bottom:5px;font-weight:600}
+.rev-inp{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px;color:var(--text2);font-family:'Cairo';font-size:0.82rem;resize:none;min-height:56px;outline:none;margin-bottom:10px}
+.rev-inp:focus{border-color:var(--blue)}
 
 /* TOAST */
-.toast {
-  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(60px);
-  background: var(--green); color: white; padding: 10px 20px;
-  border-radius: 99px; font-family: 'Cairo'; font-weight: 700; font-size: 0.85rem;
-  transition: transform 0.3s; z-index: 999;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-.save-btn {
-  width: 100%; padding: 14px; border-radius: 12px;
-  background: linear-gradient(135deg, var(--gold), var(--orange));
-  border: none; color: white; font-family: 'Cairo'; font-size: 0.95rem; font-weight: 700;
-  cursor: pointer; margin-top: 10px;
-  box-shadow: 0 4px 20px rgba(212,168,67,0.3);
-}
-
-.motivation {
-  background: linear-gradient(135deg, rgba(212,168,67,0.08), rgba(199,92,26,0.06));
-  border: 1px solid rgba(212,168,67,0.3);
-  border-radius: 12px; padding: 14px; margin-bottom: 14px;
-  font-size: 0.82rem; color: var(--gold2); text-align: center;
-  font-style: italic; line-height: 1.5;
-}
-
-.progress-ring { text-align: center; padding: 10px 0 16px; }
-.ring-num { font-size: 2.5rem; font-weight: 900; color: var(--gold2); }
-.ring-lbl { font-size: 0.75rem; color: var(--muted); font-family: 'Tajawal'; }
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--blue);color:white;padding:11px 22px;border-radius:99px;font-family:'Cairo';font-weight:700;font-size:0.85rem;transition:transform 0.3s;z-index:999;box-shadow:0 4px 20px rgba(25,118,210,0.35)}
+.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- PAGE: TODAY -->
-<div class="page active" id="page-today">
-  <div class="page-header">
-    <h2>☀️ يومي</h2>
-    <div class="date-badge" id="today-date"></div>
-  </div>
+<!-- ========== SECTION 1: إدارة أعمال ========== -->
+<div class="section active" id="sec-business">
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="side-btn active" onclick="switchTab('business','b-tasks',this)">
+        <span class="sico">📋</span>مهام
+      </button>
+      <button class="side-btn" onclick="switchTab('business','b-accounts',this)">
+        <span class="sico">💰</span>حسابات
+      </button>
+      <button class="side-btn" onclick="switchTab('business','b-orders',this)">
+        <span class="sico">📦</span>أوردرات
+      </button>
+      <button class="side-btn" onclick="switchTab('business','b-goals',this)">
+        <span class="sico">🎯</span>أهداف
+      </button>
+      <button class="side-btn" onclick="switchTab('business','b-review',this)">
+        <span class="sico">📊</span>مراجعة
+      </button>
+    </div>
 
-  <div class="motivation" id="daily-quote"></div>
+    <!-- Content -->
+    <div class="content">
 
-  <!-- BIG QUESTION -->
-  <div class="big-q">
-    <p>⭐ الشيء الواحد الأهم اليوم؟</p>
-    <textarea id="big-q-input" placeholder="اكتب المهمة الأهم اللي لو أنجزتها يحس يومك ناجح..."></textarea>
-  </div>
+      <!-- مهام الأعمال -->
+      <div class="tab" id="b-tasks">
+        <div class="page-title">📋 مهام الأعمال</div>
+        <div class="motivation" id="daily-quote"></div>
+        <div class="big-q">
+          <p>⭐ أهم مهمة اليوم؟</p>
+          <textarea id="big-q-input" placeholder="المهمة الأهم اللي لو أنجزتها يحس يومك ناجح..."></textarea>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ طاقتي اليوم</div>
+          <div class="energy-row">
+            <button class="energy-btn" onclick="setEnergy(this,'🔥 ممتاز')">🔥 ممتاز</button>
+            <button class="energy-btn" onclick="setEnergy(this,'✅ جيد')">✅ جيد</button>
+            <button class="energy-btn" onclick="setEnergy(this,'⚠️ متعب')">⚠️ متعب</button>
+            <button class="energy-btn" onclick="setEnergy(this,'😴 منهك')">😴 منهك</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📌 مهام اليوم</div>
+          <select class="sel" id="new-task-cat">
+            <option value="biz">🏭 أعمال</option>
+            <option value="urgent">🚨 عاجل</option>
+          </select>
+          <div class="row">
+            <input class="inp" style="margin:0;flex:1" type="text" id="new-task" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addTask()">
+            <button class="btn-add" onclick="addTask()">+</button>
+          </div>
+          <div id="tasks-list" style="margin-top:8px"></div>
+        </div>
+      </div>
 
-  <!-- ENERGY -->
-  <div class="card">
-    <div class="card-title">⚡ طاقتي اليوم</div>
-    <div class="energy-row">
-      <button class="energy-btn" onclick="setEnergy(this,'🔥 ممتاز')">🔥 ممتاز</button>
-      <button class="energy-btn" onclick="setEnergy(this,'✅ جيد')">✅ جيد</button>
-      <button class="energy-btn" onclick="setEnergy(this,'⚠️ متعب')">⚠️ متعب</button>
-      <button class="energy-btn" onclick="setEnergy(this,'😴 منهك')">😴 منهك</button>
+      <!-- حسابات الأعمال -->
+      <div class="tab" id="b-accounts" style="display:none">
+        <div class="page-title">💰 حسابات الأعمال</div>
+        <div class="sum-grid">
+          <div class="sum-card inc"><div class="sum-lbl inc">📈 إيرادات</div><div class="sum-amt inc" id="b-income">$0</div></div>
+          <div class="sum-card exp"><div class="sum-lbl exp">📉 مصاريف</div><div class="sum-amt exp" id="b-expense">$0</div></div>
+          <div class="sum-card net"><div class="sum-lbl net">💎 صافي الربح</div><div class="sum-amt net" id="b-net">$0</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🏦 رأس المال</div>
+          <div class="row">
+            <input class="inp" style="margin:0;flex:1" type="number" id="capital-inp" placeholder="أدخل رأس المال ($)">
+            <button class="btn-sm" onclick="updateCapital()">حفظ</button>
+          </div>
+          <div style="font-size:1.4rem;font-weight:900;color:var(--blue);text-align:center;margin:10px 0" id="capital-disp">$700,000</div>
+          <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:5px">
+            <span style="color:var(--muted)">الهدف: $1,000,000</span>
+            <span style="color:var(--blue);font-weight:700" id="capital-pct">70%</span>
+          </div>
+          <div class="goal-bar"><div class="goal-fill fill-blue" id="capital-bar" style="width:70%"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">💳 إضافة معاملة</div>
+          <div class="type-row">
+            <button class="type-btn inc" id="b-inc-btn" onclick="setBTxType('income')">📈 إيراد</button>
+            <button class="type-btn" id="b-exp-btn" onclick="setBTxType('expense')">📉 مصروف</button>
+          </div>
+          <input class="inp" type="text" id="b-tx-desc" placeholder="الوصف...">
+          <input class="inp" type="number" id="b-tx-amt" placeholder="المبلغ ($)">
+          <select class="sel" id="b-tx-cat">
+            <option value="sales">💼 مبيعات</option>
+            <option value="shipping">🚢 شحن</option>
+            <option value="customs">🏛 جمارك</option>
+            <option value="salary">👷 رواتب</option>
+            <option value="rent">🏠 إيجار</option>
+            <option value="other">📌 أخرى</option>
+          </select>
+          <button class="btn-primary" onclick="addBTx()">💾 إضافة</button>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 آخر المعاملات</div>
+          <div id="b-tx-list"></div>
+        </div>
+      </div>
+
+      <!-- أوردرات -->
+      <div class="tab" id="b-orders" style="display:none">
+        <div class="page-title">📦 الأوردرات</div>
+        <div class="card">
+          <div class="card-title">➕ أوردر جديد</div>
+          <input class="inp" type="text" id="ord-name" placeholder="اسم العميل">
+          <input class="inp" type="number" id="ord-amt" placeholder="المبلغ ($)">
+          <select class="sel" id="ord-status">
+            <option value="pending">⏳ قيد التنفيذ</option>
+            <option value="shipped">🚢 تم الشحن</option>
+            <option value="delivered">✅ تم التسليم</option>
+            <option value="paid">💰 تم الدفع</option>
+          </select>
+          <button class="btn-primary" onclick="addOrder()">💾 إضافة الأوردر</button>
+        </div>
+        <div class="card">
+          <div class="card-title">📦 الأوردرات النشطة</div>
+          <div id="orders-list"></div>
+        </div>
+      </div>
+
+      <!-- أهداف الأعمال -->
+      <div class="tab" id="b-goals" style="display:none">
+        <div class="page-title">🎯 أهداف الأعمال</div>
+        <div class="card">
+          <div class="card-title">💰 الأهداف المالية</div>
+          <div class="goal-row">
+            <div class="goal-hd"><span class="goal-lbl">رأس المال</span><span class="goal-val" id="g-capital">$700K / $1M</span></div>
+            <div class="goal-bar"><div class="goal-fill fill-blue" id="g-cap-bar" style="width:70%"></div></div>
+          </div>
+          <div class="goal-row">
+            <div class="goal-hd"><span class="goal-lbl">هدف عمر 38 — $1M</span><span class="goal-val" id="g38">70%</span></div>
+            <div class="goal-bar"><div class="goal-fill fill-blue" id="g38-bar" style="width:70%"></div></div>
+          </div>
+          <div class="goal-row">
+            <div class="goal-hd"><span class="goal-lbl">هدف عمر 40 — $2.5M</span><span class="goal-val" id="g40">28%</span></div>
+            <div class="goal-bar"><div class="goal-fill fill-green" id="g40-bar" style="width:28%"></div></div>
+          </div>
+          <div class="goal-row">
+            <div class="goal-hd"><span class="goal-lbl">هدف عمر 45 — $5M</span><span class="goal-val" id="g45">14%</span></div>
+            <div class="goal-bar"><div class="goal-fill fill-purple" id="g45-bar" style="width:14%"></div></div>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <input class="inp" style="margin:0;flex:1" type="number" id="cap-update" placeholder="تحديث رأس المال ($)">
+            <button class="btn-sm" onclick="updateCapitalGoal()">تحديث</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🚀 مشاريع الاتحاد</div>
+          <div id="biz-goals"></div>
+        </div>
+      </div>
+
+      <!-- مراجعة الأعمال -->
+      <div class="tab" id="b-review" style="display:none">
+        <div class="page-title">📊 مراجعة الأعمال</div>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-num" id="b-done-tasks">0</div><div class="stat-lbl">مهمة منجزة</div></div>
+          <div class="stat"><div class="stat-num" id="b-orders-count">0</div><div class="stat-lbl">أوردر نشط</div></div>
+          <div class="stat"><div class="stat-num" id="b-net-stat">$0</div><div class="stat-lbl">صافي ربح</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">✍️ تأمل الأسبوع</div>
+          <div class="rev-lbl">أفضل إنجاز هذا الأسبوع؟</div>
+          <textarea class="rev-inp" id="r1" placeholder="اكتب هنا..."></textarea>
+          <div class="rev-lbl">أكبر تحدي في العمل؟</div>
+          <textarea class="rev-inp" id="r2" placeholder="اكتب هنا..."></textarea>
+          <div class="rev-lbl">خطة الأسبوع القادم؟</div>
+          <textarea class="rev-inp" id="r3" placeholder="اكتب هنا..."></textarea>
+          <button class="btn-primary" onclick="saveReview()">💾 حفظ</button>
+        </div>
+      </div>
+
     </div>
   </div>
-
-  <!-- TASKS -->
-  <div class="card">
-    <div class="card-title">📋 مهام اليوم</div>
-    <select class="cat-select" id="new-cat">
-      <option value="biz">🏭 عمل</option>
-      <option value="personal">👤 شخصي</option>
-      <option value="health">💪 صحة</option>
-      <option value="urgent">🚨 عاجل</option>
-    </select>
-    <div class="add-task">
-      <input type="text" id="new-task" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addTask()">
-      <button class="add-btn" onclick="addTask()">+</button>
-    </div>
-    <div id="tasks-list"></div>
-  </div>
-
-  <button class="save-btn" onclick="saveDay()">💾 حفظ اليوم</button>
 </div>
 
-<!-- PAGE: HABITS -->
-<div class="page" id="page-habits">
-  <div class="page-header">
-    <h2>🔄 عاداتي</h2>
-    <div class="date-badge" id="streak-badge">🔥 0 يوم متتالي</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">✅ عادات رواد الأعمال اليومية</div>
-    <div class="habits-grid" id="habits-grid">
-      <!-- rendered by JS -->
+<!-- ========== SECTION 2: شخصي ========== -->
+<div class="section" id="sec-personal">
+  <div class="layout">
+    <div class="sidebar">
+      <button class="side-btn active" onclick="switchTab('personal','p-habits',this)">
+        <span class="sico">🔄</span>عادات
+      </button>
+      <button class="side-btn" onclick="switchTab('personal','p-accounts',this)">
+        <span class="sico">💳</span>مصاريف
+      </button>
+      <button class="side-btn" onclick="switchTab('personal','p-tasks',this)">
+        <span class="sico">📝</span>مهام
+      </button>
+      <button class="side-btn" onclick="switchTab('personal','p-goals',this)">
+        <span class="sico">🏠</span>أهداف
+      </button>
     </div>
-  </div>
+    <div class="content">
 
-  <div class="card">
-    <div class="card-title">📊 إحصائيات الأسبوع</div>
-    <div class="stats-row" id="habit-stats"></div>
+      <!-- عادات -->
+      <div class="tab" id="p-habits">
+        <div class="page-title">🔄 عاداتي اليومية</div>
+        <div class="card">
+          <div class="card-title">✅ عادات رجل الأعمال</div>
+          <div class="habit-grid" id="habits-grid"></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-num" id="h-done">0</div><div class="stat-lbl">اليوم</div></div>
+          <div class="stat"><div class="stat-num" id="h-pct">0%</div><div class="stat-lbl">إنجاز</div></div>
+          <div class="stat"><div class="stat-num" id="h-streak">0🔥</div><div class="stat-lbl">متتالي</div></div>
+        </div>
+      </div>
+
+      <!-- مصاريف شخصية -->
+      <div class="tab" id="p-accounts" style="display:none">
+        <div class="page-title">💳 المصاريف الشخصية</div>
+        <div class="sum-grid">
+          <div class="sum-card inc"><div class="sum-lbl inc">📈 دخل</div><div class="sum-amt inc" id="p-income">$0</div></div>
+          <div class="sum-card exp"><div class="sum-lbl exp">📉 مصاريف</div><div class="sum-amt exp" id="p-expense">$0</div></div>
+          <div class="sum-card net"><div class="sum-lbl net">💎 المتبقي</div><div class="sum-amt net" id="p-net">$0</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">💳 إضافة</div>
+          <div class="type-row">
+            <button class="type-btn inc" id="p-inc-btn" onclick="setPTxType('income')">📈 دخل</button>
+            <button class="type-btn" id="p-exp-btn" onclick="setPTxType('expense')">📉 مصروف</button>
+          </div>
+          <input class="inp" type="text" id="p-tx-desc" placeholder="الوصف...">
+          <input class="inp" type="number" id="p-tx-amt" placeholder="المبلغ ($)">
+          <select class="sel" id="p-tx-cat">
+            <option value="food">🍽 طعام ومطعم</option>
+            <option value="transport">🚗 مواصلات</option>
+            <option value="health">💊 صحة</option>
+            <option value="family">👨‍👩‍👧 عائلة</option>
+            <option value="education">📚 تعليم</option>
+            <option value="other">📌 أخرى</option>
+          </select>
+          <button class="btn-primary" onclick="addPTx()">💾 إضافة</button>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 السجل</div>
+          <div id="p-tx-list"></div>
+        </div>
+      </div>
+
+      <!-- مهام شخصية -->
+      <div class="tab" id="p-tasks" style="display:none">
+        <div class="page-title">📝 المهام الشخصية</div>
+        <div class="card">
+          <div class="row">
+            <input class="inp" style="margin:0;flex:1" type="text" id="p-new-task" placeholder="أضف مهمة شخصية..." onkeydown="if(event.key==='Enter')addPTask()">
+            <button class="btn-add" onclick="addPTask()">+</button>
+          </div>
+          <div id="p-tasks-list" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <!-- أهداف شخصية -->
+      <div class="tab" id="p-goals" style="display:none">
+        <div class="page-title">🏠 الأهداف الشخصية</div>
+        <div class="card">
+          <div class="card-title">🏆 الإنجازات</div>
+          <div id="personal-goals"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">💪 كلمة لنفسك</div>
+          <textarea class="rev-inp" id="self-note" placeholder="اكتب كلمة تشجيع لنفسك..."></textarea>
+          <button class="btn-primary" onclick="saveSelfNote()">💾 حفظ</button>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<!-- PAGE: GOALS -->
-<div class="page" id="page-goals">
-  <div class="page-header">
-    <h2>🎯 أهدافي</h2>
-    <div class="date-badge">2026 — 2030</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">💰 الهدف المالي</div>
-
-    <div class="goal-row">
-      <div class="goal-header">
-        <span class="goal-label">رأس المال الحالي</span>
-        <span class="goal-vals" id="capital-display">$700,000 / $1,000,000</span>
-      </div>
-      <div class="goal-bar"><div class="goal-fill fill-gold" id="capital-bar" style="width:70%"></div></div>
-      <div class="fin-input-row">
-        <input class="fin-input" type="number" id="capital-input" placeholder="أدخل رأس المال الحالي ($)">
-        <button class="fin-btn" onclick="updateCapital()">تحديث</button>
-      </div>
+<!-- ========== SECTION 3: مواعيد ========== -->
+<div class="section" id="sec-schedule">
+  <div class="layout">
+    <div class="sidebar">
+      <button class="side-btn active" onclick="switchTab('schedule','s-today',this)">
+        <span class="sico">☀️</span>اليوم
+      </button>
+      <button class="side-btn" onclick="switchTab('schedule','s-add',this)">
+        <span class="sico">➕</span>إضافة
+      </button>
     </div>
+    <div class="content">
 
-    <div class="goal-row">
-      <div class="goal-header">
-        <span class="goal-label">هدف عمر 38 — $1M</span>
-        <span class="goal-vals" id="g38-display">70%</span>
+      <!-- جدول اليوم -->
+      <div class="tab" id="s-today">
+        <div class="page-title">🗓 جدول اليوم</div>
+        <div class="card" style="background:linear-gradient(135deg,var(--blue),var(--blue2));padding:14px;text-align:center">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.8);font-family:Tajawal" id="today-date-disp"></div>
+          <div style="font-size:1rem;font-weight:700;color:white;margin-top:4px" id="today-greeting"></div>
+        </div>
+        <div id="schedule-list"></div>
       </div>
-      <div class="goal-bar"><div class="goal-fill fill-green" id="g38-bar" style="width:70%"></div></div>
-    </div>
 
-    <div class="goal-row">
-      <div class="goal-header">
-        <span class="goal-label">هدف عمر 40 — $2.5M</span>
-        <span class="goal-vals" id="g40-display">28%</span>
+      <!-- إضافة موعد -->
+      <div class="tab" id="s-add" style="display:none">
+        <div class="page-title">➕ موعد جديد</div>
+        <div class="card">
+          <input class="inp" type="text" id="s-title" placeholder="عنوان الموعد...">
+          <select class="sel" id="s-time">
+            <option value="07:00">7:00 صباح</option>
+            <option value="08:00">8:00 صباح</option>
+            <option value="09:00">9:00 صباح</option>
+            <option value="10:00">10:00 صباح</option>
+            <option value="11:00">11:00 صباح</option>
+            <option value="12:00">12:00 ظهر</option>
+            <option value="13:00">1:00 مساء</option>
+            <option value="14:00">2:00 مساء</option>
+            <option value="15:00">3:00 مساء</option>
+            <option value="16:00">4:00 مساء</option>
+            <option value="17:00">5:00 مساء</option>
+            <option value="18:00">6:00 مساء</option>
+            <option value="19:00">7:00 مساء</option>
+            <option value="20:00">8:00 مساء</option>
+          </select>
+          <select class="sel" id="s-type">
+            <option value="work">🏭 عمل</option>
+            <option value="meet">🤝 اجتماع</option>
+            <option value="call">📞 مكالمة</option>
+            <option value="personal">👤 شخصي</option>
+            <option value="rest">😴 راحة</option>
+          </select>
+          <button class="btn-primary" onclick="addSchedule()">💾 إضافة الموعد</button>
+        </div>
+        <div class="card" style="background:var(--blue-light)">
+          <div class="card-title">⏰ الجدول الافتراضي</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:2;font-family:Tajawal">
+            🌅 7:00 — صحيان + قهوة + تخطيط<br>
+            ⭐ 7:30 — أهم مهمة بدون هاتف<br>
+            🤝 9:00 — اجتماعات وزيارات<br>
+            😴 12:00 — غداء وراحة<br>
+            📋 1:00 — متابعة وردود<br>
+            ✅ 4:00 — مراجعة اليوم<br>
+            🏠 5:00 — عائلة فقط
+          </div>
+        </div>
       </div>
-      <div class="goal-bar"><div class="goal-fill fill-blue" id="g40-bar" style="width:28%"></div></div>
-    </div>
 
-    <div class="goal-row">
-      <div class="goal-header">
-        <span class="goal-label">هدف عمر 45 — $5M</span>
-        <span class="goal-vals" id="g45-display">14%</span>
-      </div>
-      <div class="goal-bar"><div class="goal-fill fill-purple" id="g45-bar" style="width:14%"></div></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🏠 الأهداف الشخصية</div>
-    <div id="personal-goals">
-      <!-- rendered by JS -->
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🚀 أهداف المشاريع</div>
-    <div id="biz-goals"></div>
   </div>
 </div>
 
-<!-- PAGE: REVIEW -->
-<div class="page" id="page-review">
-  <div class="page-header">
-    <h2>📊 مراجعتي</h2>
-    <div class="date-badge">أسبوعي</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🏆 إنجازات هذا الأسبوع</div>
-    <div class="progress-ring">
-      <div class="ring-num" id="weekly-score">0%</div>
-      <div class="ring-lbl">نسبة إنجاز المهام</div>
-    </div>
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num" id="done-count">0</div><div class="stat-lbl">مهمة منجزة</div></div>
-      <div class="stat"><div class="stat-num" id="habit-count">0</div><div class="stat-lbl">عادة يومية</div></div>
-      <div class="stat"><div class="stat-num" id="streak-count">0</div><div class="stat-lbl">يوم متتالي 🔥</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">✍️ تأمل الأسبوع</div>
-    <div class="review-item">
-      <div class="review-label">شنو أفضل شيء صار هذا الأسبوع؟</div>
-      <textarea class="review-input" id="r1" placeholder="اكتب هنا..."></textarea>
-    </div>
-    <div class="review-item">
-      <div class="review-label">شنو أكبر تحدي واجهته؟</div>
-      <textarea class="review-input" id="r2" placeholder="اكتب هنا..."></textarea>
-    </div>
-    <div class="review-item">
-      <div class="review-label">شنو تغير الأسبوع الجاي؟</div>
-      <textarea class="review-input" id="r3" placeholder="اكتب هنا..."></textarea>
-    </div>
-    <div class="review-item">
-      <div class="review-label">كلمة لنفسك 💪</div>
-      <textarea class="review-input" id="r4" placeholder="شجع نفسك..."></textarea>
-    </div>
-    <button class="save-btn" onclick="saveReview()">💾 حفظ المراجعة</button>
-  </div>
-</div>
-
-<!-- BOTTOM NAV -->
-<nav class="nav">
-  <button class="nav-btn active" onclick="showPage('today',this)">
-    <span class="icon">☀️</span>يومي
+<!-- ========== BOTTOM NAV ========== -->
+<nav class="main-nav">
+  <button class="main-btn active" onclick="showSection('business',this)">
+    <span class="ico">🏭</span>أعمال
   </button>
-  <button class="nav-btn" onclick="showPage('schedule',this)">
-    <span class="icon">🗓</span>جدول
+  <button class="main-btn" onclick="showSection('personal',this)">
+    <span class="ico">👤</span>شخصي
   </button>
-  <button class="nav-btn" onclick="showPage('accounts',this)">
-    <span class="icon">💰</span>حسابات
-  </button>
-  <button class="nav-btn" onclick="showPage('goals',this)">
-    <span class="icon">🎯</span>أهدافي
-  </button>
-  <button class="nav-btn" onclick="showPage('review',this)">
-    <span class="icon">📊</span>مراجعة
+  <button class="main-btn" onclick="showSection('schedule',this)">
+    <span class="ico">🗓</span>مواعيد
   </button>
 </nav>
 
-
-<!-- PAGE: SCHEDULE -->
-<div class="page" id="page-schedule">
-  <div class="page-header">
-    <h2>🗓 جدول يومي</h2>
-    <div class="date-badge" id="sched-date"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">⏰ جدول رجل الأعمال</div>
-    <div id="schedule-slots"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">➕ أضف موعد</div>
-    <select class="cat-select" id="sched-time">
-      <option value="07:00">7:00 صباح</option><option value="08:00">8:00 صباح</option>
-      <option value="09:00">9:00 صباح</option><option value="10:00">10:00 صباح</option>
-      <option value="11:00">11:00 صباح</option><option value="12:00">12:00 ظهر</option>
-      <option value="13:00">1:00 مساء</option><option value="14:00">2:00 مساء</option>
-      <option value="15:00">3:00 مساء</option><option value="16:00">4:00 مساء</option>
-      <option value="17:00">5:00 مساء</option><option value="18:00">6:00 مساء</option>
-      <option value="20:00">8:00 مساء</option>
-    </select>
-    <select class="cat-select" id="sched-type">
-      <option value="work">🏭 عمل</option><option value="meet">🤝 اجتماع</option>
-      <option value="call">📞 مكالمة</option><option value="personal">👤 شخصي</option>
-      <option value="rest">😴 راحة</option>
-    </select>
-    <div class="add-task">
-      <input type="text" id="sched-title" placeholder="وصف الموعد...">
-      <button class="add-btn" onclick="addSchedule()">+</button>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE: ACCOUNTS -->
-<div class="page" id="page-accounts">
-  <div class="page-header">
-    <h2>💰 حسابات الاتحاد</h2>
-    <div class="date-badge" id="acc-date"></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-    <div class="card" style="margin:0;text-align:center">
-      <div style="font-size:0.68rem;color:var(--green);font-weight:700;margin-bottom:6px">📈 إيرادات</div>
-      <div style="font-size:1.3rem;font-weight:900;color:var(--green)" id="total-income">$0</div>
-    </div>
-    <div class="card" style="margin:0;text-align:center">
-      <div style="font-size:0.68rem;color:var(--red);font-weight:700;margin-bottom:6px">📉 مصاريف</div>
-      <div style="font-size:1.3rem;font-weight:900;color:var(--red)" id="total-expense">$0</div>
-    </div>
-  </div>
-  <div class="card" style="text-align:center;margin-bottom:14px">
-    <div style="font-size:0.68rem;color:var(--gold);font-weight:700;margin-bottom:6px">💎 صافي الربح</div>
-    <div style="font-size:2rem;font-weight:900;color:var(--gold2)" id="net-profit">$0</div>
-  </div>
-  <div class="card">
-    <div class="card-title">🏦 رأس المال</div>
-    <div style="display:flex;gap:8px">
-      <input class="fin-input" type="number" id="capital-now" placeholder="أدخل رأس المال ($)" style="flex:1">
-      <button class="fin-btn" onclick="updateCapitalAcc()">حفظ</button>
-    </div>
-    <div style="font-size:1.4rem;font-weight:900;color:var(--gold2);text-align:center;margin-top:12px" id="capital-display-acc">$700,000</div>
-    <div style="margin-top:10px">
-      <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px">
-        <span style="color:var(--muted)">نحو $1,000,000</span>
-        <span style="color:var(--gold)" id="capital-pct-acc">70%</span>
-      </div>
-      <div style="background:rgba(255,255,255,0.06);border-radius:99px;height:8px;overflow:hidden">
-        <div id="capital-bar-acc" style="height:100%;border-radius:99px;background:linear-gradient(to left,var(--orange),var(--gold2));width:70%;transition:width 0.8s"></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">📦 الأوردرات النشطة</div>
-    <div id="orders-list"></div>
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <input class="fin-input" type="text" id="order-name" placeholder="اسم العميل / الأوردر" style="flex:1">
-      <button class="fin-btn" onclick="showOrderForm()">+</button>
-    </div>
-    <div id="order-form" style="display:none;margin-top:10px">
-      <input class="fin-input" type="number" id="order-amount" placeholder="المبلغ ($)" style="margin-bottom:8px">
-      <select class="cat-select" id="order-status">
-        <option value="pending">⏳ قيد التنفيذ</option>
-        <option value="shipped">🚢 تم الشحن</option>
-        <option value="delivered">✅ تم التسليم</option>
-        <option value="paid">💰 تم الدفع</option>
-      </select>
-      <button class="save-btn" onclick="addOrder()" style="margin-top:8px">حفظ الأوردر</button>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">💳 إضافة معاملة</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <button class="fin-btn" id="type-income-btn" onclick="setTxType('income')" style="background:rgba(39,174,96,0.15);color:var(--green);border-color:rgba(39,174,96,0.3)">📈 إيراد</button>
-      <button class="fin-btn" id="type-expense-btn" onclick="setTxType('expense')" style="background:rgba(255,255,255,0.04)">📉 مصروف</button>
-    </div>
-    <input class="fin-input" type="text" id="tx-desc" placeholder="الوصف..." style="margin-bottom:8px">
-    <input class="fin-input" type="number" id="tx-amount" placeholder="المبلغ ($)" style="margin-bottom:8px">
-    <select class="cat-select" id="tx-cat">
-      <option value="sales">💼 مبيعات</option><option value="shipping">🚢 شحن</option>
-      <option value="customs">🏛 جمارك</option><option value="salary">👷 رواتب</option>
-      <option value="rent">🏠 إيجار</option><option value="other">📌 أخرى</option>
-    </select>
-    <button class="save-btn" onclick="addTransaction()" style="margin-top:8px">💾 إضافة معاملة</button>
-  </div>
-  <div class="card">
-    <div class="card-title">📋 آخر المعاملات</div>
-    <div id="tx-list"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast">✅ تم الحفظ!</div>
+<div class="toast" id="toast">✅ تم!</div>
 
 <script>
-// ===== DATA =====
-let state = JSON.parse(localStorage.getItem('yawmi_v2') || '{}');
-if(!state.tasks) state.tasks = [];
-if(!state.habits) state.habits = {};
-if(!state.capital) state.capital = 700000;
-if(!state.streak) state.streak = 0;
-if(!state.energy) state.energy = '';
-if(!state.bigQ) state.bigQ = '';
-if(!state.reviews) state.reviews = {};
-if(!state.completedDays) state.completedDays = 0;
+// ===== STATE =====
+let S = JSON.parse(localStorage.getItem('yawmi_v4')||'{}');
+const def = {
+  capital:700000, bTx:[], pTx:[], orders:[], bTasks:[], pTasks:[],
+  habits:{}, streak:0, schedule:{}, bigQ:'', energy:'', reviews:{},
+  bizGoals:{}, selfNote:'', capital:700000
+};
+Object.keys(def).forEach(k=>{ if(S[k]===undefined) S[k]=def[k]; });
 
-const HABITS = [
-  {id:'wake', icon:'🌅', name:'صحيان بكير', desc:'قبل 7:30'},
-  {id:'plan', icon:'📋', name:'تخطيط اليوم', desc:'10 دقائق صباح'},
-  {id:'focus', icon:'🎯', name:'ساعة تركيز', desc:'بدون هاتف'},
-  {id:'exercise', icon:'💪', name:'رياضة', desc:'30 دقيقة'},
-  {id:'read', icon:'📚', name:'قراءة', desc:'15 دقيقة'},
-  {id:'review', icon:'✅', name:'مراجعة اليوم', desc:'5 دقائق مساء'},
-  {id:'family', icon:'👨‍👩‍👧', name:'وقت العائلة', desc:'بدون هاتف'},
-  {id:'gratitude', icon:'🙏', name:'شكر وامتنان', desc:'3 أشياء'},
-];
-
-const PERSONAL_GOALS = [
-  {id:'house2', icon:'🏠', name:'السكن الثاني', done: true},
-  {id:'cars', icon:'🚗', name:'سيارتين', done: true},
-  {id:'health', icon:'💪', name:'صحة جيدة', done: false},
-  {id:'family2', icon:'👨‍👩‍👧', name:'استقرار عائلي', done: true},
-];
-
-const BIZ_GOALS = [
-  {id:'machines', icon:'🏭', name:'استقبال المكائن + 8 صفقات', done: false},
-  {id:'survey', icon:'📋', name:'مسح 300 معمل', done: false},
-  {id:'social', icon:'📱', name:'10K متابع فيسبوك', done: false},
-  {id:'exit', icon:'🤝', name:'التخارج من المقاولات', done: false},
-  {id:'maintenance', icon:'🔧', name:'قسم الصيانة', done: false},
-  {id:'factory', icon:'🏗️', name:'ورشة التصنيع', done: false},
-];
-
-const QUOTES = [
-  'من $12,000 إلى $700,000 — أنت تثبت كل يوم إنك قادر. 💪',
-  'الخوف من الفشل أكبر مشكلة — لكنك تكمل رغم كل شيء. 🎯',
-  'زوجتك تثق بك، العائلة تعتمد عليك — أنت لا تخذل من يحبك. 🤍',
-  'الراحة مو كسل — الراحة وقود للنجاح. ⚡',
-  'يوم واحد بتركيز يساوي أسبوع بتشتت. 🎯',
-  'كل حاوية صفقة، كل صفقة خطوة، كل خطوة قريبة من $1M. 🚀',
-  'أعظم رجال الأعمال خافوا — لكنهم ما وقفوا. 💡',
-  'أنت لست موظفاً — أنت باني مستقبل. 🏆',
-];
-
-const today = new Date().toLocaleDateString('ar-IQ', {weekday:'long', day:'numeric', month:'long'});
+let bTxType='income', pTxType='income';
 const todayKey = new Date().toISOString().split('T')[0];
+const today = new Date().toLocaleDateString('ar-IQ',{weekday:'long',day:'numeric',month:'long'});
+
+const HABITS=[
+  {id:'wake',icon:'🌅',name:'صحيان بكير',desc:'قبل 7:30'},
+  {id:'plan',icon:'📋',name:'تخطيط اليوم',desc:'10 دقائق'},
+  {id:'focus',icon:'🎯',name:'ساعة تركيز',desc:'بدون هاتف'},
+  {id:'exercise',icon:'💪',name:'رياضة',desc:'30 دقيقة'},
+  {id:'read',icon:'📚',name:'قراءة',desc:'15 دقيقة'},
+  {id:'review',icon:'✅',name:'مراجعة اليوم',desc:'5 دقائق'},
+  {id:'family',icon:'👨‍👩‍👧',name:'وقت العائلة',desc:'بدون هاتف'},
+  {id:'gratitude',icon:'🙏',name:'امتنان',desc:'3 أشياء'},
+];
+
+const BIZ_GOALS=[
+  {id:'machines',icon:'🏭',name:'استقبال المكائن + 8 صفقات'},
+  {id:'survey',icon:'📋',name:'مسح 300 معمل'},
+  {id:'social',icon:'📱',name:'10K متابع فيسبوك'},
+  {id:'exit',icon:'🤝',name:'التخارج من المقاولات'},
+  {id:'maintenance',icon:'🔧',name:'قسم الصيانة'},
+  {id:'factory',icon:'🏗️',name:'ورشة التصنيع'},
+];
+
+const PERSONAL_GOALS=[
+  {id:'house1',icon:'🏠',name:'السكن الأول',done:true},
+  {id:'house2',icon:'🏠',name:'السكن الثاني',done:true},
+  {id:'cars',icon:'🚗',name:'سيارتين',done:true},
+  {id:'health',icon:'💪',name:'صحة جيدة',done:false},
+  {id:'family',icon:'👨‍👩‍👧',name:'استقرار عائلي',done:true},
+];
+
+const DEFAULT_SCHED=[
+  {id:1,time:'07:00',type:'personal',title:'صحيان + قهوة + تخطيط اليوم',done:false},
+  {id:2,time:'07:30',type:'work',title:'⭐ أهم مهمة — بدون هاتف',done:false},
+  {id:3,time:'09:00',type:'meet',title:'اجتماعات + زيارات + مكالمات',done:false},
+  {id:4,time:'12:00',type:'rest',title:'غداء + راحة',done:false},
+  {id:5,time:'13:00',type:'work',title:'متابعة + ردود + إدارة',done:false},
+  {id:6,time:'16:00',type:'work',title:'مراجعة اليوم + تخطيط الغد',done:false},
+  {id:7,time:'17:00',type:'personal',title:'🏠 عائلة فقط — لا شغل',done:false},
+];
+
+const QUOTES=[
+  'من $12,000 إلى $700,000 — أنت تثبت كل يوم إنك قادر 💪',
+  'يوم واحد بتركيز يساوي أسبوع بتشتت 🎯',
+  'أعظم رجال الأعمال خافوا — لكنهم ما وقفوا 💡',
+  'الراحة مو كسل — الراحة وقود للنجاح ⚡',
+  'كل صفقة خطوة نحو $1M 🚀',
+  'زوجتك تثق بك — أنت لا تخذل من يحبك 🤍',
+  'أنت لست موظفاً — أنت باني مستقبل 🏆',
+];
+
+// ===== NAVIGATION =====
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.main-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchTab(section, tabId, btn) {
+  const sec = document.getElementById('sec-'+section);
+  sec.querySelectorAll('.tab').forEach(t=>t.style.display='none');
+  sec.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(tabId).style.display='block';
+  btn.classList.add('active');
+}
 
 // ===== INIT =====
-document.getElementById('today-date').textContent = today;
 document.getElementById('daily-quote').textContent = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-document.getElementById('big-q-input').value = state.bigQ || '';
-document.getElementById('big-q-input').oninput = () => { state.bigQ = document.getElementById('big-q-input').value; save(); };
+document.getElementById('big-q-input').value = S.bigQ||'';
+document.getElementById('big-q-input').oninput = ()=>{ S.bigQ=document.getElementById('big-q-input').value; save(); };
+document.getElementById('today-date-disp').textContent = today;
+const hr = new Date().getHours();
+document.getElementById('today-greeting').textContent = hr<12?'☀️ صباح الخير':'hr<17?🌤️ مساء الخير':'🌙 مساء الخير';
+if(S.energy) document.querySelectorAll('.energy-btn').forEach(b=>{ if(b.textContent.trim()===S.energy) b.classList.add('sel'); });
+if(S.selfNote) document.getElementById('self-note').value = S.selfNote;
 
-renderTasks();
-renderHabits();
-renderGoals();
-updateStats();
-
-// Energy
-if(state.energy) {
-  document.querySelectorAll('.energy-btn').forEach(b => {
-    if(b.textContent.trim() === state.energy) b.classList.add('sel');
-  });
-}
-
-// ===== PAGES =====
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  btn.classList.add('active');
-  if(id==='review') updateReviewStats();
-}
+renderBTasks(); renderHabits(); renderBAccounts(); renderPAccounts();
+renderOrders(); renderGoals(); renderSchedule(); renderPersonalGoals();
+renderPTasks(); renderReview();
 
 // ===== ENERGY =====
-function setEnergy(btn, val) {
-  document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  state.energy = val;
-  save();
+function setEnergy(btn,val){
+  document.querySelectorAll('.energy-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel'); S.energy=val; save();
 }
 
-// ===== TASKS =====
-function addTask() {
-  const input = document.getElementById('new-task');
-  const cat = document.getElementById('new-cat').value;
-  const title = input.value.trim();
-  if(!title) return;
-  state.tasks.push({id: Date.now(), title, cat, done: false, date: todayKey});
-  input.value = '';
-  renderTasks();
-  save();
+// ===== BUSINESS TASKS =====
+function addTask(){
+  const inp=document.getElementById('new-task');
+  const t=inp.value.trim(); if(!t) return;
+  S.bTasks.push({id:Date.now(),title:t,cat:document.getElementById('new-task-cat').value,done:false,date:todayKey});
+  inp.value=''; renderBTasks(); save();
+}
+function toggleBTask(id){
+  const t=S.bTasks.find(t=>t.id===id);
+  if(t){t.done=!t.done; renderBTasks(); save();}
+}
+function renderBTasks(){
+  const list=S.bTasks.filter(t=>t.date===todayKey);
+  const el=document.getElementById('tasks-list');
+  if(!el) return;
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">أضف أول مهمة 👆</div>';return;}
+  const cats={biz:'🏭 أعمال',urgent:'🚨 عاجل'};
+  const cls={biz:'tc-biz',urgent:'tc-urgent'};
+  el.innerHTML=list.map(t=>`
+    <div class="task-item ${t.done?'done':''}" onclick="toggleBTask(${t.id})">
+      <div class="chk ${t.done?'done':''}">✓</div>
+      <div style="flex:1"><div class="tl">${t.title}</div><span class="tc ${cls[t.cat]||'tc-biz'}">${cats[t.cat]||t.cat}</span></div>
+    </div>`).join('');
+  if(document.getElementById('b-done-tasks')) document.getElementById('b-done-tasks').textContent=list.filter(t=>t.done).length;
 }
 
-function toggleTask(id) {
-  const t = state.tasks.find(t=>t.id===id);
-  if(t) { t.done = !t.done; renderTasks(); save(); updateStats(); }
+// ===== PERSONAL TASKS =====
+function addPTask(){
+  const inp=document.getElementById('p-new-task');
+  const t=inp.value.trim(); if(!t) return;
+  S.pTasks.push({id:Date.now(),title:t,done:false,date:todayKey});
+  inp.value=''; renderPTasks(); save();
 }
-
-function renderTasks() {
-  const todayTasks = state.tasks.filter(t => t.date === todayKey);
-  const el = document.getElementById('tasks-list');
-  if(!todayTasks.length) {
-    el.innerHTML = '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:20px">لا توجد مهام — أضف أول مهمة لليوم 👆</div>';
-    return;
-  }
-  el.innerHTML = todayTasks.map(t => `
-    <div class="task-item ${t.done?'done':''}" onclick="toggleTask(${t.id})">
-      <div class="check ${t.done?'done':''}">✓</div>
-      <div class="task-body">
-        <div class="task-title">${t.title}</div>
-        <span class="task-cat cat-${t.cat}">${{biz:'🏭 عمل',personal:'👤 شخصي',health:'💪 صحة',urgent:'🚨 عاجل'}[t.cat]}</span>
-      </div>
-    </div>
-  `).join('');
+function togglePTask(id){
+  const t=S.pTasks.find(t=>t.id===id);
+  if(t){t.done=!t.done; renderPTasks(); save();}
+}
+function renderPTasks(){
+  const list=S.pTasks.filter(t=>t.date===todayKey);
+  const el=document.getElementById('p-tasks-list');
+  if(!el) return;
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">أضف مهمة شخصية 👆</div>';return;}
+  el.innerHTML=list.map(t=>`
+    <div class="task-item ${t.done?'done':''}" onclick="togglePTask(${t.id})">
+      <div class="chk ${t.done?'done':''}">✓</div>
+      <div style="flex:1"><div class="tl">${t.title}</div></div>
+    </div>`).join('');
 }
 
 // ===== HABITS =====
-function toggleHabit(id) {
-  if(!state.habits[todayKey]) state.habits[todayKey] = {};
-  state.habits[todayKey][id] = !state.habits[todayKey][id];
-  renderHabits();
-  save();
-  updateStreak();
+function toggleHabit(id){
+  if(!S.habits[todayKey]) S.habits[todayKey]={};
+  S.habits[todayKey][id]=!S.habits[todayKey][id];
+  renderHabits(); save();
 }
-
-function renderHabits() {
-  const todayH = state.habits[todayKey] || {};
-  document.getElementById('habits-grid').innerHTML = HABITS.map(h => `
+function renderHabits(){
+  const todayH=S.habits[todayKey]||{};
+  const el=document.getElementById('habits-grid');
+  if(!el) return;
+  el.innerHTML=HABITS.map(h=>`
     <div class="habit-card ${todayH[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
-      <div class="habit-icon">${h.icon}</div>
-      <div class="habit-name">${h.name}</div>
-      <div class="habit-streak">${h.desc}</div>
-    </div>
-  `).join('');
-
-  const done = Object.values(todayH).filter(Boolean).length;
-  const pct = Math.round(done/HABITS.length*100);
-  document.getElementById('habit-stats').innerHTML = `
-    <div class="stat"><div class="stat-num">${done}/${HABITS.length}</div><div class="stat-lbl">اليوم</div></div>
-    <div class="stat"><div class="stat-num">${pct}%</div><div class="stat-lbl">إنجاز</div></div>
-    <div class="stat"><div class="stat-num">${state.streak}🔥</div><div class="stat-lbl">متتالي</div></div>
-  `;
-  document.getElementById('streak-badge').textContent = `🔥 ${state.streak} يوم متتالي`;
+      <div class="hi">${h.icon}</div>
+      <div class="hn">${h.name}</div>
+      <div class="hd">${h.desc}</div>
+    </div>`).join('');
+  const done=Object.values(todayH).filter(Boolean).length;
+  const pct=Math.round(done/HABITS.length*100);
+  if(document.getElementById('h-done')) document.getElementById('h-done').textContent=done+'/'+HABITS.length;
+  if(document.getElementById('h-pct')) document.getElementById('h-pct').textContent=pct+'%';
+  if(document.getElementById('h-streak')) document.getElementById('h-streak').textContent=S.streak+'🔥';
 }
 
-function updateStreak() {
-  const todayH = state.habits[todayKey] || {};
-  const allDone = HABITS.every(h => todayH[h.id]);
-  if(allDone) state.streak = (state.streak||0) + 1;
+// ===== BUSINESS ACCOUNTS =====
+function setBTxType(t){
+  bTxType=t;
+  document.getElementById('b-inc-btn').className='type-btn'+(t==='income'?' inc':'');
+  document.getElementById('b-exp-btn').className='type-btn'+(t==='expense'?' exp':'');
+}
+function addBTx(){
+  const desc=document.getElementById('b-tx-desc').value.trim();
+  const amt=parseFloat(document.getElementById('b-tx-amt').value);
+  if(!desc||!amt) return;
+  S.bTx.push({id:Date.now(),type:bTxType,desc,amount:amt,cat:document.getElementById('b-tx-cat').value,date:todayKey});
+  document.getElementById('b-tx-desc').value='';
+  document.getElementById('b-tx-amt').value='';
+  renderBAccounts(); save(); showToast(bTxType==='income'?'📈 تم إضافة الإيراد!':'📉 تم إضافة المصروف!');
+}
+function delBTx(id){S.bTx=S.bTx.filter(t=>t.id!==id); renderBAccounts(); save();}
+function renderBAccounts(){
+  const inc=S.bTx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const exp=S.bTx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const net=inc-exp;
+  if(document.getElementById('b-income')) document.getElementById('b-income').textContent='$'+inc.toLocaleString();
+  if(document.getElementById('b-expense')) document.getElementById('b-expense').textContent='$'+exp.toLocaleString();
+  if(document.getElementById('b-net')) document.getElementById('b-net').textContent=(net>=0?'+':'')+' $'+net.toLocaleString();
+  if(document.getElementById('b-net-stat')) document.getElementById('b-net-stat').textContent='$'+net.toLocaleString();
+  const cap=S.capital||700000;
+  const pct=Math.min(100,Math.round(cap/1000000*100));
+  if(document.getElementById('capital-disp')) document.getElementById('capital-disp').textContent='$'+cap.toLocaleString();
+  if(document.getElementById('capital-pct')) document.getElementById('capital-pct').textContent=pct+'%';
+  if(document.getElementById('capital-bar')) document.getElementById('capital-bar').style.width=pct+'%';
+  const el=document.getElementById('b-tx-list');
+  if(!el) return;
+  const last=[...S.bTx].reverse().slice(0,10);
+  el.innerHTML=last.length?last.map(t=>`
+    <div style="display:flex;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${t.type==='income'?'var(--green-light)':'var(--red-light)'}">
+        ${t.type==='income'?'📈':'📉'}</div>
+      <div style="flex:1"><div style="font-size:0.85rem;font-weight:600">${t.desc}</div><div style="font-size:0.68rem;color:var(--muted)">${t.date}</div></div>
+      <span style="font-weight:700;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
+      <button class="btn-del" onclick="delBTx(${t.id})">×</button>
+    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد معاملات بعد</div>';
+}
+function updateCapital(){
+  const v=parseFloat(document.getElementById('capital-inp').value);
+  if(v>0){S.capital=v; renderBAccounts(); renderGoals(); save(); showToast('💰 تم تحديث رأس المال!');}
+}
+
+// ===== PERSONAL ACCOUNTS =====
+function setPTxType(t){
+  pTxType=t;
+  document.getElementById('p-inc-btn').className='type-btn'+(t==='income'?' inc':'');
+  document.getElementById('p-exp-btn').className='type-btn'+(t==='expense'?' exp':'');
+}
+function addPTx(){
+  const desc=document.getElementById('p-tx-desc').value.trim();
+  const amt=parseFloat(document.getElementById('p-tx-amt').value);
+  if(!desc||!amt) return;
+  S.pTx.push({id:Date.now(),type:pTxType,desc,amount:amt,cat:document.getElementById('p-tx-cat').value,date:todayKey});
+  document.getElementById('p-tx-desc').value='';
+  document.getElementById('p-tx-amt').value='';
+  renderPAccounts(); save(); showToast(pTxType==='income'?'📈 تم!':'📉 تم!');
+}
+function delPTx(id){S.pTx=S.pTx.filter(t=>t.id!==id); renderPAccounts(); save();}
+function renderPAccounts(){
+  const inc=S.pTx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const exp=S.pTx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  if(document.getElementById('p-income')) document.getElementById('p-income').textContent='$'+inc.toLocaleString();
+  if(document.getElementById('p-expense')) document.getElementById('p-expense').textContent='$'+exp.toLocaleString();
+  if(document.getElementById('p-net')) document.getElementById('p-net').textContent='$'+(inc-exp).toLocaleString();
+  const el=document.getElementById('p-tx-list');
+  if(!el) return;
+  const last=[...S.pTx].reverse().slice(0,10);
+  el.innerHTML=last.length?last.map(t=>`
+    <div style="display:flex;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${t.type==='income'?'var(--green-light)':'var(--red-light)'}">
+        ${t.type==='income'?'📈':'📉'}</div>
+      <div style="flex:1"><div style="font-size:0.85rem;font-weight:600">${t.desc}</div><div style="font-size:0.68rem;color:var(--muted)">${t.date}</div></div>
+      <span style="font-weight:700;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
+      <button class="btn-del" onclick="delPTx(${t.id})">×</button>
+    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد معاملات بعد</div>';
+}
+
+// ===== ORDERS =====
+function addOrder(){
+  const name=document.getElementById('ord-name').value.trim();
+  if(!name) return;
+  S.orders.push({id:Date.now(),name,amount:parseFloat(document.getElementById('ord-amt').value)||0,status:document.getElementById('ord-status').value,date:todayKey});
+  document.getElementById('ord-name').value='';
+  document.getElementById('ord-amt').value='';
+  renderOrders(); save(); showToast('📦 تم إضافة الأوردر!');
+}
+function updateOrdStatus(id,status){const o=S.orders.find(o=>o.id===id);if(o){o.status=status;renderOrders();save();}}
+function delOrder(id){S.orders=S.orders.filter(o=>o.id!==id);renderOrders();save();}
+function renderOrders(){
+  const el=document.getElementById('orders-list');
+  if(!el) return;
+  if(document.getElementById('b-orders-count')) document.getElementById('b-orders-count').textContent=S.orders.length;
+  const sL={pending:'⏳ قيد التنفيذ',shipped:'🚢 شحن',delivered:'✅ تسليم',paid:'💰 مدفوع'};
+  el.innerHTML=S.orders.length?S.orders.map(o=>`
+    <div class="order-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:0.88rem;font-weight:700">${o.name}</span>
+        <button class="btn-del" onclick="delOrder(${o.id})">🗑</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:0.9rem;color:var(--blue);font-weight:700">$${o.amount.toLocaleString()}</span>
+        <select onchange="updateOrdStatus(${o.id},this.value)" style="background:white;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text2);font-size:0.72rem;font-family:Cairo;outline:none">
+          ${['pending','shipped','delivered','paid'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${sL[s]}</option>`).join('')}
+        </select>
+      </div>
+    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد أوردرات بعد</div>';
 }
 
 // ===== GOALS =====
-function renderGoals() {
-  const capital = state.capital;
-  const pct1M = Math.min(100, Math.round(capital/1000000*100));
-  const pct25M = Math.min(100, Math.round(capital/2500000*100));
-  const pct5M = Math.min(100, Math.round(capital/5000000*100));
-
-  document.getElementById('capital-display').textContent = `$${capital.toLocaleString()} / $1,000,000`;
-  document.getElementById('capital-bar').style.width = pct1M + '%';
-  document.getElementById('g38-display').textContent = pct1M + '%';
-  document.getElementById('g38-bar').style.width = pct1M + '%';
-  document.getElementById('g40-display').textContent = pct25M + '%';
-  document.getElementById('g40-bar').style.width = pct25M + '%';
-  document.getElementById('g45-display').textContent = pct5M + '%';
-  document.getElementById('g45-bar').style.width = pct5M + '%';
-
-  document.getElementById('personal-goals').innerHTML = PERSONAL_GOALS.map(g => `
-    <div class="task-item" onclick="togglePersonalGoal('${g.id}')">
-      <div class="check ${g.done?'done':''}">✓</div>
-      <div class="task-body"><div class="task-title">${g.icon} ${g.name}</div></div>
-    </div>
-  `).join('');
-
-  document.getElementById('biz-goals').innerHTML = BIZ_GOALS.map(g => `
-    <div class="task-item ${(state.bizGoals||{})[g.id]?'done':''}" onclick="toggleBizGoal('${g.id}')">
-      <div class="check ${(state.bizGoals||{})[g.id]?'done':''}">✓</div>
-      <div class="task-body"><div class="task-title">${g.icon} ${g.name}</div></div>
-    </div>
-  `).join('');
+function updateCapitalGoal(){
+  const v=parseFloat(document.getElementById('cap-update').value);
+  if(v>0){S.capital=v; renderGoals(); renderBAccounts(); save(); showToast('💰 تم التحديث!');}
+}
+function toggleBizGoal(id){S.bizGoals[id]=!S.bizGoals[id];renderGoals();save();}
+function renderGoals(){
+  const cap=S.capital||700000;
+  const p1=Math.min(100,Math.round(cap/1000000*100));
+  const p2=Math.min(100,Math.round(cap/2500000*100));
+  const p3=Math.min(100,Math.round(cap/5000000*100));
+  if(document.getElementById('g-capital')) document.getElementById('g-capital').textContent='$'+cap.toLocaleString()+' / $1M';
+  if(document.getElementById('g-cap-bar')) document.getElementById('g-cap-bar').style.width=p1+'%';
+  if(document.getElementById('g38')) document.getElementById('g38').textContent=p1+'%';
+  if(document.getElementById('g38-bar')) document.getElementById('g38-bar').style.width=p1+'%';
+  if(document.getElementById('g40')) document.getElementById('g40').textContent=p2+'%';
+  if(document.getElementById('g40-bar')) document.getElementById('g40-bar').style.width=p2+'%';
+  if(document.getElementById('g45')) document.getElementById('g45').textContent=p3+'%';
+  if(document.getElementById('g45-bar')) document.getElementById('g45-bar').style.width=p3+'%';
+  const el=document.getElementById('biz-goals');
+  if(!el) return;
+  el.innerHTML=BIZ_GOALS.map(g=>`
+    <div class="task-item ${S.bizGoals[g.id]?'done':''}" onclick="toggleBizGoal('${g.id}')">
+      <div class="chk ${S.bizGoals[g.id]?'done':''}">✓</div>
+      <div style="flex:1"><div class="tl">${g.icon} ${g.name}</div></div>
+    </div>`).join('');
+}
+function renderPersonalGoals(){
+  const el=document.getElementById('personal-goals');
+  if(!el) return;
+  el.innerHTML=PERSONAL_GOALS.map(g=>`
+    <div class="task-item ${g.done?'done':''}">
+      <div class="chk ${g.done?'done':''}">✓</div>
+      <div style="flex:1"><div class="tl">${g.icon} ${g.name}</div></div>
+    </div>`).join('');
 }
 
-function updateCapital() {
-  const v = parseFloat(document.getElementById('capital-input').value);
-  if(v > 0) { state.capital = v; renderGoals(); save(); showToast('تم تحديث رأس المال! 💰'); }
+// ===== SCHEDULE =====
+function addSchedule(){
+  const title=document.getElementById('s-title').value.trim();
+  if(!title) return;
+  if(!S.schedule[todayKey]) S.schedule[todayKey]=JSON.parse(JSON.stringify(DEFAULT_SCHED));
+  S.schedule[todayKey].push({id:Date.now(),time:document.getElementById('s-time').value,type:document.getElementById('s-type').value,title,done:false});
+  S.schedule[todayKey].sort((a,b)=>a.time.localeCompare(b.time));
+  document.getElementById('s-title').value='';
+  renderSchedule(); save(); showToast('🗓 تم إضافة الموعد!');
 }
-
-function toggleBizGoal(id) {
-  if(!state.bizGoals) state.bizGoals = {};
-  state.bizGoals[id] = !state.bizGoals[id];
-  renderGoals(); save();
+function toggleSched(id){
+  const items=S.schedule[todayKey]||DEFAULT_SCHED;
+  const item=items.find(i=>i.id===id);
+  if(item){item.done=!item.done;renderSchedule();save();}
 }
-
-function togglePersonalGoal(id) { /* static for now */ }
+function delSched(id){
+  if(!S.schedule[todayKey]) S.schedule[todayKey]=JSON.parse(JSON.stringify(DEFAULT_SCHED));
+  S.schedule[todayKey]=S.schedule[todayKey].filter(i=>i.id!==id);
+  renderSchedule();save();
+}
+function renderSchedule(){
+  const items=S.schedule[todayKey]||DEFAULT_SCHED;
+  const colors={work:'#1976D2',meet:'#7B1FA2',call:'#2E7D32',personal:'#F57F17',rest:'#90A4AE'};
+  const el=document.getElementById('schedule-list');
+  if(!el) return;
+  el.innerHTML=items.map(i=>`
+    <div class="sched-item ${i.done?'done':''}" onclick="toggleSched(${i.id})">
+      <div class="sched-time">${i.time}</div>
+      <div class="sched-bar" style="background:${colors[i.type]||'#1976D2'}"></div>
+      <div class="sched-title" style="${i.done?'text-decoration:line-through':''}">${i.title}</div>
+      <div style="display:flex;gap:4px;align-items:center">
+        <div style="width:20px;height:20px;border-radius:5px;border:2px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;font-size:0.7rem;${i.done?'background:var(--blue);border-color:var(--blue);color:white':'background:white'}">✓</div>
+        <button class="btn-del" onclick="event.stopPropagation();delSched(${i.id})">×</button>
+      </div>
+    </div>`).join('');
+}
 
 // ===== REVIEW =====
-function updateReviewStats() {
-  const todayTasks = state.tasks.filter(t => t.date === todayKey);
-  const done = todayTasks.filter(t => t.done).length;
-  const total = todayTasks.length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  const habitsDone = Object.values(state.habits[todayKey]||{}).filter(Boolean).length;
-
-  document.getElementById('weekly-score').textContent = pct + '%';
-  document.getElementById('done-count').textContent = done;
-  document.getElementById('habit-count').textContent = habitsDone;
-  document.getElementById('streak-count').textContent = state.streak;
-
-  const r = (state.reviews||{})[todayKey] || {};
-  document.getElementById('r1').value = r.r1||'';
-  document.getElementById('r2').value = r.r2||'';
-  document.getElementById('r3').value = r.r3||'';
-  document.getElementById('r4').value = r.r4||'';
+function saveReview(){
+  S.reviews[todayKey]={r1:document.getElementById('r1').value,r2:document.getElementById('r2').value,r3:document.getElementById('r3').value};
+  save(); showToast('📊 تم حفظ المراجعة!');
+}
+function renderReview(){
+  const r=(S.reviews||{})[todayKey]||{};
+  if(document.getElementById('r1')) document.getElementById('r1').value=r.r1||'';
+  if(document.getElementById('r2')) document.getElementById('r2').value=r.r2||'';
+  if(document.getElementById('r3')) document.getElementById('r3').value=r.r3||'';
 }
 
-function saveReview() {
-  if(!state.reviews) state.reviews = {};
-  state.reviews[todayKey] = {
-    r1: document.getElementById('r1').value,
-    r2: document.getElementById('r2').value,
-    r3: document.getElementById('r3').value,
-    r4: document.getElementById('r4').value,
-  };
-  save(); showToast('تم حفظ المراجعة! 📊');
-}
+function saveSelfNote(){S.selfNote=document.getElementById('self-note').value;save();showToast('🤍 تم الحفظ!');}
 
 // ===== UTILS =====
-function updateStats() { renderTasks(); }
-
-function saveDay() { save(); showToast('تم حفظ يومك! ✅'); }
-
-function save() { localStorage.setItem('yawmi_v2', JSON.stringify(state)); }
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function save(){localStorage.setItem('yawmi_v4',JSON.stringify(S));}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 </script>
 
 <script>
-
-// ===== SCHEDULE =====
-if(!state.schedule) state.schedule = {};
-let txType = 'income';
-
-const DEFAULT_SCHEDULE = [
-  {id:1, time:'07:00', type:'personal', title:'صحيان + قهوة + تخطيط اليوم', done:false},
-  {id:2, time:'07:30', type:'work', title:'⭐ أهم مهمة — بدون هاتف', done:false},
-  {id:3, time:'09:00', type:'meet', title:'اجتماعات + زيارات + مكالمات', done:false},
-  {id:4, time:'12:00', type:'rest', title:'غداء + راحة', done:false},
-  {id:5, time:'13:00', type:'work', title:'متابعة + ردود + إدارة', done:false},
-  {id:6, time:'16:00', type:'work', title:'مراجعة اليوم + تخطيط الغد', done:false},
-  {id:7, time:'17:00', type:'personal', title:'🏠 عائلة فقط — لا شغل', done:false},
-];
-
-function addSchedule() {
-  const time = document.getElementById('sched-time').value;
-  const type = document.getElementById('sched-type').value;
-  const title = document.getElementById('sched-title').value.trim();
-  if(!title) return;
-  if(!state.schedule[todayKey]) state.schedule[todayKey] = [...DEFAULT_SCHEDULE];
-  state.schedule[todayKey].push({id:Date.now(), time, type, title, done:false});
-  state.schedule[todayKey].sort((a,b) => a.time.localeCompare(b.time));
-  document.getElementById('sched-title').value = '';
-  renderSchedule(); save();
-}
-
-function toggleSched(id) {
-  const items = state.schedule[todayKey] || DEFAULT_SCHEDULE;
-  const item = items.find(i => i.id===id);
-  if(item) { item.done = !item.done; renderSchedule(); save(); }
-}
-
-function delSched(id) {
-  if(!state.schedule[todayKey]) state.schedule[todayKey] = [...DEFAULT_SCHEDULE];
-  state.schedule[todayKey] = state.schedule[todayKey].filter(i=>i.id!==id);
-  renderSchedule(); save();
-}
-
-function renderSchedule() {
-  if(document.getElementById('sched-date')) document.getElementById('sched-date').textContent = today;
-  const items = state.schedule[todayKey] || DEFAULT_SCHEDULE;
-  const typeColors = {work:'var(--gold)',meet:'var(--blue)',call:'var(--green)',personal:'var(--purple)',rest:'var(--muted)'};
-  const el = document.getElementById('schedule-slots');
-  if(!el) return;
-  el.innerHTML = items.map(i => `
-    <div style="display:flex;gap:10px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);${i.done?'opacity:0.4':''}" onclick="toggleSched(${i.id})">
-      <div style="font-size:0.75rem;font-weight:700;color:var(--gold);width:45px;flex-shrink:0">${i.time}</div>
-      <div style="width:4px;height:36px;border-radius:2px;background:${typeColors[i.type]||'var(--gold)'};flex-shrink:0"></div>
-      <div style="flex:1;font-size:0.82rem;${i.done?'text-decoration:line-through':''}">${i.title}</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <div style="width:20px;height:20px;border-radius:5px;border:2px solid rgba(212,168,67,0.3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;${i.done?'background:var(--green);border-color:var(--green);color:white':''}">✓</div>
-        <button onclick="event.stopPropagation();delSched(${i.id})" style="background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer;font-size:1rem">×</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ===== ACCOUNTS =====
-if(!state.transactions) state.transactions = [];
-if(!state.orders) state.orders = [];
-if(!state.capitalAcc) state.capitalAcc = 700000;
-
-function setTxType(type) {
-  txType = type;
-  const iBtn = document.getElementById('type-income-btn');
-  const eBtn = document.getElementById('type-expense-btn');
-  if(!iBtn || !eBtn) return;
-  iBtn.style.background = type==='income' ? 'rgba(39,174,96,0.2)' : 'rgba(255,255,255,0.04)';
-  iBtn.style.color = type==='income' ? 'var(--green)' : 'var(--muted)';
-  eBtn.style.background = type==='expense' ? 'rgba(231,76,60,0.2)' : 'rgba(255,255,255,0.04)';
-  eBtn.style.color = type==='expense' ? 'var(--red)' : 'var(--muted)';
-}
-
-function addTransaction() {
-  const desc = document.getElementById('tx-desc').value.trim();
-  const amount = parseFloat(document.getElementById('tx-amount').value);
-  const cat = document.getElementById('tx-cat').value;
-  if(!desc || !amount) return;
-  state.transactions.push({id:Date.now(), type:txType, desc, amount, cat, date:todayKey});
-  document.getElementById('tx-desc').value = '';
-  document.getElementById('tx-amount').value = '';
-  renderAccounts(); save();
-  showToast(txType==='income' ? '📈 تم إضافة الإيراد!' : '📉 تم إضافة المصروف!');
-}
-
-function delTx(id) {
-  state.transactions = state.transactions.filter(t=>t.id!==id);
-  renderAccounts(); save();
-}
-
-function showOrderForm() {
-  const f = document.getElementById('order-form');
-  if(f) f.style.display = f.style.display==='none' ? 'block' : 'none';
-}
-
-function addOrder() {
-  const name = document.getElementById('order-name').value.trim();
-  const amount = parseFloat(document.getElementById('order-amount').value)||0;
-  const status = document.getElementById('order-status').value;
-  if(!name) return;
-  state.orders.push({id:Date.now(), name, amount, status, date:todayKey});
-  document.getElementById('order-name').value = '';
-  document.getElementById('order-amount').value = '';
-  const f = document.getElementById('order-form');
-  if(f) f.style.display = 'none';
-  renderAccounts(); save();
-  showToast('📦 تم إضافة الأوردر!');
-}
-
-function updateOrderStatus(id, status) {
-  const o = state.orders.find(o=>o.id===id);
-  if(o) { o.status = status; renderAccounts(); save(); }
-}
-
-function delOrder(id) {
-  state.orders = state.orders.filter(o=>o.id!==id);
-  renderAccounts(); save();
-}
-
-function updateCapitalAcc() {
-  const v = parseFloat(document.getElementById('capital-now').value);
-  if(v > 0) {
-    state.capitalAcc = v; state.capital = v;
-    renderAccounts(); renderGoals(); save();
-    showToast('💰 تم تحديث رأس المال!');
-  }
-}
-
-function renderAccounts() {
-  if(!document.getElementById('total-income')) return;
-  if(document.getElementById('acc-date')) document.getElementById('acc-date').textContent = today;
-  const income = state.transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
-  const expense = state.transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
-  const net = income - expense;
-  document.getElementById('total-income').textContent = '$'+income.toLocaleString();
-  document.getElementById('total-expense').textContent = '$'+expense.toLocaleString();
-  document.getElementById('net-profit').textContent = (net>=0?'+':'')+' $'+net.toLocaleString();
-  document.getElementById('net-profit').style.color = net>=0 ? 'var(--green)' : 'var(--red)';
-  const cap = state.capitalAcc || 700000;
-  const pct = Math.min(100, Math.round(cap/1000000*100));
-  document.getElementById('capital-display-acc').textContent = '$'+cap.toLocaleString();
-  document.getElementById('capital-pct-acc').textContent = pct+'%';
-  document.getElementById('capital-bar-acc').style.width = pct+'%';
-  const statusLabels = {pending:'⏳ قيد التنفيذ',shipped:'🚢 شحن',delivered:'✅ تسليم',paid:'💰 مدفوع'};
-  const statusColors = {pending:'var(--gold)',shipped:'var(--blue)',delivered:'var(--green)',paid:'var(--green)'};
-  document.getElementById('orders-list').innerHTML = state.orders.length ? state.orders.map(o=>`
-    <div style="padding:10px;border:1px solid rgba(255,255,255,0.07);border-radius:8px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:0.85rem;font-weight:700">${o.name}</span>
-        <button onclick="delOrder(${o.id})" style="background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer">🗑</button>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:0.85rem;color:var(--gold2);font-weight:700">$${o.amount.toLocaleString()}</span>
-        <select onchange="updateOrderStatus(${o.id},this.value)" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 8px;color:${statusColors[o.status]};font-size:0.72rem;font-family:Cairo">
-          ${['pending','shipped','delivered','paid'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${statusLabels[s]}</option>`).join('')}
-        </select>
-      </div>
-    </div>
-  `).join('') : '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:16px">لا توجد أوردرات — أضف أول أوردر 👆</div>';
-  const last10 = [...state.transactions].reverse().slice(0,10);
-  document.getElementById('tx-list').innerHTML = last10.length ? last10.map(t=>`
-    <div style="display:flex;gap:10px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)">
-      <span style="font-size:1.1rem">${t.type==='income'?'📈':'📉'}</span>
-      <div style="flex:1">
-        <div style="font-size:0.82rem;font-weight:600">${t.desc}</div>
-        <div style="font-size:0.68rem;color:var(--muted);font-family:Tajawal">${t.date}</div>
-      </div>
-      <span style="font-weight:700;font-size:0.9rem;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
-      <button onclick="delTx(${t.id})" style="background:none;border:none;color:rgba(255,80,80,0.4);cursor:pointer">×</button>
-    </div>
-  `).join('') : '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:16px">لا توجد معاملات بعد</div>';
-}
-
-renderSchedule();
-renderAccounts();
-
-// ===== PWA + NOTIFICATIONS =====
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(reg => {
-    console.log('SW registered');
-  });
-}
-
-async function requestNotifications() {
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+async function requestNotifications(){
   if(!('Notification' in window)) return;
-  const perm = await Notification.requestPermission();
-  if(perm === 'granted') {
-    scheduleNotifications();
-    showToast('✅ تم تفعيل التنبيهات!');
-  }
+  const p=await Notification.requestPermission();
+  if(p==='granted'){scheduleNotifs();showToast('✅ تم تفعيل التنبيهات!');}
 }
-
-function scheduleNotifications() {
-  // Schedule morning notification at 7:00 AM
-  scheduleDailyNotif('morning', 7, 0, '☀️ خطط يومك!', 'افتح التطبيق وحدد أهم مهمة اليوم');
-  // Schedule evening review at 8:00 PM  
-  scheduleDailyNotif('evening', 20, 0, '📊 راجع يومك!', 'شنو أنجزت اليوم؟ سجّل عاداتك');
-  // Schedule habits reminder at 9:00 PM
-  scheduleDailyNotif('habits', 21, 0, '🔄 عاداتك اليوم!', 'لا تنسى تسجل عاداتك قبل النوم');
+function scheduleNotifs(){
+  notif('morning',7,0,'☀️ خطط يومك!','افتح التطبيق وحدد أهم مهمة اليوم');
+  notif('evening',20,0,'📊 راجع يومك!','شنو أنجزت اليوم؟');
+  notif('habits',21,0,'🔄 عاداتك اليوم!','لا تنسى تسجل عاداتك قبل النوم');
 }
-
-function scheduleDailyNotif(id, hour, min, title, body) {
-  const saved = localStorage.getItem('notif_'+id);
-  const now = new Date();
-  const next = new Date();
-  next.setHours(hour, min, 0, 0);
-  if(next <= now) next.setDate(next.getDate() + 1);
-  const delay = next - now;
-  
-  // Clear old timeout
-  if(saved) clearTimeout(parseInt(saved));
-  
-  // Set new timeout
-  const tid = setTimeout(() => {
-    if(Notification.permission === 'granted') {
-      new Notification(title, { body, icon: 'icon.png', badge: 'icon.png' });
-    }
-    scheduleDailyNotif(id, hour, min, title, body); // reschedule tomorrow
-  }, delay);
-  
-  localStorage.setItem('notif_'+id, tid);
+function notif(id,h,m,title,body){
+  const now=new Date(),next=new Date();
+  next.setHours(h,m,0,0);
+  if(next<=now) next.setDate(next.getDate()+1);
+  setTimeout(()=>{
+    if(Notification.permission==='granted') new Notification(title,{body,icon:'icon.png'});
+    notif(id,h,m,title,body);
+  },next-now);
 }
-
-// Auto-request on first visit
-if(localStorage.getItem('notif_asked') !== 'yes') {
-  localStorage.setItem('notif_asked', 'yes');
-  setTimeout(requestNotifications, 2000);
-}
-
-// Re-schedule on each load
-if(Notification.permission === 'granted') {
-  scheduleNotifications();
-}
+if(localStorage.getItem('notif_asked')!=='yes'){localStorage.setItem('notif_asked','yes');setTimeout(requestNotifications,2000);}
+if(Notification.permission==='granted') scheduleNotifs();
 </script>
-
 </body>
 </html>
