@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>يومي — الاتحاد كروب</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="يومي">
+  <meta name="theme-color" content="#d4a843">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #07070f;
+  --gold: #d4a843;
+  --gold2: #f0c060;
+  --orange: #c75c1a;
+  --surface: #0f0f1a;
+  --card: #141428;
+  --border: rgba(212,168,67,0.15);
+  --text: #e8e8f0;
+  --muted: #5a5a7a;
+  --green: #27ae60;
+  --blue: #2980b9;
+  --red: #e74c3c;
+  --purple: #8e44ad;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* NAV */
+.nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: rgba(10,10,20,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; z-index: 100;
+  padding: 8px 0 20px;
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  font-family: 'Tajawal'; font-size: 0.65rem;
+  transition: color 0.2s; padding: 4px 0;
+}
+.nav-btn.active { color: var(--gold); }
+.nav-btn .icon { font-size: 1.3rem; }
+
+/* PAGES */
+.page { display: none; padding: 20px 16px 100px; }
+.page.active { display: block; }
+
+/* HEADER */
+.page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.page-header h2 { font-size: 1.2rem; font-weight: 800; }
+.date-badge {
+  background: rgba(212,168,67,0.1);
+  border: 1px solid var(--border);
+  border-radius: 99px; padding: 4px 12px;
+  font-size: 0.72rem; color: var(--gold);
+  font-family: 'Tajawal';
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 0.68rem; letter-spacing: 1.5px;
+  color: var(--gold); font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* BIG QUESTION */
+.big-q {
+  background: linear-gradient(135deg, rgba(212,168,67,0.1), rgba(199,92,26,0.08));
+  border: 1px solid var(--gold);
+  border-radius: 16px; padding: 18px;
+  margin-bottom: 16px;
+}
+.big-q p { font-size: 0.82rem; color: var(--muted); font-family: 'Tajawal'; margin-bottom: 10px; }
+.big-q textarea {
+  width: 100%; background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px; color: var(--text);
+  font-family: 'Cairo'; font-size: 0.88rem;
+  resize: none; min-height: 70px; outline: none;
+}
+.big-q textarea:focus { border-color: var(--gold); }
+
+/* TASKS */
+.task-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 8px; cursor: pointer;
+  transition: background 0.15s;
+  background: rgba(255,255,255,0.02);
+}
+.task-item:hover { background: rgba(255,255,255,0.04); }
+.task-item.done { opacity: 0.5; }
+.task-item.done .task-title { text-decoration: line-through; }
+
+.check {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border-radius: 6px; border: 2px solid rgba(212,168,67,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; transition: all 0.2s; margin-top: 1px;
+  cursor: pointer;
+}
+.check.done { background: var(--green); border-color: var(--green); color: white; }
+
+.task-body { flex: 1; }
+.task-title { font-size: 0.85rem; font-weight: 600; }
+.task-cat {
+  font-size: 0.65rem; padding: 2px 7px; border-radius: 99px;
+  font-weight: 700; display: inline-block; margin-top: 3px;
+}
+.cat-biz { background: rgba(212,168,67,0.15); color: var(--gold); }
+.cat-personal { background: rgba(41,128,185,0.15); color: var(--blue); }
+.cat-health { background: rgba(39,174,96,0.15); color: var(--green); }
+.cat-urgent { background: rgba(231,76,60,0.15); color: var(--red); }
+
+/* ADD TASK */
+.add-task {
+  display: flex; gap: 8px; margin-bottom: 8px;
+}
+.add-task input {
+  flex: 1; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; color: var(--text);
+  font-family: 'Cairo'; font-size: 0.85rem; outline: none;
+}
+.add-task input:focus { border-color: var(--gold); }
+.add-btn {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  border: none; color: white; font-size: 1.3rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.cat-select {
+  width: 100%; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; color: var(--text);
+  font-family: 'Cairo'; font-size: 0.82rem; outline: none;
+  margin-bottom: 8px;
+}
+
+/* HABITS */
+.habits-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.habit-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 14px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s;
+}
+.habit-card.done {
+  background: rgba(39,174,96,0.1);
+  border-color: rgba(39,174,96,0.4);
+}
+.habit-icon { font-size: 1.8rem; margin-bottom: 6px; }
+.habit-name { font-size: 0.78rem; font-weight: 700; margin-bottom: 2px; }
+.habit-streak { font-size: 0.65rem; color: var(--muted); font-family: 'Tajawal'; }
+.habit-card.done .habit-name { color: var(--green); }
+
+/* GOALS / FINANCE */
+.goal-row {
+  margin-bottom: 14px;
+}
+.goal-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.goal-label { font-size: 0.8rem; font-weight: 700; }
+.goal-vals { font-size: 0.75rem; color: var(--gold); font-weight: 700; }
+.goal-bar { background: rgba(255,255,255,0.07); border-radius: 99px; height: 10px; overflow: hidden; }
+.goal-fill { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
+.fill-gold { background: linear-gradient(to left, var(--orange), var(--gold2)); }
+.fill-green { background: linear-gradient(to left, #1e8449, var(--green)); }
+.fill-blue { background: linear-gradient(to left, #1a5276, var(--blue)); }
+.fill-purple { background: linear-gradient(to left, #6c3483, var(--purple)); }
+
+.fin-input-row { display: flex; gap: 8px; margin-top: 10px; }
+.fin-input {
+  flex: 1; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 9px 12px; color: var(--text);
+  font-family: 'Cairo'; font-size: 0.82rem; outline: none;
+}
+.fin-btn {
+  padding: 9px 16px; border-radius: 8px;
+  background: rgba(212,168,67,0.15);
+  border: 1px solid var(--border);
+  color: var(--gold); font-family: 'Cairo'; font-size: 0.82rem;
+  cursor: pointer; font-weight: 700;
+}
+
+/* STATS */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
+.stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 12px; text-align: center;
+}
+.stat-num { font-size: 1.4rem; font-weight: 900; color: var(--gold2); }
+.stat-lbl { font-size: 0.65rem; color: var(--muted); font-family: 'Tajawal'; margin-top: 2px; }
+
+/* WEEKLY REVIEW */
+.review-item { margin-bottom: 12px; }
+.review-label { font-size: 0.78rem; color: var(--muted); font-family: 'Tajawal'; margin-bottom: 6px; }
+.review-input {
+  width: 100%; background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px; color: var(--text);
+  font-family: 'Cairo'; font-size: 0.82rem; resize: none;
+  min-height: 60px; outline: none;
+}
+.review-input:focus { border-color: var(--gold); }
+
+/* ENERGY METER */
+.energy-row { display: flex; gap: 8px; }
+.energy-btn {
+  flex: 1; padding: 10px 4px; border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--muted); font-family: 'Cairo'; font-size: 0.75rem;
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.energy-btn.sel { background: rgba(212,168,67,0.15); border-color: var(--gold); color: var(--gold); font-weight: 700; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(60px);
+  background: var(--green); color: white; padding: 10px 20px;
+  border-radius: 99px; font-family: 'Cairo'; font-weight: 700; font-size: 0.85rem;
+  transition: transform 0.3s; z-index: 999;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.save-btn {
+  width: 100%; padding: 14px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  border: none; color: white; font-family: 'Cairo'; font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; margin-top: 10px;
+  box-shadow: 0 4px 20px rgba(212,168,67,0.3);
+}
+
+.motivation {
+  background: linear-gradient(135deg, rgba(212,168,67,0.08), rgba(199,92,26,0.06));
+  border: 1px solid rgba(212,168,67,0.3);
+  border-radius: 12px; padding: 14px; margin-bottom: 14px;
+  font-size: 0.82rem; color: var(--gold2); text-align: center;
+  font-style: italic; line-height: 1.5;
+}
+
+.progress-ring { text-align: center; padding: 10px 0 16px; }
+.ring-num { font-size: 2.5rem; font-weight: 900; color: var(--gold2); }
+.ring-lbl { font-size: 0.75rem; color: var(--muted); font-family: 'Tajawal'; }
+</style>
+</head>
+<body>
+
+<!-- PAGE: TODAY -->
+<div class="page active" id="page-today">
+  <div class="page-header">
+    <h2>☀️ يومي</h2>
+    <div class="date-badge" id="today-date"></div>
+  </div>
+
+  <div class="motivation" id="daily-quote"></div>
+
+  <!-- BIG QUESTION -->
+  <div class="big-q">
+    <p>⭐ الشيء الواحد الأهم اليوم؟</p>
+    <textarea id="big-q-input" placeholder="اكتب المهمة الأهم اللي لو أنجزتها يحس يومك ناجح..."></textarea>
+  </div>
+
+  <!-- ENERGY -->
+  <div class="card">
+    <div class="card-title">⚡ طاقتي اليوم</div>
+    <div class="energy-row">
+      <button class="energy-btn" onclick="setEnergy(this,'🔥 ممتاز')">🔥 ممتاز</button>
+      <button class="energy-btn" onclick="setEnergy(this,'✅ جيد')">✅ جيد</button>
+      <button class="energy-btn" onclick="setEnergy(this,'⚠️ متعب')">⚠️ متعب</button>
+      <button class="energy-btn" onclick="setEnergy(this,'😴 منهك')">😴 منهك</button>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div class="card">
+    <div class="card-title">📋 مهام اليوم</div>
+    <select class="cat-select" id="new-cat">
+      <option value="biz">🏭 عمل</option>
+      <option value="personal">👤 شخصي</option>
+      <option value="health">💪 صحة</option>
+      <option value="urgent">🚨 عاجل</option>
+    </select>
+    <div class="add-task">
+      <input type="text" id="new-task" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addTask()">
+      <button class="add-btn" onclick="addTask()">+</button>
+    </div>
+    <div id="tasks-list"></div>
+  </div>
+
+  <button class="save-btn" onclick="saveDay()">💾 حفظ اليوم</button>
+</div>
+
+<!-- PAGE: HABITS -->
+<div class="page" id="page-habits">
+  <div class="page-header">
+    <h2>🔄 عاداتي</h2>
+    <div class="date-badge" id="streak-badge">🔥 0 يوم متتالي</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ عادات رواد الأعمال اليومية</div>
+    <div class="habits-grid" id="habits-grid">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 إحصائيات الأسبوع</div>
+    <div class="stats-row" id="habit-stats"></div>
+  </div>
+</div>
+
+<!-- PAGE: GOALS -->
+<div class="page" id="page-goals">
+  <div class="page-header">
+    <h2>🎯 أهدافي</h2>
+    <div class="date-badge">2026 — 2030</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 الهدف المالي</div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <span class="goal-label">رأس المال الحالي</span>
+        <span class="goal-vals" id="capital-display">$700,000 / $1,000,000</span>
+      </div>
+      <div class="goal-bar"><div class="goal-fill fill-gold" id="capital-bar" style="width:70%"></div></div>
+      <div class="fin-input-row">
+        <input class="fin-input" type="number" id="capital-input" placeholder="أدخل رأس المال الحالي ($)">
+        <button class="fin-btn" onclick="updateCapital()">تحديث</button>
+      </div>
+    </div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <span class="goal-label">هدف عمر 38 — $1M</span>
+        <span class="goal-vals" id="g38-display">70%</span>
+      </div>
+      <div class="goal-bar"><div class="goal-fill fill-green" id="g38-bar" style="width:70%"></div></div>
+    </div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <span class="goal-label">هدف عمر 40 — $2.5M</span>
+        <span class="goal-vals" id="g40-display">28%</span>
+      </div>
+      <div class="goal-bar"><div class="goal-fill fill-blue" id="g40-bar" style="width:28%"></div></div>
+    </div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <span class="goal-label">هدف عمر 45 — $5M</span>
+        <span class="goal-vals" id="g45-display">14%</span>
+      </div>
+      <div class="goal-bar"><div class="goal-fill fill-purple" id="g45-bar" style="width:14%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏠 الأهداف الشخصية</div>
+    <div id="personal-goals">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 أهداف المشاريع</div>
+    <div id="biz-goals"></div>
+  </div>
+</div>
+
+<!-- PAGE: REVIEW -->
+<div class="page" id="page-review">
+  <div class="page-header">
+    <h2>📊 مراجعتي</h2>
+    <div class="date-badge">أسبوعي</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 إنجازات هذا الأسبوع</div>
+    <div class="progress-ring">
+      <div class="ring-num" id="weekly-score">0%</div>
+      <div class="ring-lbl">نسبة إنجاز المهام</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="done-count">0</div><div class="stat-lbl">مهمة منجزة</div></div>
+      <div class="stat"><div class="stat-num" id="habit-count">0</div><div class="stat-lbl">عادة يومية</div></div>
+      <div class="stat"><div class="stat-num" id="streak-count">0</div><div class="stat-lbl">يوم متتالي 🔥</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✍️ تأمل الأسبوع</div>
+    <div class="review-item">
+      <div class="review-label">شنو أفضل شيء صار هذا الأسبوع؟</div>
+      <textarea class="review-input" id="r1" placeholder="اكتب هنا..."></textarea>
+    </div>
+    <div class="review-item">
+      <div class="review-label">شنو أكبر تحدي واجهته؟</div>
+      <textarea class="review-input" id="r2" placeholder="اكتب هنا..."></textarea>
+    </div>
+    <div class="review-item">
+      <div class="review-label">شنو تغير الأسبوع الجاي؟</div>
+      <textarea class="review-input" id="r3" placeholder="اكتب هنا..."></textarea>
+    </div>
+    <div class="review-item">
+      <div class="review-label">كلمة لنفسك 💪</div>
+      <textarea class="review-input" id="r4" placeholder="شجع نفسك..."></textarea>
+    </div>
+    <button class="save-btn" onclick="saveReview()">💾 حفظ المراجعة</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('today',this)">
+    <span class="icon">☀️</span>يومي
+  </button>
+  <button class="nav-btn" onclick="showPage('habits',this)">
+    <span class="icon">🔄</span>عاداتي
+  </button>
+  <button class="nav-btn" onclick="showPage('goals',this)">
+    <span class="icon">🎯</span>أهدافي
+  </button>
+  <button class="nav-btn" onclick="showPage('review',this)">
+    <span class="icon">📊</span>مراجعة
+  </button>
+</nav>
+
+<div class="toast" id="toast">✅ تم الحفظ!</div>
+
+<script>
+// ===== DATA =====
+let state = JSON.parse(localStorage.getItem('yawmi_v2') || '{}');
+if(!state.tasks) state.tasks = [];
+if(!state.habits) state.habits = {};
+if(!state.capital) state.capital = 700000;
+if(!state.streak) state.streak = 0;
+if(!state.energy) state.energy = '';
+if(!state.bigQ) state.bigQ = '';
+if(!state.reviews) state.reviews = {};
+if(!state.completedDays) state.completedDays = 0;
+
+const HABITS = [
+  {id:'wake', icon:'🌅', name:'صحيان بكير', desc:'قبل 7:30'},
+  {id:'plan', icon:'📋', name:'تخطيط اليوم', desc:'10 دقائق صباح'},
+  {id:'focus', icon:'🎯', name:'ساعة تركيز', desc:'بدون هاتف'},
+  {id:'exercise', icon:'💪', name:'رياضة', desc:'30 دقيقة'},
+  {id:'read', icon:'📚', name:'قراءة', desc:'15 دقيقة'},
+  {id:'review', icon:'✅', name:'مراجعة اليوم', desc:'5 دقائق مساء'},
+  {id:'family', icon:'👨‍👩‍👧', name:'وقت العائلة', desc:'بدون هاتف'},
+  {id:'gratitude', icon:'🙏', name:'شكر وامتنان', desc:'3 أشياء'},
+];
+
+const PERSONAL_GOALS = [
+  {id:'house2', icon:'🏠', name:'السكن الثاني', done: true},
+  {id:'cars', icon:'🚗', name:'سيارتين', done: true},
+  {id:'health', icon:'💪', name:'صحة جيدة', done: false},
+  {id:'family2', icon:'👨‍👩‍👧', name:'استقرار عائلي', done: true},
+];
+
+const BIZ_GOALS = [
+  {id:'machines', icon:'🏭', name:'استقبال المكائن + 8 صفقات', done: false},
+  {id:'survey', icon:'📋', name:'مسح 300 معمل', done: false},
+  {id:'social', icon:'📱', name:'10K متابع فيسبوك', done: false},
+  {id:'exit', icon:'🤝', name:'التخارج من المقاولات', done: false},
+  {id:'maintenance', icon:'🔧', name:'قسم الصيانة', done: false},
+  {id:'factory', icon:'🏗️', name:'ورشة التصنيع', done: false},
+];
+
+const QUOTES = [
+  'من $12,000 إلى $700,000 — أنت تثبت كل يوم إنك قادر. 💪',
+  'الخوف من الفشل أكبر مشكلة — لكنك تكمل رغم كل شيء. 🎯',
+  'زوجتك تثق بك، العائلة تعتمد عليك — أنت لا تخذل من يحبك. 🤍',
+  'الراحة مو كسل — الراحة وقود للنجاح. ⚡',
+  'يوم واحد بتركيز يساوي أسبوع بتشتت. 🎯',
+  'كل حاوية صفقة، كل صفقة خطوة، كل خطوة قريبة من $1M. 🚀',
+  'أعظم رجال الأعمال خافوا — لكنهم ما وقفوا. 💡',
+  'أنت لست موظفاً — أنت باني مستقبل. 🏆',
+];
+
+const today = new Date().toLocaleDateString('ar-IQ', {weekday:'long', day:'numeric', month:'long'});
+const todayKey = new Date().toISOString().split('T')[0];
+
+// ===== INIT =====
+document.getElementById('today-date').textContent = today;
+document.getElementById('daily-quote').textContent = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+document.getElementById('big-q-input').value = state.bigQ || '';
+document.getElementById('big-q-input').oninput = () => { state.bigQ = document.getElementById('big-q-input').value; save(); };
+
+renderTasks();
+renderHabits();
+renderGoals();
+updateStats();
+
+// Energy
+if(state.energy) {
+  document.querySelectorAll('.energy-btn').forEach(b => {
+    if(b.textContent.trim() === state.energy) b.classList.add('sel');
+  });
+}
+
+// ===== PAGES =====
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='review') updateReviewStats();
+}
+
+// ===== ENERGY =====
+function setEnergy(btn, val) {
+  document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.energy = val;
+  save();
+}
+
+// ===== TASKS =====
+function addTask() {
+  const input = document.getElementById('new-task');
+  const cat = document.getElementById('new-cat').value;
+  const title = input.value.trim();
+  if(!title) return;
+  state.tasks.push({id: Date.now(), title, cat, done: false, date: todayKey});
+  input.value = '';
+  renderTasks();
+  save();
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(t=>t.id===id);
+  if(t) { t.done = !t.done; renderTasks(); save(); updateStats(); }
+}
+
+function renderTasks() {
+  const todayTasks = state.tasks.filter(t => t.date === todayKey);
+  const el = document.getElementById('tasks-list');
+  if(!todayTasks.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:20px">لا توجد مهام — أضف أول مهمة لليوم 👆</div>';
+    return;
+  }
+  el.innerHTML = todayTasks.map(t => `
+    <div class="task-item ${t.done?'done':''}" onclick="toggleTask(${t.id})">
+      <div class="check ${t.done?'done':''}">✓</div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <span class="task-cat cat-${t.cat}">${{biz:'🏭 عمل',personal:'👤 شخصي',health:'💪 صحة',urgent:'🚨 عاجل'}[t.cat]}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== HABITS =====
+function toggleHabit(id) {
+  if(!state.habits[todayKey]) state.habits[todayKey] = {};
+  state.habits[todayKey][id] = !state.habits[todayKey][id];
+  renderHabits();
+  save();
+  updateStreak();
+}
+
+function renderHabits() {
+  const todayH = state.habits[todayKey] || {};
+  document.getElementById('habits-grid').innerHTML = HABITS.map(h => `
+    <div class="habit-card ${todayH[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
+      <div class="habit-icon">${h.icon}</div>
+      <div class="habit-name">${h.name}</div>
+      <div class="habit-streak">${h.desc}</div>
+    </div>
+  `).join('');
+
+  const done = Object.values(todayH).filter(Boolean).length;
+  const pct = Math.round(done/HABITS.length*100);
+  document.getElementById('habit-stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${done}/${HABITS.length}</div><div class="stat-lbl">اليوم</div></div>
+    <div class="stat"><div class="stat-num">${pct}%</div><div class="stat-lbl">إنجاز</div></div>
+    <div class="stat"><div class="stat-num">${state.streak}🔥</div><div class="stat-lbl">متتالي</div></div>
+  `;
+  document.getElementById('streak-badge').textContent = `🔥 ${state.streak} يوم متتالي`;
+}
+
+function updateStreak() {
+  const todayH = state.habits[todayKey] || {};
+  const allDone = HABITS.every(h => todayH[h.id]);
+  if(allDone) state.streak = (state.streak||0) + 1;
+}
+
+// ===== GOALS =====
+function renderGoals() {
+  const capital = state.capital;
+  const pct1M = Math.min(100, Math.round(capital/1000000*100));
+  const pct25M = Math.min(100, Math.round(capital/2500000*100));
+  const pct5M = Math.min(100, Math.round(capital/5000000*100));
+
+  document.getElementById('capital-display').textContent = `$${capital.toLocaleString()} / $1,000,000`;
+  document.getElementById('capital-bar').style.width = pct1M + '%';
+  document.getElementById('g38-display').textContent = pct1M + '%';
+  document.getElementById('g38-bar').style.width = pct1M + '%';
+  document.getElementById('g40-display').textContent = pct25M + '%';
+  document.getElementById('g40-bar').style.width = pct25M + '%';
+  document.getElementById('g45-display').textContent = pct5M + '%';
+  document.getElementById('g45-bar').style.width = pct5M + '%';
+
+  document.getElementById('personal-goals').innerHTML = PERSONAL_GOALS.map(g => `
+    <div class="task-item" onclick="togglePersonalGoal('${g.id}')">
+      <div class="check ${g.done?'done':''}">✓</div>
+      <div class="task-body"><div class="task-title">${g.icon} ${g.name}</div></div>
+    </div>
+  `).join('');
+
+  document.getElementById('biz-goals').innerHTML = BIZ_GOALS.map(g => `
+    <div class="task-item ${(state.bizGoals||{})[g.id]?'done':''}" onclick="toggleBizGoal('${g.id}')">
+      <div class="check ${(state.bizGoals||{})[g.id]?'done':''}">✓</div>
+      <div class="task-body"><div class="task-title">${g.icon} ${g.name}</div></div>
+    </div>
+  `).join('');
+}
+
+function updateCapital() {
+  const v = parseFloat(document.getElementById('capital-input').value);
+  if(v > 0) { state.capital = v; renderGoals(); save(); showToast('تم تحديث رأس المال! 💰'); }
+}
+
+function toggleBizGoal(id) {
+  if(!state.bizGoals) state.bizGoals = {};
+  state.bizGoals[id] = !state.bizGoals[id];
+  renderGoals(); save();
+}
+
+function togglePersonalGoal(id) { /* static for now */ }
+
+// ===== REVIEW =====
+function updateReviewStats() {
+  const todayTasks = state.tasks.filter(t => t.date === todayKey);
+  const done = todayTasks.filter(t => t.done).length;
+  const total = todayTasks.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  const habitsDone = Object.values(state.habits[todayKey]||{}).filter(Boolean).length;
+
+  document.getElementById('weekly-score').textContent = pct + '%';
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('habit-count').textContent = habitsDone;
+  document.getElementById('streak-count').textContent = state.streak;
+
+  const r = (state.reviews||{})[todayKey] || {};
+  document.getElementById('r1').value = r.r1||'';
+  document.getElementById('r2').value = r.r2||'';
+  document.getElementById('r3').value = r.r3||'';
+  document.getElementById('r4').value = r.r4||'';
+}
+
+function saveReview() {
+  if(!state.reviews) state.reviews = {};
+  state.reviews[todayKey] = {
+    r1: document.getElementById('r1').value,
+    r2: document.getElementById('r2').value,
+    r3: document.getElementById('r3').value,
+    r4: document.getElementById('r4').value,
+  };
+  save(); showToast('تم حفظ المراجعة! 📊');
+}
+
+// ===== UTILS =====
+function updateStats() { renderTasks(); }
+
+function saveDay() { save(); showToast('تم حفظ يومك! ✅'); }
+
+function save() { localStorage.setItem('yawmi_v2', JSON.stringify(state)); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+
+<script>
+// ===== PWA + NOTIFICATIONS =====
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    console.log('SW registered');
+  });
+}
+
+async function requestNotifications() {
+  if(!('Notification' in window)) return;
+  const perm = await Notification.requestPermission();
+  if(perm === 'granted') {
+    scheduleNotifications();
+    showToast('✅ تم تفعيل التنبيهات!');
+  }
+}
+
+function scheduleNotifications() {
+  // Schedule morning notification at 7:00 AM
+  scheduleDailyNotif('morning', 7, 0, '☀️ خطط يومك!', 'افتح التطبيق وحدد أهم مهمة اليوم');
+  // Schedule evening review at 8:00 PM  
+  scheduleDailyNotif('evening', 20, 0, '📊 راجع يومك!', 'شنو أنجزت اليوم؟ سجّل عاداتك');
+  // Schedule habits reminder at 9:00 PM
+  scheduleDailyNotif('habits', 21, 0, '🔄 عاداتك اليوم!', 'لا تنسى تسجل عاداتك قبل النوم');
+}
+
+function scheduleDailyNotif(id, hour, min, title, body) {
+  const saved = localStorage.getItem('notif_'+id);
+  const now = new Date();
+  const next = new Date();
+  next.setHours(hour, min, 0, 0);
+  if(next <= now) next.setDate(next.getDate() + 1);
+  const delay = next - now;
+  
+  // Clear old timeout
+  if(saved) clearTimeout(parseInt(saved));
+  
+  // Set new timeout
+  const tid = setTimeout(() => {
+    if(Notification.permission === 'granted') {
+      new Notification(title, { body, icon: 'icon.png', badge: 'icon.png' });
+    }
+    scheduleDailyNotif(id, hour, min, title, body); // reschedule tomorrow
+  }, delay);
+  
+  localStorage.setItem('notif_'+id, tid);
+}
+
+// Auto-request on first visit
+if(localStorage.getItem('notif_asked') !== 'yes') {
+  localStorage.setItem('notif_asked', 'yes');
+  setTimeout(requestNotifications, 2000);
+}
+
+// Re-schedule on each load
+if(Notification.permission === 'granted') {
+  scheduleNotifications();
+}
+</script>
+
+</body>
+</html>
