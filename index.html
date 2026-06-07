@@ -453,8 +453,11 @@ body {
   <button class="nav-btn active" onclick="showPage('today',this)">
     <span class="icon">☀️</span>يومي
   </button>
-  <button class="nav-btn" onclick="showPage('habits',this)">
-    <span class="icon">🔄</span>عاداتي
+  <button class="nav-btn" onclick="showPage('schedule',this)">
+    <span class="icon">🗓</span>جدول
+  </button>
+  <button class="nav-btn" onclick="showPage('accounts',this)">
+    <span class="icon">💰</span>حسابات
   </button>
   <button class="nav-btn" onclick="showPage('goals',this)">
     <span class="icon">🎯</span>أهدافي
@@ -463,6 +466,116 @@ body {
     <span class="icon">📊</span>مراجعة
   </button>
 </nav>
+
+
+<!-- PAGE: SCHEDULE -->
+<div class="page" id="page-schedule">
+  <div class="page-header">
+    <h2>🗓 جدول يومي</h2>
+    <div class="date-badge" id="sched-date"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⏰ جدول رجل الأعمال</div>
+    <div id="schedule-slots"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">➕ أضف موعد</div>
+    <select class="cat-select" id="sched-time">
+      <option value="07:00">7:00 صباح</option><option value="08:00">8:00 صباح</option>
+      <option value="09:00">9:00 صباح</option><option value="10:00">10:00 صباح</option>
+      <option value="11:00">11:00 صباح</option><option value="12:00">12:00 ظهر</option>
+      <option value="13:00">1:00 مساء</option><option value="14:00">2:00 مساء</option>
+      <option value="15:00">3:00 مساء</option><option value="16:00">4:00 مساء</option>
+      <option value="17:00">5:00 مساء</option><option value="18:00">6:00 مساء</option>
+      <option value="20:00">8:00 مساء</option>
+    </select>
+    <select class="cat-select" id="sched-type">
+      <option value="work">🏭 عمل</option><option value="meet">🤝 اجتماع</option>
+      <option value="call">📞 مكالمة</option><option value="personal">👤 شخصي</option>
+      <option value="rest">😴 راحة</option>
+    </select>
+    <div class="add-task">
+      <input type="text" id="sched-title" placeholder="وصف الموعد...">
+      <button class="add-btn" onclick="addSchedule()">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: ACCOUNTS -->
+<div class="page" id="page-accounts">
+  <div class="page-header">
+    <h2>💰 حسابات الاتحاد</h2>
+    <div class="date-badge" id="acc-date"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    <div class="card" style="margin:0;text-align:center">
+      <div style="font-size:0.68rem;color:var(--green);font-weight:700;margin-bottom:6px">📈 إيرادات</div>
+      <div style="font-size:1.3rem;font-weight:900;color:var(--green)" id="total-income">$0</div>
+    </div>
+    <div class="card" style="margin:0;text-align:center">
+      <div style="font-size:0.68rem;color:var(--red);font-weight:700;margin-bottom:6px">📉 مصاريف</div>
+      <div style="font-size:1.3rem;font-weight:900;color:var(--red)" id="total-expense">$0</div>
+    </div>
+  </div>
+  <div class="card" style="text-align:center;margin-bottom:14px">
+    <div style="font-size:0.68rem;color:var(--gold);font-weight:700;margin-bottom:6px">💎 صافي الربح</div>
+    <div style="font-size:2rem;font-weight:900;color:var(--gold2)" id="net-profit">$0</div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏦 رأس المال</div>
+    <div style="display:flex;gap:8px">
+      <input class="fin-input" type="number" id="capital-now" placeholder="أدخل رأس المال ($)" style="flex:1">
+      <button class="fin-btn" onclick="updateCapitalAcc()">حفظ</button>
+    </div>
+    <div style="font-size:1.4rem;font-weight:900;color:var(--gold2);text-align:center;margin-top:12px" id="capital-display-acc">$700,000</div>
+    <div style="margin-top:10px">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px">
+        <span style="color:var(--muted)">نحو $1,000,000</span>
+        <span style="color:var(--gold)" id="capital-pct-acc">70%</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:99px;height:8px;overflow:hidden">
+        <div id="capital-bar-acc" style="height:100%;border-radius:99px;background:linear-gradient(to left,var(--orange),var(--gold2));width:70%;transition:width 0.8s"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📦 الأوردرات النشطة</div>
+    <div id="orders-list"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <input class="fin-input" type="text" id="order-name" placeholder="اسم العميل / الأوردر" style="flex:1">
+      <button class="fin-btn" onclick="showOrderForm()">+</button>
+    </div>
+    <div id="order-form" style="display:none;margin-top:10px">
+      <input class="fin-input" type="number" id="order-amount" placeholder="المبلغ ($)" style="margin-bottom:8px">
+      <select class="cat-select" id="order-status">
+        <option value="pending">⏳ قيد التنفيذ</option>
+        <option value="shipped">🚢 تم الشحن</option>
+        <option value="delivered">✅ تم التسليم</option>
+        <option value="paid">💰 تم الدفع</option>
+      </select>
+      <button class="save-btn" onclick="addOrder()" style="margin-top:8px">حفظ الأوردر</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">💳 إضافة معاملة</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <button class="fin-btn" id="type-income-btn" onclick="setTxType('income')" style="background:rgba(39,174,96,0.15);color:var(--green);border-color:rgba(39,174,96,0.3)">📈 إيراد</button>
+      <button class="fin-btn" id="type-expense-btn" onclick="setTxType('expense')" style="background:rgba(255,255,255,0.04)">📉 مصروف</button>
+    </div>
+    <input class="fin-input" type="text" id="tx-desc" placeholder="الوصف..." style="margin-bottom:8px">
+    <input class="fin-input" type="number" id="tx-amount" placeholder="المبلغ ($)" style="margin-bottom:8px">
+    <select class="cat-select" id="tx-cat">
+      <option value="sales">💼 مبيعات</option><option value="shipping">🚢 شحن</option>
+      <option value="customs">🏛 جمارك</option><option value="salary">👷 رواتب</option>
+      <option value="rent">🏠 إيجار</option><option value="other">📌 أخرى</option>
+    </select>
+    <button class="save-btn" onclick="addTransaction()" style="margin-top:8px">💾 إضافة معاملة</button>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 آخر المعاملات</div>
+    <div id="tx-list"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast">✅ تم الحفظ!</div>
 
@@ -715,6 +828,183 @@ function showToast(msg) {
 </script>
 
 <script>
+
+// ===== SCHEDULE =====
+if(!state.schedule) state.schedule = {};
+let txType = 'income';
+
+const DEFAULT_SCHEDULE = [
+  {id:1, time:'07:00', type:'personal', title:'صحيان + قهوة + تخطيط اليوم', done:false},
+  {id:2, time:'07:30', type:'work', title:'⭐ أهم مهمة — بدون هاتف', done:false},
+  {id:3, time:'09:00', type:'meet', title:'اجتماعات + زيارات + مكالمات', done:false},
+  {id:4, time:'12:00', type:'rest', title:'غداء + راحة', done:false},
+  {id:5, time:'13:00', type:'work', title:'متابعة + ردود + إدارة', done:false},
+  {id:6, time:'16:00', type:'work', title:'مراجعة اليوم + تخطيط الغد', done:false},
+  {id:7, time:'17:00', type:'personal', title:'🏠 عائلة فقط — لا شغل', done:false},
+];
+
+function addSchedule() {
+  const time = document.getElementById('sched-time').value;
+  const type = document.getElementById('sched-type').value;
+  const title = document.getElementById('sched-title').value.trim();
+  if(!title) return;
+  if(!state.schedule[todayKey]) state.schedule[todayKey] = [...DEFAULT_SCHEDULE];
+  state.schedule[todayKey].push({id:Date.now(), time, type, title, done:false});
+  state.schedule[todayKey].sort((a,b) => a.time.localeCompare(b.time));
+  document.getElementById('sched-title').value = '';
+  renderSchedule(); save();
+}
+
+function toggleSched(id) {
+  const items = state.schedule[todayKey] || DEFAULT_SCHEDULE;
+  const item = items.find(i => i.id===id);
+  if(item) { item.done = !item.done; renderSchedule(); save(); }
+}
+
+function delSched(id) {
+  if(!state.schedule[todayKey]) state.schedule[todayKey] = [...DEFAULT_SCHEDULE];
+  state.schedule[todayKey] = state.schedule[todayKey].filter(i=>i.id!==id);
+  renderSchedule(); save();
+}
+
+function renderSchedule() {
+  if(document.getElementById('sched-date')) document.getElementById('sched-date').textContent = today;
+  const items = state.schedule[todayKey] || DEFAULT_SCHEDULE;
+  const typeColors = {work:'var(--gold)',meet:'var(--blue)',call:'var(--green)',personal:'var(--purple)',rest:'var(--muted)'};
+  const el = document.getElementById('schedule-slots');
+  if(!el) return;
+  el.innerHTML = items.map(i => `
+    <div style="display:flex;gap:10px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);${i.done?'opacity:0.4':''}" onclick="toggleSched(${i.id})">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--gold);width:45px;flex-shrink:0">${i.time}</div>
+      <div style="width:4px;height:36px;border-radius:2px;background:${typeColors[i.type]||'var(--gold)'};flex-shrink:0"></div>
+      <div style="flex:1;font-size:0.82rem;${i.done?'text-decoration:line-through':''}">${i.title}</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="width:20px;height:20px;border-radius:5px;border:2px solid rgba(212,168,67,0.3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;${i.done?'background:var(--green);border-color:var(--green);color:white':''}">✓</div>
+        <button onclick="event.stopPropagation();delSched(${i.id})" style="background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer;font-size:1rem">×</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== ACCOUNTS =====
+if(!state.transactions) state.transactions = [];
+if(!state.orders) state.orders = [];
+if(!state.capitalAcc) state.capitalAcc = 700000;
+
+function setTxType(type) {
+  txType = type;
+  const iBtn = document.getElementById('type-income-btn');
+  const eBtn = document.getElementById('type-expense-btn');
+  if(!iBtn || !eBtn) return;
+  iBtn.style.background = type==='income' ? 'rgba(39,174,96,0.2)' : 'rgba(255,255,255,0.04)';
+  iBtn.style.color = type==='income' ? 'var(--green)' : 'var(--muted)';
+  eBtn.style.background = type==='expense' ? 'rgba(231,76,60,0.2)' : 'rgba(255,255,255,0.04)';
+  eBtn.style.color = type==='expense' ? 'var(--red)' : 'var(--muted)';
+}
+
+function addTransaction() {
+  const desc = document.getElementById('tx-desc').value.trim();
+  const amount = parseFloat(document.getElementById('tx-amount').value);
+  const cat = document.getElementById('tx-cat').value;
+  if(!desc || !amount) return;
+  state.transactions.push({id:Date.now(), type:txType, desc, amount, cat, date:todayKey});
+  document.getElementById('tx-desc').value = '';
+  document.getElementById('tx-amount').value = '';
+  renderAccounts(); save();
+  showToast(txType==='income' ? '📈 تم إضافة الإيراد!' : '📉 تم إضافة المصروف!');
+}
+
+function delTx(id) {
+  state.transactions = state.transactions.filter(t=>t.id!==id);
+  renderAccounts(); save();
+}
+
+function showOrderForm() {
+  const f = document.getElementById('order-form');
+  if(f) f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+
+function addOrder() {
+  const name = document.getElementById('order-name').value.trim();
+  const amount = parseFloat(document.getElementById('order-amount').value)||0;
+  const status = document.getElementById('order-status').value;
+  if(!name) return;
+  state.orders.push({id:Date.now(), name, amount, status, date:todayKey});
+  document.getElementById('order-name').value = '';
+  document.getElementById('order-amount').value = '';
+  const f = document.getElementById('order-form');
+  if(f) f.style.display = 'none';
+  renderAccounts(); save();
+  showToast('📦 تم إضافة الأوردر!');
+}
+
+function updateOrderStatus(id, status) {
+  const o = state.orders.find(o=>o.id===id);
+  if(o) { o.status = status; renderAccounts(); save(); }
+}
+
+function delOrder(id) {
+  state.orders = state.orders.filter(o=>o.id!==id);
+  renderAccounts(); save();
+}
+
+function updateCapitalAcc() {
+  const v = parseFloat(document.getElementById('capital-now').value);
+  if(v > 0) {
+    state.capitalAcc = v; state.capital = v;
+    renderAccounts(); renderGoals(); save();
+    showToast('💰 تم تحديث رأس المال!');
+  }
+}
+
+function renderAccounts() {
+  if(!document.getElementById('total-income')) return;
+  if(document.getElementById('acc-date')) document.getElementById('acc-date').textContent = today;
+  const income = state.transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const expense = state.transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const net = income - expense;
+  document.getElementById('total-income').textContent = '$'+income.toLocaleString();
+  document.getElementById('total-expense').textContent = '$'+expense.toLocaleString();
+  document.getElementById('net-profit').textContent = (net>=0?'+':'')+' $'+net.toLocaleString();
+  document.getElementById('net-profit').style.color = net>=0 ? 'var(--green)' : 'var(--red)';
+  const cap = state.capitalAcc || 700000;
+  const pct = Math.min(100, Math.round(cap/1000000*100));
+  document.getElementById('capital-display-acc').textContent = '$'+cap.toLocaleString();
+  document.getElementById('capital-pct-acc').textContent = pct+'%';
+  document.getElementById('capital-bar-acc').style.width = pct+'%';
+  const statusLabels = {pending:'⏳ قيد التنفيذ',shipped:'🚢 شحن',delivered:'✅ تسليم',paid:'💰 مدفوع'};
+  const statusColors = {pending:'var(--gold)',shipped:'var(--blue)',delivered:'var(--green)',paid:'var(--green)'};
+  document.getElementById('orders-list').innerHTML = state.orders.length ? state.orders.map(o=>`
+    <div style="padding:10px;border:1px solid rgba(255,255,255,0.07);border-radius:8px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:0.85rem;font-weight:700">${o.name}</span>
+        <button onclick="delOrder(${o.id})" style="background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer">🗑</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:0.85rem;color:var(--gold2);font-weight:700">$${o.amount.toLocaleString()}</span>
+        <select onchange="updateOrderStatus(${o.id},this.value)" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 8px;color:${statusColors[o.status]};font-size:0.72rem;font-family:Cairo">
+          ${['pending','shipped','delivered','paid'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${statusLabels[s]}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+  `).join('') : '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:16px">لا توجد أوردرات — أضف أول أوردر 👆</div>';
+  const last10 = [...state.transactions].reverse().slice(0,10);
+  document.getElementById('tx-list').innerHTML = last10.length ? last10.map(t=>`
+    <div style="display:flex;gap:10px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <span style="font-size:1.1rem">${t.type==='income'?'📈':'📉'}</span>
+      <div style="flex:1">
+        <div style="font-size:0.82rem;font-weight:600">${t.desc}</div>
+        <div style="font-size:0.68rem;color:var(--muted);font-family:Tajawal">${t.date}</div>
+      </div>
+      <span style="font-weight:700;font-size:0.9rem;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
+      <button onclick="delTx(${t.id})" style="background:none;border:none;color:rgba(255,80,80,0.4);cursor:pointer">×</button>
+    </div>
+  `).join('') : '<div style="text-align:center;color:var(--muted);font-family:Tajawal;font-size:0.82rem;padding:16px">لا توجد معاملات بعد</div>';
+}
+
+renderSchedule();
+renderAccounts();
+
 // ===== PWA + NOTIFICATIONS =====
 if('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').then(reg => {
