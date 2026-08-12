@@ -200,6 +200,11 @@ body{font-family:"Cairo",sans-serif;background:var(--bg);color:var(--tx);max-wid
 .bp.cr{background:var(--gl);border-color:#A5D6A7;color:var(--gn)}
 
 /* TOAST */
+.stab{padding:7px 12px;border-radius:99px;background:var(--bg);border:1.5px solid var(--br);font-family:'Cairo';font-size:0.72rem;font-weight:700;color:var(--mt);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s}
+.stab.on{background:var(--bl);color:white;border-color:var(--bl)}
+.calc-btn{padding:14px 8px;border-radius:11px;background:var(--bg);border:1.5px solid var(--br);font-family:'Cairo';font-size:1rem;font-weight:700;color:var(--tx);cursor:pointer;text-align:center;transition:all 0.15s}
+.calc-btn:active{transform:scale(0.94);background:var(--bll)}
+.calc-btn.op{background:var(--bll);color:var(--bl);border-color:var(--bm)}
 .toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--bl);color:white;padding:9px 20px;border-radius:99px;font-family:Cairo;font-weight:700;font-size:0.78rem;z-index:9999;transition:top 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 18px rgba(21,101,192,0.35)}
 .toast.on{top:14px}
 
@@ -564,36 +569,156 @@ body{font-family:"Cairo",sans-serif;background:var(--bg);color:var(--tx);max-wid
         </div>
         <!-- ⚡ نافذة المحاسب -->
         <div class="tab" id="mg-quick">
-          <div class="pt">⚡ تسجيل سريع</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-            <button onclick="setQType('recv')" id="q-recv-btn" style="padding:14px 8px;border-radius:12px;background:var(--gl);border:2px solid #81C784;color:var(--gn);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer">📥 مستلم</button>
-            <button onclick="setQType('exp')" id="q-exp-btn" style="padding:14px 8px;border-radius:12px;background:var(--bg);border:2px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer">📤 مصروف</button>
+          <div class="pt">⚡ نافذة المحاسب</div>
+
+          <!-- Sub nav -->
+          <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px">
+            <button class="stab on" id="ac-recv-btn" onclick="switchAcTab('recv',this)">📥 مستلم</button>
+            <button class="stab" id="ac-exp-btn" onclick="switchAcTab('exp',this)">📤 مصروف</button>
+            <button class="stab" id="ac-calc-btn" onclick="switchAcTab('calc',this)">🧮 حاسبة</button>
+            <button class="stab" id="ac-cl-btn" onclick="switchAcTab('cl',this)">👥 زبائن</button>
           </div>
-          <div class="card">
-            <div class="ct">🖊️ تسجيل سريع</div>
-            <input class="inp mb" type="text" id="q-from" placeholder="من / لمن؟">
-            <input class="inp mb" type="text" id="q-desc" placeholder="الوصف / التبويب">
-            <div class="ar">
-              <input class="inp" type="number" id="q-d" placeholder="$ دولار">
-              <span>أو</span>
-              <input class="inp" type="number" id="q-iq" placeholder="د.ع">
+
+          <!-- مستلم -->
+          <div id="ac-recv-tab">
+            <div class="card" style="border:2px solid #81C784">
+              <div class="ct" style="color:var(--gn)">📥 تسجيل مستلم</div>
+              <input class="inp mb" type="text" id="ac-rv-from" placeholder="من؟ (اسم العميل)">
+              <input class="inp mb" type="text" id="ac-rv-desc" placeholder="الوصف / التبويب">
+              <div class="ar">
+                <input class="inp" type="number" id="ac-rv-d" placeholder="$ دولار">
+                <span>أو</span>
+                <input class="inp" type="number" id="ac-rv-iq" placeholder="د.ع">
+              </div>
+              <select class="sel mb" id="ac-rv-type">
+                <option value="cash">💵 نقد</option>
+                <option value="transfer">🏦 تحويل</option>
+                <option value="ajal">📅 آجل مُحصَّل</option>
+              </select>
+              <input class="inp mb" type="date" id="ac-rv-date">
+
+              <!-- صورة إجبارية -->
+              <div style="background:var(--gl);border:2px dashed #81C784;border-radius:10px;padding:12px;text-align:center;margin-bottom:8px;cursor:pointer" onclick="document.getElementById('ac-rv-img').click()">
+                <div id="ac-rv-preview" style="display:none;margin-bottom:8px">
+                  <img id="ac-rv-img-preview" style="max-width:100%;max-height:150px;border-radius:8px;object-fit:cover">
+                </div>
+                <div id="ac-rv-placeholder">
+                  <div style="font-size:1.8rem;margin-bottom:4px">📷</div>
+                  <div style="font-size:0.78rem;font-weight:700;color:var(--gn)">صوّر الفاتورة أو الإيصال</div>
+                  <div style="font-size:0.65rem;color:var(--mt);font-family:Tajawal">إجباري قبل التسجيل</div>
+                </div>
+                <input type="file" id="ac-rv-img" accept="image/*" capture="environment" style="display:none" onchange="previewImg('rv',this)">
+              </div>
+
+              <button class="btn" style="background:var(--gn)" onclick="addAcRecv()">💾 تسجيل المستلم</button>
             </div>
-            <select class="sel mb" id="q-cat">
-              <option value="sales">💼 مبيعات</option>
-              <option value="shipping">🚢 شحن</option>
-              <option value="customs">🏛 جمارك</option>
-              <option value="transport">🚚 نقل</option>
-              <option value="salary">👷 رواتب</option>
-              <option value="rent">🏠 إيجار</option>
-              <option value="other">📌 متفرقات</option>
-            </select>
-            <input class="inp mb" type="date" id="q-date">
-            <button class="btn" onclick="addQuick()" id="q-btn">💾 تسجيل</button>
+            <div class="card">
+              <div class="ct">📋 آخر المستلمات</div>
+              <div id="ac-rv-list"></div>
+            </div>
           </div>
-          <div class="card">
-            <div class="ct">📋 آخر التسجيلات</div>
-            <div id="q-list"></div>
+
+          <!-- مصروف -->
+          <div id="ac-exp-tab" style="display:none">
+            <div class="card" style="border:2px solid #EF9A9A">
+              <div class="ct" style="color:var(--rd)">📤 تسجيل مصروف</div>
+              <input class="inp mb" type="text" id="ac-ex-to" placeholder="لمن؟ (مورد / جهة)">
+              <input class="inp mb" type="text" id="ac-ex-desc" placeholder="الوصف / التبويب">
+              <div class="ar">
+                <input class="inp" type="number" id="ac-ex-d" placeholder="$ دولار">
+                <span>أو</span>
+                <input class="inp" type="number" id="ac-ex-iq" placeholder="د.ع">
+              </div>
+              <select class="sel mb" id="ac-ex-cat">
+                <option value="shipping">🚢 شحن بحري</option>
+                <option value="customs">🏛 جمارك</option>
+                <option value="transport">🚚 نقل داخلي</option>
+                <option value="salary">👷 رواتب</option>
+                <option value="rent">🏠 إيجار</option>
+                <option value="ads">📢 ترويج</option>
+                <option value="loan">💸 سلفة</option>
+                <option value="other">📌 متفرقات</option>
+              </select>
+              <input class="inp mb" type="date" id="ac-ex-date">
+
+              <!-- صورة إجبارية -->
+              <div style="background:var(--rl);border:2px dashed #EF9A9A;border-radius:10px;padding:12px;text-align:center;margin-bottom:8px;cursor:pointer" onclick="document.getElementById('ac-ex-img').click()">
+                <div id="ac-ex-preview" style="display:none;margin-bottom:8px">
+                  <img id="ac-ex-img-preview" style="max-width:100%;max-height:150px;border-radius:8px;object-fit:cover">
+                </div>
+                <div id="ac-ex-placeholder">
+                  <div style="font-size:1.8rem;margin-bottom:4px">📷</div>
+                  <div style="font-size:0.78rem;font-weight:700;color:var(--rd)">صوّر الفاتورة أو الإيصال</div>
+                  <div style="font-size:0.65rem;color:var(--mt);font-family:Tajawal">إجباري قبل التسجيل</div>
+                </div>
+                <input type="file" id="ac-ex-img" accept="image/*" capture="environment" style="display:none" onchange="previewImg('ex',this)">
+              </div>
+
+              <button class="btn" style="background:var(--rd)" onclick="addAcExp()">💾 تسجيل المصروف</button>
+            </div>
+            <div class="card">
+              <div class="ct">📋 آخر المصروفات</div>
+              <div id="ac-ex-list"></div>
+            </div>
           </div>
+
+          <!-- حاسبة -->
+          <div id="ac-calc-tab" style="display:none">
+            <div class="card">
+              <div class="ct">🧮 الحاسبة</div>
+              <div style="background:var(--bg);border-radius:12px;padding:14px;text-align:left;margin-bottom:12px;min-height:64px">
+                <div style="font-size:0.72rem;color:var(--mt);min-height:18px;font-family:Tajawal" id="calc-expr"></div>
+                <div style="font-size:2rem;font-weight:900;color:var(--bl);font-family:Cairo" id="calc-disp">0</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <button class="calc-btn" style="background:var(--rl);color:var(--rd);grid-column:span 2" onclick="calcAC('C')">C مسح</button>
+                <button class="calc-btn" onclick="calcAC('%')">%</button>
+                <button class="calc-btn op" onclick="calcAC('/')">÷</button>
+                <button class="calc-btn" onclick="calcAC('7')">7</button>
+                <button class="calc-btn" onclick="calcAC('8')">8</button>
+                <button class="calc-btn" onclick="calcAC('9')">9</button>
+                <button class="calc-btn op" onclick="calcAC('*')">×</button>
+                <button class="calc-btn" onclick="calcAC('4')">4</button>
+                <button class="calc-btn" onclick="calcAC('5')">5</button>
+                <button class="calc-btn" onclick="calcAC('6')">6</button>
+                <button class="calc-btn op" onclick="calcAC('-')">−</button>
+                <button class="calc-btn" onclick="calcAC('1')">1</button>
+                <button class="calc-btn" onclick="calcAC('2')">2</button>
+                <button class="calc-btn" onclick="calcAC('3')">3</button>
+                <button class="calc-btn op" onclick="calcAC('+')">+</button>
+                <button class="calc-btn" onclick="calcAC('0')" style="grid-column:span 2">0</button>
+                <button class="calc-btn" onclick="calcAC('.')">.</button>
+                <button class="calc-btn" style="background:var(--bl);color:white" onclick="calcAC('=')">=</button>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+                <button class="btn" style="background:var(--gn);margin-top:0" onclick="calcToRecv()">📥 تحويل لمستلم</button>
+                <button class="btn" style="background:var(--rd);margin-top:0" onclick="calcToExp()">📤 تحويل لمصروف</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- زبائن المحاسب -->
+          <div id="ac-cl-tab" style="display:none">
+            <div class="sc exp" style="margin-bottom:9px">
+              <div class="sc-lbl exp">💰 إجمالي ديون الزبائن</div>
+              <div class="sc-amt exp" id="ac-cl-tot">$0</div>
+            </div>
+            <!-- إضافة زبون سريع -->
+            <div class="card">
+              <div class="ct">➕ زبون جديد</div>
+              <input class="inp mb" type="text" id="ac-cl-name" placeholder="اسم الزبون">
+              <input class="inp mb" type="text" id="ac-cl-phone" placeholder="رقم الموبايل">
+              <input class="inp mb" type="text" id="ac-cl-co" placeholder="اسم الورشة / الشركة">
+              <button class="btn" onclick="addAcClient()">💾 إضافة الزبون</button>
+            </div>
+            <!-- بحث عن زبون -->
+            <div class="card">
+              <div class="ct">🔍 بحث وكشف حساب</div>
+              <input class="inp mb" type="text" id="ac-cl-search" placeholder="ابحث عن زبون..." oninput="searchAcClient()">
+              <div id="ac-cl-list"></div>
+            </div>
+          </div>
+
         </div>
 
         <div class="tab" id="mg-goals">
@@ -781,6 +906,244 @@ function getD(a,b){const d=parseFloat(document.getElementById(a)?.value)||0;cons
 function getIQ(a,b){const d=parseFloat(document.getElementById(a)?.value)||0;const iq=parseFloat(document.getElementById(b)?.value)||0;return iq>0?iq:d>0?toIQ(d):0;}
 function $(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 function save(){localStorage.setItem('yw9',JSON.stringify(S));}
+
+// ===== ACCOUNTANT MODULE =====
+let _calcExpr = '';
+let _calcVal = '0';
+let _acPhotoRv = false;
+let _acPhotoEx = false;
+
+// Sub tab switch
+function switchAcTab(tab, btn){
+  ['recv','exp','calc','cl'].forEach(t=>{
+    const el=document.getElementById('ac-'+t+'-tab');
+    const b=document.getElementById('ac-'+t+'-btn');
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+    if(b) b.classList.toggle('on', t===tab);
+  });
+  if(tab==='cl') rAcClients();
+}
+
+// Image preview (confirm only, not saved)
+function previewImg(type, input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('ac-'+type+'-preview');
+    const placeholder = document.getElementById('ac-'+type+'-placeholder');
+    const img = document.getElementById('ac-'+type+'-img-preview');
+    if(img) img.src = e.target.result;
+    if(preview) preview.style.display = 'block';
+    if(placeholder) placeholder.style.display = 'none';
+    if(type==='rv') _acPhotoRv = true;
+    if(type==='ex') _acPhotoEx = true;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Add received
+function addAcRecv(){
+  if(!_acPhotoRv){ toast('📷 لازم تصور الفاتورة أو الإيصال أولاً!'); return; }
+  const from = document.getElementById('ac-rv-from').value.trim();
+  if(!from){ toast('⚠️ أدخل اسم العميل'); return; }
+  const amtD = getD('ac-rv-d','ac-rv-iq');
+  if(!amtD){ toast('⚠️ أدخل المبلغ'); return; }
+  S.recv.push({
+    id:Date.now(), from,
+    desc: document.getElementById('ac-rv-desc').value,
+    amtD, amtIQ: getIQ('ac-rv-d','ac-rv-iq'),
+    type: document.getElementById('ac-rv-type').value,
+    date: document.getElementById('ac-rv-date').value || dk,
+    byAccountant: true
+  });
+  // Reset form
+  ['ac-rv-from','ac-rv-desc','ac-rv-d','ac-rv-iq'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('ac-rv-date').value = dk;
+  const preview=document.getElementById('ac-rv-preview');
+  const placeholder=document.getElementById('ac-rv-placeholder');
+  if(preview) preview.style.display='none';
+  if(placeholder) placeholder.style.display='block';
+  _acPhotoRv = false;
+  document.getElementById('ac-rv-img').value='';
+  rAcRecv(); rSafe(); rRecv(); save();
+  toast('📥 تم تسجيل المستلم!');
+}
+
+// Add expense
+function addAcExp(){
+  if(!_acPhotoEx){ toast('📷 لازم تصور الفاتورة أو الإيصال أولاً!'); return; }
+  const to = document.getElementById('ac-ex-to').value.trim();
+  if(!to){ toast('⚠️ أدخل الجهة'); return; }
+  const amtD = getD('ac-ex-d','ac-ex-iq');
+  if(!amtD){ toast('⚠️ أدخل المبلغ'); return; }
+  S.expenses.push({
+    id:Date.now(), to,
+    desc: document.getElementById('ac-ex-desc').value,
+    amtD, amtIQ: getIQ('ac-ex-d','ac-ex-iq'),
+    cat: document.getElementById('ac-ex-cat').value,
+    date: document.getElementById('ac-ex-date').value || dk,
+    byAccountant: true
+  });
+  ['ac-ex-to','ac-ex-desc','ac-ex-d','ac-ex-iq'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('ac-ex-date').value = dk;
+  const preview=document.getElementById('ac-ex-preview');
+  const placeholder=document.getElementById('ac-ex-placeholder');
+  if(preview) preview.style.display='none';
+  if(placeholder) placeholder.style.display='block';
+  _acPhotoEx = false;
+  document.getElementById('ac-ex-img').value='';
+  rAcExp(); rSafe(); rExp(); save();
+  toast('📤 تم تسجيل المصروف!');
+}
+
+// Render accountant lists
+function rAcRecv(){
+  const el=document.getElementById('ac-rv-list');if(!el)return;
+  const list=[...S.recv].filter(r=>r.byAccountant).reverse().slice(0,10);
+  el.innerHTML=list.length?list.map(r=>`
+    <div class="txr">
+      <div class="tx-ico" style="background:var(--gl)">📥</div>
+      <div style="flex:1">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--gn)">${r.from}</div>
+        ${r.desc?`<div style="font-size:0.68rem;color:var(--mt)">${r.desc}</div>`:''}
+        <div style="font-size:0.66rem;color:var(--mt)">${r.date}</div>
+      </div>
+      <span style="font-weight:700;color:var(--gn)">+${fD(r.amtD)}</span>
+    </div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:12px">لا توجد مستلمات بعد</div>';
+}
+
+function rAcExp(){
+  const el=document.getElementById('ac-ex-list');if(!el)return;
+  const list=[...S.expenses].filter(e=>e.byAccountant).reverse().slice(0,10);
+  el.innerHTML=list.length?list.map(e=>`
+    <div class="txr">
+      <div class="tx-ico" style="background:var(--rl)">📤</div>
+      <div style="flex:1">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--rd)">${e.to}</div>
+        ${e.desc?`<div style="font-size:0.68rem;color:var(--mt)">${e.desc}</div>`:''}
+        <div style="font-size:0.66rem;color:var(--mt)">${e.date}</div>
+      </div>
+      <span style="font-weight:700;color:var(--rd)">-${fD(e.amtD)}</span>
+    </div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:12px">لا توجد مصروفات بعد</div>';
+}
+
+// CALCULATOR
+function calcAC(key){
+  const disp = document.getElementById('calc-disp');
+  const expr = document.getElementById('calc-expr');
+  if(!disp || !expr) return;
+  if(key==='C'){
+    _calcExpr=''; _calcVal='0';
+    disp.textContent='0'; expr.textContent='';
+    return;
+  }
+  if(key==='='){
+    try{
+      const result = Function('"use strict"; return ('+_calcExpr+')')();
+      _calcVal = String(Math.round(result*100)/100);
+      expr.textContent = _calcExpr + ' =';
+      disp.textContent = Number(_calcVal).toLocaleString();
+      _calcExpr = _calcVal;
+    } catch(e){ disp.textContent='خطأ'; _calcExpr=''; }
+    return;
+  }
+  if(key==='%'){
+    try{
+      const v = parseFloat(_calcExpr)||0;
+      _calcVal = String(v/100);
+      _calcExpr = _calcVal;
+      disp.textContent = Number(_calcVal).toLocaleString();
+    } catch(e){}
+    return;
+  }
+  _calcExpr += key;
+  expr.textContent = _calcExpr;
+  try{
+    const v = Function('"use strict"; return ('+_calcExpr+')')();
+    if(isFinite(v)) disp.textContent = Number(Math.round(v*100)/100).toLocaleString();
+  } catch(e){}
+}
+
+function calcToRecv(){
+  const v = parseFloat(_calcVal)||0;
+  if(!v){ toast('⚠️ الحاسبة فارغة'); return; }
+  switchAcTab('recv', document.getElementById('ac-recv-btn'));
+  const el = document.getElementById('ac-rv-d');
+  if(el) el.value = v;
+  toast('💰 تم نقل المبلغ للمستلم');
+}
+
+function calcToExp(){
+  const v = parseFloat(_calcVal)||0;
+  if(!v){ toast('⚠️ الحاسبة فارغة'); return; }
+  switchAcTab('exp', document.getElementById('ac-exp-btn'));
+  const el = document.getElementById('ac-ex-d');
+  if(el) el.value = v;
+  toast('💰 تم نقل المبلغ للمصروف');
+}
+
+// ACCOUNTANT CLIENTS
+function addAcClient(){
+  const name = document.getElementById('ac-cl-name').value.trim();
+  if(!name){ toast('⚠️ أدخل اسم الزبون'); return; }
+  // Check if already exists
+  const exists = S.clients.find(c=>c.name===name);
+  if(exists){ toast('⚠️ الزبون موجود بالفعل!'); return; }
+  S.clients.push({
+    id:Date.now(), name,
+    phone: document.getElementById('ac-cl-phone').value,
+    co: document.getElementById('ac-cl-co').value,
+    addr:'', txs:[]
+  });
+  ['ac-cl-name','ac-cl-phone','ac-cl-co'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  rAcClients(); rClients(); save();
+  toast('👤 تم إضافة الزبون!');
+}
+
+function searchAcClient(){
+  const q = document.getElementById('ac-cl-search').value.toLowerCase();
+  rAcClients(q);
+}
+
+function rAcClients(query=''){
+  const el = document.getElementById('ac-cl-list'); if(!el) return;
+  const tot = S.clients.reduce((s,c)=>{const b=c.txs.reduce((s2,t)=>s2+(t.type==='dr'?t.amt:-t.amt),0);return s+(b>0?b:0);},0);
+  const totEl = document.getElementById('ac-cl-tot');
+  if(totEl) totEl.textContent = fD(tot);
+  const list = query ? S.clients.filter(c=>c.name.toLowerCase().includes(query)||( c.co&&c.co.toLowerCase().includes(query))) : S.clients;
+  if(!list.length){
+    el.innerHTML = '<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد نتائج</div>';
+    return;
+  }
+  el.innerHTML = list.map(c=>{
+    const bal = c.txs.reduce((s,t)=>s+(t.type==='dr'?t.amt:-t.amt),0);
+    return `<div class="cc" onclick="openAcClientDetail(${c.id})" style="margin-bottom:7px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:0.88rem;font-weight:800">${c.name}</div>
+          ${c.co?`<div style="font-size:0.68rem;color:var(--mt);font-family:Tajawal">${c.co}</div>`:''}
+          ${c.phone?`<div style="font-size:0.66rem;color:var(--mt)">📞 ${c.phone}</div>`:''}
+        </div>
+        <div style="text-align:left">
+          <div style="font-size:0.95rem;font-weight:900;color:${bal>0?'var(--rd)':bal<0?'var(--gn)':'var(--mt)'}">${fD(Math.abs(bal))}</div>
+          <div style="font-size:0.6rem;color:var(--mt);font-family:Tajawal">${bal>0?'متبقي عليه':bal<0?'متبقي له':'مصفى'}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Open client detail from accountant view
+function openAcClientDetail(id){
+  // Reuse the main client detail modal
+  openClientDetail(id);
+}
+
+// Legacy compat
+function addQuick(){}
+function setQType(){}
+function rQuick(){rAcRecv();rAcExp();}
 
 // ===== QUICK ACCOUNTANT =====
 let _qType = 'recv';
