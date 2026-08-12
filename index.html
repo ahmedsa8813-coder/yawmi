@@ -20,9 +20,9 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-width:480px;margin:0 auto;display:flex;flex-direction:column}
 
-/* BOTTOM NAV */
+/* NAV */
 .bnav{flex-shrink:0;background:var(--w);border-top:1px solid var(--br);display:flex;padding:6px 0 env(safe-area-inset-bottom,10px);box-shadow:0 -2px 12px rgba(0,0,0,0.08);z-index:100}
-.bb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-family:'Tajawal';font-size:0.6rem;color:var(--mt);padding:5px 0}
+.bb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-family:'Tajawal';font-size:0.6rem;color:var(--mt);padding:5px 0;transition:color 0.2s}
 .bb .ni{font-size:1.5rem}
 .bb.on{color:var(--bl)}
 
@@ -43,16 +43,25 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ar{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;margin-bottom:8px}
 .ar span{text-align:center;font-size:0.72rem;color:var(--mt)}
+.row{display:flex;gap:8px;align-items:center}
 
 /* BUTTONS */
-.btn{width:100%;padding:13px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:'Cairo';font-size:0.9rem;font-weight:700;cursor:pointer;display:block;margin-top:8px;transition:opacity 0.2s}
+.btn{width:100%;padding:13px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:'Cairo';font-size:0.9rem;font-weight:700;cursor:pointer;display:block;margin-top:8px}
 .btn:active{opacity:0.85}
-.btn-del{background:none;border:none;color:#B0BEC5;cursor:pointer;font-size:1.1rem;padding:2px 6px}
+.btn-sm{padding:8px 14px;border-radius:9px;background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:'Cairo';font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-del{background:none;border:none;color:#B0BEC5;cursor:pointer;font-size:1.1rem;padding:2px 6px;line-height:1}
+.btn-del:hover{color:var(--rd)}
+
+/* TYPE TOGGLE */
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tt{padding:11px 8px;border-radius:11px;border:2px solid var(--br);background:var(--bg);font-family:'Cairo';font-size:0.82rem;font-weight:700;color:var(--mt);cursor:pointer;text-align:center;transition:all 0.2s}
+.tt.on-cl{background:var(--bll);border-color:var(--bl);color:var(--bl)}
+.tt.on-rv{background:var(--gl);border-color:#81C784;color:var(--gn)}
+.tt.on-ex{background:var(--rl);border-color:#EF9A9A;color:var(--rd)}
 
 /* SUMMARY */
 .sc{border-radius:13px;padding:12px;margin-bottom:8px;text-align:center}
-.sc.inc{background:var(--gl)}.sc.exp{background:var(--rl)}.sc.net{background:linear-gradient(135deg,var(--bl),var(--b3));color:white}
-.sc.warn{background:var(--rl)}.sc.info{background:var(--bll)}
+.sc.inc{background:var(--gl)}.sc.exp{background:var(--rl)}.sc.net{background:linear-gradient(135deg,var(--bl),var(--b3));color:white}.sc.info{background:var(--bll)}
 .sc-lbl{font-size:0.62rem;font-weight:700;font-family:'Tajawal';margin-bottom:3px}
 .sc-lbl.inc{color:var(--gn)}.sc-lbl.exp{color:var(--rd)}.sc-lbl.net{color:rgba(255,255,255,0.85)}.sc-lbl.info{color:var(--bl)}
 .sc-amt{font-size:1.15rem;font-weight:900}
@@ -63,32 +72,33 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 .txr{padding:10px;border-bottom:1px solid var(--br);display:flex;gap:8px;align-items:center}
 .txr:last-child{border-bottom:none}
 .tx-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.empty{text-align:center;color:var(--mt);font-family:Tajawal;padding:18px;font-size:0.85rem}
 
 /* CLIENT CARD */
 .cc{background:var(--w);border-radius:12px;padding:12px;margin-bottom:8px;border:1.5px solid var(--br);cursor:pointer;transition:border-color 0.15s}
-.cc:hover,.cc.on{border-color:var(--bl)}
-
-/* GOAL BAR */
-.gb{background:var(--bll);border-radius:99px;height:8px;overflow:hidden;margin-bottom:4px}
-.gf{height:100%;border-radius:99px;transition:width 0.7s;background:linear-gradient(to left,var(--b3),var(--bl))}
+.cc:hover{border-color:var(--bl)}
+.cc-name{font-size:0.92rem;font-weight:800;margin-bottom:2px}
+.cc-info{font-size:0.7rem;color:var(--mt);font-family:Tajawal}
+.cc-bal{font-size:1rem;font-weight:900}
+.cc-bal.dr{color:var(--rd)}.cc-bal.cr{color:var(--gn)}.cc-bal.zero{color:var(--mt)}
 
 /* PHOTO ZONE */
-.photo-zone{border:2px dashed var(--br);border-radius:12px;padding:14px;text-align:center;cursor:pointer;margin-bottom:8px;transition:all 0.2s}
+.photo-zone{border:2px dashed var(--br);border-radius:12px;padding:14px;text-align:center;cursor:pointer;margin-bottom:8px;transition:all 0.2s;position:relative}
 .photo-zone.rv{border-color:#81C784;background:var(--gl)}
 .photo-zone.ex{border-color:#EF9A9A;background:var(--rl)}
-.photo-zone.taken{border-style:solid}
-.photo-zone img{max-width:100%;max-height:140px;border-radius:8px;object-fit:cover;margin-bottom:6px;display:block;margin:0 auto 6px}
+.photo-zone.done{border-style:solid;border-color:var(--bl)}
+.photo-zone img{max-width:100%;max-height:130px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 6px}
 
 /* CALCULATOR */
 .calc-disp{background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left}
-.calc-expr{font-size:0.72rem;color:var(--mt);min-height:18px;font-family:Tajawal}
-.calc-num{font-size:2rem;font-weight:900;color:var(--bl);font-family:Cairo}
-.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.c-expr{font-size:0.72rem;color:var(--mt);min-height:18px;font-family:Tajawal}
+.c-num{font-size:2rem;font-weight:900;color:var(--bl);font-family:Cairo}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .cb{padding:16px 8px;border-radius:11px;background:var(--bg);border:1.5px solid var(--br);font-family:'Cairo';font-size:1rem;font-weight:700;color:var(--tx);cursor:pointer;text-align:center}
 .cb:active{background:var(--bll)}
 .cb.op{background:var(--bll);color:var(--bl);border-color:var(--bm)}
 .cb.eq{background:var(--bl);color:white;border-color:var(--bl)}
-.cb.cl{background:var(--rl);color:var(--rd);border-color:#EF9A9A}
+.cb.cl{background:var(--rl);color:var(--rd)}
 
 /* MODAL */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:flex-end;justify-content:center}
@@ -100,11 +110,9 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 .toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--bl);color:white;padding:10px 22px;border-radius:99px;font-family:'Cairo';font-weight:700;font-size:0.82rem;z-index:9999;transition:top 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(21,101,192,0.35)}
 .toast.on{top:14px}
 
-/* BADGE */
-.bdg{font-size:0.6rem;padding:2px 8px;border-radius:99px;font-weight:700;display:inline-block}
-.bdg-dr{background:var(--rl);color:var(--rd)}
-.bdg-cr{background:var(--gl);color:var(--gn)}
-.bdg-zero{background:var(--bg);color:var(--mt)}
+/* GOAL BAR */
+.gb{background:var(--bll);border-radius:99px;height:7px;overflow:hidden}
+.gf{height:100%;border-radius:99px;background:linear-gradient(to left,var(--b3),var(--bl))}
 </style>
 </head>
 <body>
@@ -116,54 +124,64 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
   <div class="sc inc">
     <div class="sc-lbl inc">📥 إجمالي المستلم اليوم</div>
     <div class="sc-amt inc" id="rv-today">$0</div>
+    <div class="sub" style="color:var(--gn)" id="rv-today-iq">0 د.ع</div>
   </div>
 
   <div class="card" style="border:2px solid #81C784">
     <div class="ct" style="color:var(--gn)">➕ مستلم جديد</div>
-    <!-- اختيار الزبون أو كتابة يدوية -->
-    <div style="display:flex;gap:7px;margin-bottom:8px">
-      <button id="rv-client-btn" onclick="setRvMode('client')" style="flex:1;padding:9px;border-radius:10px;background:var(--bl);color:white;border:none;font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">👥 زبون محفوظ</button>
-      <button id="rv-other-btn" onclick="setRvMode('other')" style="flex:1;padding:9px;border-radius:10px;background:var(--bg);color:var(--mt);border:1.5px solid var(--br);font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">✏️ غير زبون</button>
+
+    <!-- نوع المصدر -->
+    <div class="type-toggle mb">
+      <button class="tt on-cl" id="rv-mode-cl" onclick="setRvMode('client')">👥 زبون محفوظ</button>
+      <button class="tt" id="rv-mode-ot" onclick="setRvMode('other')">✏️ جهة أخرى</button>
     </div>
+
+    <!-- زبون محفوظ -->
     <div id="rv-client-div">
-      <select class="sel mb" id="rv-client-sel">
+      <select class="sel mb" id="rv-cl-sel">
         <option value="">-- اختر الزبون --</option>
       </select>
     </div>
+
+    <!-- جهة أخرى -->
     <div id="rv-other-div" style="display:none">
-      <input class="inp mb" type="text" id="rv-from-manual" placeholder="من؟ (اسم المصدر)">
+      <input class="inp mb" type="text" id="rv-manual" placeholder="من؟ (اسم المصدر)">
     </div>
-    <input class="inp mb" type="text" id="rv-desc" placeholder="الوصف / التبويب">
+
+    <input class="inp mb" type="text" id="rv-desc" placeholder="الوصف / التبويب (اختياري)">
+
     <div class="ar">
       <input class="inp" type="number" id="rv-d" placeholder="$ دولار" inputmode="decimal">
       <span>أو</span>
       <input class="inp" type="number" id="rv-iq" placeholder="د.ع" inputmode="decimal">
     </div>
+
     <select class="sel mb" id="rv-type">
       <option value="cash">💵 نقد</option>
       <option value="transfer">🏦 تحويل</option>
       <option value="ajal">📅 آجل مُحصَّل</option>
       <option value="sale">🏭 بيع ماكينة</option>
     </select>
+
     <input class="inp mb" type="date" id="rv-date">
 
     <!-- صورة إجبارية -->
-    <div class="photo-zone rv" id="rv-photo-zone" onclick="document.getElementById('rv-img').click()">
-      <img id="rv-img-preview" style="display:none">
-      <div id="rv-placeholder">
-        <div style="font-size:2rem;margin-bottom:5px">📷</div>
+    <div class="photo-zone rv" id="rv-pz" onclick="document.getElementById('rv-img').click()">
+      <img id="rv-img-prev" style="display:none">
+      <div id="rv-ph">
+        <div style="font-size:2rem;margin-bottom:4px">📷</div>
         <div style="font-size:0.82rem;font-weight:700;color:var(--gn)">صوّر الفاتورة / الإيصال</div>
         <div style="font-size:0.65rem;color:var(--mt);font-family:Tajawal;margin-top:2px">إجباري قبل التسجيل</div>
       </div>
-      <input type="file" id="rv-img" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto('rv',this)">
+      <input type="file" id="rv-img" accept="image/*" capture="environment" style="display:none" onchange="takePhoto('rv',this)">
     </div>
 
     <button class="btn" style="background:var(--gn)" onclick="saveRecv()">💾 تسجيل المستلم</button>
   </div>
 
   <div class="card">
-    <div class="ct">📋 سجل اليوم</div>
-    <div id="rv-list"></div>
+    <div class="ct">📋 سجل المستلمات</div>
+    <div id="rv-list"><div class="empty">لا توجد مستلمات بعد</div></div>
   </div>
 </div>
 
@@ -174,29 +192,34 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
   <div class="sc exp">
     <div class="sc-lbl exp">📤 إجمالي المصروف اليوم</div>
     <div class="sc-amt exp" id="ex-today">$0</div>
+    <div class="sub" style="color:var(--rd)" id="ex-today-iq">0 د.ع</div>
   </div>
 
   <div class="card" style="border:2px solid #EF9A9A">
     <div class="ct" style="color:var(--rd)">➕ مصروف جديد</div>
-    <!-- اختيار الزبون أو كتابة يدوية -->
-    <div style="display:flex;gap:7px;margin-bottom:8px">
-      <button id="ex-client-btn" onclick="setExMode('client')" style="flex:1;padding:9px;border-radius:10px;background:var(--rd);color:white;border:none;font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">👥 زبون محفوظ</button>
-      <button id="ex-other-btn" onclick="setExMode('other')" style="flex:1;padding:9px;border-radius:10px;background:var(--bg);color:var(--mt);border:1.5px solid var(--br);font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">✏️ غير زبون</button>
+
+    <div class="type-toggle mb">
+      <button class="tt on-cl" id="ex-mode-cl" onclick="setExMode('client')">👥 زبون محفوظ</button>
+      <button class="tt" id="ex-mode-ot" onclick="setExMode('other')">✏️ جهة أخرى</button>
     </div>
+
     <div id="ex-client-div">
-      <select class="sel mb" id="ex-client-sel">
+      <select class="sel mb" id="ex-cl-sel">
         <option value="">-- اختر الزبون --</option>
       </select>
     </div>
     <div id="ex-other-div" style="display:none">
-      <input class="inp mb" type="text" id="ex-to-manual" placeholder="لمن؟ (مورد / جهة)">
+      <input class="inp mb" type="text" id="ex-manual" placeholder="لمن؟ (مورد / جهة)">
     </div>
-    <input class="inp mb" type="text" id="ex-desc" placeholder="الوصف / التبويب">
+
+    <input class="inp mb" type="text" id="ex-desc" placeholder="الوصف / التبويب (اختياري)">
+
     <div class="ar">
       <input class="inp" type="number" id="ex-d" placeholder="$ دولار" inputmode="decimal">
       <span>أو</span>
       <input class="inp" type="number" id="ex-iq" placeholder="د.ع" inputmode="decimal">
     </div>
+
     <select class="sel mb" id="ex-cat">
       <option value="shipping">🚢 شحن بحري</option>
       <option value="customs">🏛 جمارك ورسوم</option>
@@ -207,25 +230,25 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
       <option value="loan">💸 سلفة / تمويل أوردر</option>
       <option value="other">📌 متفرقات</option>
     </select>
+
     <input class="inp mb" type="date" id="ex-date">
 
-    <!-- صورة إجبارية -->
-    <div class="photo-zone ex" id="ex-photo-zone" onclick="document.getElementById('ex-img').click()">
-      <img id="ex-img-preview" style="display:none">
-      <div id="ex-placeholder">
-        <div style="font-size:2rem;margin-bottom:5px">📷</div>
+    <div class="photo-zone ex" id="ex-pz" onclick="document.getElementById('ex-img').click()">
+      <img id="ex-img-prev" style="display:none">
+      <div id="ex-ph">
+        <div style="font-size:2rem;margin-bottom:4px">📷</div>
         <div style="font-size:0.82rem;font-weight:700;color:var(--rd)">صوّر الفاتورة / الإيصال</div>
         <div style="font-size:0.65rem;color:var(--mt);font-family:Tajawal;margin-top:2px">إجباري قبل التسجيل</div>
       </div>
-      <input type="file" id="ex-img" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto('ex',this)">
+      <input type="file" id="ex-img" accept="image/*" capture="environment" style="display:none" onchange="takePhoto('ex',this)">
     </div>
 
     <button class="btn" style="background:var(--rd)" onclick="saveExp()">💾 تسجيل المصروف</button>
   </div>
 
   <div class="card">
-    <div class="ct">📋 سجل اليوم</div>
-    <div id="ex-list"></div>
+    <div class="ct">📋 سجل المصروفات</div>
+    <div id="ex-list"><div class="empty">لا توجد مصروفات بعد</div></div>
   </div>
 </div>
 
@@ -234,29 +257,25 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
   <div class="pt">🧮 الحاسبة</div>
   <div class="card">
     <div class="calc-disp">
-      <div class="calc-expr" id="c-expr"></div>
-      <div class="calc-num" id="c-disp">0</div>
+      <div class="c-expr" id="c-expr"></div>
+      <div class="c-num" id="c-num">0</div>
     </div>
-    <div class="calc-grid">
+    <div class="cgrid">
       <button class="cb cl" style="grid-column:span 2" onclick="ca('C')">مسح C</button>
       <button class="cb op" onclick="ca('%')">%</button>
       <button class="cb op" onclick="ca('/')">÷</button>
-
       <button class="cb" onclick="ca('7')">7</button>
       <button class="cb" onclick="ca('8')">8</button>
       <button class="cb" onclick="ca('9')">9</button>
       <button class="cb op" onclick="ca('*')">×</button>
-
       <button class="cb" onclick="ca('4')">4</button>
       <button class="cb" onclick="ca('5')">5</button>
       <button class="cb" onclick="ca('6')">6</button>
       <button class="cb op" onclick="ca('-')">−</button>
-
       <button class="cb" onclick="ca('1')">1</button>
       <button class="cb" onclick="ca('2')">2</button>
       <button class="cb" onclick="ca('3')">3</button>
       <button class="cb op" onclick="ca('+')">+</button>
-
       <button class="cb" style="grid-column:span 2" onclick="ca('0')">0</button>
       <button class="cb" onclick="ca('.')">.</button>
       <button class="cb eq" onclick="ca('=')">=</button>
@@ -274,14 +293,14 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 
   <div class="sc info" style="margin-bottom:11px">
     <div class="sc-lbl info">💰 إجمالي ديون الزبائن</div>
-    <div class="sc-amt info" id="cl-tot">$0</div>
+    <div class="sc-amt info" id="cl-tot-all">$0</div>
   </div>
 
   <!-- إضافة زبون -->
   <div class="card">
     <div class="ct">➕ زبون جديد</div>
-    <input class="inp mb" type="text" id="cl-name" placeholder="اسم الزبون">
-    <input class="inp mb" type="text" id="cl-phone" placeholder="📞 رقم الموبايل">
+    <input class="inp mb" type="text" id="cl-name" placeholder="اسم الزبون *">
+    <input class="inp mb" type="tel" id="cl-phone" placeholder="📞 رقم الموبايل">
     <input class="inp mb" type="text" id="cl-co" placeholder="🏭 اسم الورشة / الشركة">
     <input class="inp mb" type="text" id="cl-addr" placeholder="📍 المنطقة / العنوان">
     <button class="btn" onclick="addClient()">💾 إضافة الزبون</button>
@@ -289,15 +308,28 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 
   <!-- بحث -->
   <div class="card">
-    <div class="ct">🔍 بحث وكشف حساب</div>
-    <input class="inp mb" type="text" id="cl-search" placeholder="ابحث باسم الزبون..." oninput="searchCl()">
-    <div id="cl-list"></div>
+    <div class="ct">📋 قائمة الزبائن</div>
+    <input class="inp mb" type="text" id="cl-search" placeholder="🔍 ابحث عن زبون..." oninput="rClients()">
+    <div id="cl-list"><div class="empty">لا توجد زبائن بعد</div></div>
   </div>
 </div>
 
-<!-- CLIENT DETAIL MODAL -->
+<!-- MODAL: تفاصيل زبون -->
 <div class="modal" id="cl-modal">
-  <div class="mbox" id="cl-modal-content"></div>
+  <div class="mbox" id="cl-modal-body"></div>
+</div>
+
+<!-- MODAL: تعديل زبون -->
+<div class="modal" id="edit-modal">
+  <div class="mbox">
+    <div class="mt2">✏️ تعديل بيانات الزبون</div>
+    <input class="inp mb" type="text" id="edit-name" placeholder="اسم الزبون *">
+    <input class="inp mb" type="tel" id="edit-phone" placeholder="📞 رقم الموبايل">
+    <input class="inp mb" type="text" id="edit-co" placeholder="🏭 اسم الورشة">
+    <input class="inp mb" type="text" id="edit-addr" placeholder="📍 العنوان">
+    <button class="btn" onclick="saveEditClient()">💾 حفظ التعديلات</button>
+    <button class="btn" style="background:var(--bg);color:var(--mt);border:1.5px solid var(--br);margin-top:6px" onclick="closeModals()">إلغاء</button>
+  </div>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -311,33 +343,68 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 <div class="toast" id="toast"></div>
 
 <script>
-// STATE
-let S = JSON.parse(localStorage.getItem('acc_v1') || '{}');
-if(!S.recv) S.recv = [];
-if(!S.expenses) S.expenses = [];
+// ===== STATE =====
+let S = JSON.parse(localStorage.getItem('acc_v2') || '{}');
+if(!S.recv)    S.recv    = [];
+if(!S.exp)     S.exp     = [];
 if(!S.clients) S.clients = [];
-if(!S.exrate) S.exrate = 1520;
+if(!S.exrate)  S.exrate  = 1520;
 
 const dk = new Date().toISOString().split('T')[0];
-const dn = new Date().toLocaleDateString('ar-IQ',{weekday:'long',day:'numeric',month:'long'});
 
-// Photo flags
+// Modes
+let _rvMode = 'client';
+let _exMode = 'client';
 let _rvPhoto = false;
 let _exPhoto = false;
+let _calcExpr = '';
+let _calcVal = '0';
+let _editId = null;
+let _clTxType = 'dr';
 
-// Calc state
-let _expr = '';
-let _calcResult = '0';
-
-// Init dates
+// Init
 document.getElementById('rv-date').value = dk;
 document.getElementById('ex-date').value = dk;
+rAll();
 
-// Render on load
-rRecv();
-rExp();
-rClients();
-updateClientSelects();
+function rAll() { rRecv(); rExp(); rClients(); fillSelects(); }
+
+// ===== UTILS =====
+const rate = () => S.exrate || 1520;
+const toD  = iq => iq / rate();
+const toIQ = d  => d  * rate();
+const fD   = v  => '$' + Math.round(v).toLocaleString();
+const fIQ  = v  => Math.round(v).toLocaleString() + ' د.ع';
+
+function getD(a, b) {
+  const d = parseFloat(document.getElementById(a)?.value) || 0;
+  const iq = parseFloat(document.getElementById(b)?.value) || 0;
+  return d > 0 ? d : iq > 0 ? toD(iq) : 0;
+}
+function getIQ(a, b) {
+  const d = parseFloat(document.getElementById(a)?.value) || 0;
+  const iq = parseFloat(document.getElementById(b)?.value) || 0;
+  return iq > 0 ? iq : d > 0 ? toIQ(d) : 0;
+}
+
+function $(id, v) { const el = document.getElementById(id); if(el) el.textContent = v; }
+function save() { localStorage.setItem('acc_v2', JSON.stringify(S)); }
+function toast(msg, ok) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = ok === false ? 'var(--rd)' : 'var(--bl)';
+  t.classList.remove('on');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    t.classList.add('on');
+    setTimeout(() => t.classList.remove('on'), 2400);
+  }));
+}
+function closeModals() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('on'));
+}
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { if(e.target === m) closeModals(); });
+});
 
 // ===== NAV =====
 function showPg(id, btn) {
@@ -345,419 +412,320 @@ function showPg(id, btn) {
   document.querySelectorAll('.bb').forEach(b => b.classList.remove('on'));
   document.getElementById('pg-' + id).classList.add('on');
   btn.classList.add('on');
-  if(id === 'cl') rClients();
 }
 
-// ===== UTILS =====
-const rate = () => S.exrate || 1520;
-const toD = iq => iq / rate();
-const toIQ = d => d * rate();
-const fD = v => '$' + Math.round(v).toLocaleString();
-const fIQ = v => Math.round(v).toLocaleString() + ' د.ع';
-
-function getD(did, iqid) {
-  const d = parseFloat(document.getElementById(did)?.value) || 0;
-  const iq = parseFloat(document.getElementById(iqid)?.value) || 0;
-  return d > 0 ? d : iq > 0 ? toD(iq) : 0;
-}
-function getIQ(did, iqid) {
-  const d = parseFloat(document.getElementById(did)?.value) || 0;
-  const iq = parseFloat(document.getElementById(iqid)?.value) || 0;
-  return iq > 0 ? iq : d > 0 ? toIQ(d) : 0;
+// ===== FILL SELECTS =====
+function fillSelects() {
+  const opts = '<option value="">-- اختر الزبون --</option>' +
+    S.clients.map(c => `<option value="${c.id}">${c.name}${c.co ? ' — ' + c.co : ''}</option>`).join('');
+  ['rv-cl-sel', 'ex-cl-sel'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = opts;
+  });
 }
 
-function $(id, v) { const el = document.getElementById(id); if(el) el.textContent = v; }
-function save() { localStorage.setItem('acc_v1', JSON.stringify(S)); }
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.remove('on');
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    t.classList.add('on');
-    setTimeout(() => t.classList.remove('on'), 2400);
-  }));
+// ===== MODE SWITCH =====
+function setRvMode(mode) {
+  _rvMode = mode;
+  document.getElementById('rv-client-div').style.display = mode === 'client' ? 'block' : 'none';
+  document.getElementById('rv-other-div').style.display  = mode === 'other'  ? 'block' : 'none';
+  document.getElementById('rv-mode-cl').className = 'tt' + (mode === 'client' ? ' on-cl' : '');
+  document.getElementById('rv-mode-ot').className = 'tt' + (mode === 'other'  ? ' on-cl' : '');
+}
+function setExMode(mode) {
+  _exMode = mode;
+  document.getElementById('ex-client-div').style.display = mode === 'client' ? 'block' : 'none';
+  document.getElementById('ex-other-div').style.display  = mode === 'other'  ? 'block' : 'none';
+  document.getElementById('ex-mode-cl').className = 'tt' + (mode === 'client' ? ' on-cl' : '');
+  document.getElementById('ex-mode-ot').className = 'tt' + (mode === 'other'  ? ' on-cl' : '');
 }
 
 // ===== PHOTO =====
-function previewPhoto(type, input) {
-  const file = input.files[0];
-  if(!file) return;
+function takePhoto(type, input) {
+  const file = input.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const preview = document.getElementById(type + '-img-preview');
-    const placeholder = document.getElementById(type + '-placeholder');
-    const zone = document.getElementById(type + '-photo-zone');
-    if(preview) { preview.src = e.target.result; preview.style.display = 'block'; }
-    if(placeholder) placeholder.style.display = 'none';
-    if(zone) zone.classList.add('taken');
+    const prev = document.getElementById(type + '-img-prev');
+    const ph   = document.getElementById(type + '-ph');
+    const pz   = document.getElementById(type + '-pz');
+    if(prev) { prev.src = e.target.result; prev.style.display = 'block'; }
+    if(ph)   ph.style.display = 'none';
+    if(pz)   pz.classList.add('done');
     if(type === 'rv') _rvPhoto = true;
     if(type === 'ex') _exPhoto = true;
   };
   reader.readAsDataURL(file);
 }
-
 function resetPhoto(type) {
-  const preview = document.getElementById(type + '-img-preview');
-  const placeholder = document.getElementById(type + '-placeholder');
-  const zone = document.getElementById(type + '-photo-zone');
-  const input = document.getElementById(type + '-img');
-  if(preview) { preview.src = ''; preview.style.display = 'none'; }
-  if(placeholder) placeholder.style.display = 'block';
-  if(zone) zone.classList.remove('taken');
-  if(input) input.value = '';
+  const prev = document.getElementById(type + '-img-prev');
+  const ph   = document.getElementById(type + '-ph');
+  const pz   = document.getElementById(type + '-pz');
+  const inp  = document.getElementById(type + '-img');
+  if(prev) { prev.src = ''; prev.style.display = 'none'; }
+  if(ph)   ph.style.display = 'block';
+  if(pz)   pz.classList.remove('done');
+  if(inp)  inp.value = '';
   if(type === 'rv') _rvPhoto = false;
   if(type === 'ex') _exPhoto = false;
 }
 
-// ===== RECEIVE =====
-// Mode: 'client' or 'other'
-let _rvMode = 'client';
-let _exMode = 'client';
-
-function setRvMode(mode) {
-  _rvMode = mode;
-  const isClient = mode === 'client';
-  document.getElementById('rv-client-div').style.display = isClient ? 'block' : 'none';
-  document.getElementById('rv-other-div').style.display = isClient ? 'none' : 'block';
-  const cb = document.getElementById('rv-client-btn');
-  const ob = document.getElementById('rv-other-btn');
-  if(cb) { cb.style.background = isClient ? 'var(--bl)' : 'var(--bg)'; cb.style.color = isClient ? 'white' : 'var(--mt)'; cb.style.border = isClient ? 'none' : '1.5px solid var(--br)'; }
-  if(ob) { ob.style.background = isClient ? 'var(--bg)' : 'var(--bl)'; ob.style.color = isClient ? 'var(--mt)' : 'white'; ob.style.border = isClient ? '1.5px solid var(--br)' : 'none'; }
-}
-
-function setExMode(mode) {
-  _exMode = mode;
-  const isClient = mode === 'client';
-  document.getElementById('ex-client-div').style.display = isClient ? 'block' : 'none';
-  document.getElementById('ex-other-div').style.display = isClient ? 'none' : 'block';
-  const cb = document.getElementById('ex-client-btn');
-  const ob = document.getElementById('ex-other-btn');
-  if(cb) { cb.style.background = isClient ? 'var(--rd)' : 'var(--bg)'; cb.style.color = isClient ? 'white' : 'var(--mt)'; cb.style.border = isClient ? 'none' : '1.5px solid var(--br)'; }
-  if(ob) { ob.style.background = isClient ? 'var(--bg)' : 'var(--rd)'; ob.style.color = isClient ? 'var(--mt)' : 'white'; ob.style.border = isClient ? '1.5px solid var(--br)' : 'none'; }
-}
-
-function getRvFrom() {
+// ===== GET NAME FROM FORM =====
+function getRvName() {
   if(_rvMode === 'client') {
-    const sel = document.getElementById('rv-client-sel');
-    return sel ? sel.value : '';
+    const sel = document.getElementById('rv-cl-sel');
+    const id  = sel ? parseInt(sel.value) : 0;
+    const cl  = S.clients.find(c => c.id === id);
+    return cl ? cl.name : '';
   }
-  const el = document.getElementById('rv-from-manual');
-  return el ? el.value.trim() : '';
+  return (document.getElementById('rv-manual')?.value || '').trim();
 }
-
-function getExTo() {
+function getRvClientId() {
+  if(_rvMode !== 'client') return null;
+  const sel = document.getElementById('rv-cl-sel');
+  return sel && sel.value ? parseInt(sel.value) : null;
+}
+function getExName() {
   if(_exMode === 'client') {
-    const sel = document.getElementById('ex-client-sel');
-    return sel ? sel.value : '';
+    const sel = document.getElementById('ex-cl-sel');
+    const id  = sel ? parseInt(sel.value) : 0;
+    const cl  = S.clients.find(c => c.id === id);
+    return cl ? cl.name : '';
   }
-  const el = document.getElementById('ex-to-manual');
-  return el ? el.value.trim() : '';
+  return (document.getElementById('ex-manual')?.value || '').trim();
+}
+function getExClientId() {
+  if(_exMode !== 'client') return null;
+  const sel = document.getElementById('ex-cl-sel');
+  return sel && sel.value ? parseInt(sel.value) : null;
 }
 
-// Update client dropdowns when clients change
-function updateClientSelects() {
-  const opts = '<option value="">-- اختر الزبون --</option>' +
-    S.clients.map(c => `<option value="${c.name}">${c.name}${c.co ? ' — ' + c.co : ''}</option>`).join('');
-  const rvSel = document.getElementById('rv-client-sel');
-  const exSel = document.getElementById('ex-client-sel');
-  if(rvSel) rvSel.innerHTML = opts;
-  if(exSel) exSel.innerHTML = opts;
-}
-
+// ===== SAVE RECV =====
 function saveRecv() {
-  if(!_rvPhoto) { toast('📷 صوّر الفاتورة أولاً!'); return; }
-  const from = getRvFrom();
-  if(!from) { toast(_rvMode === 'client' ? '⚠️ اختر الزبون' : '⚠️ أدخل الاسم'); return; }
+  if(!_rvPhoto) { toast('📷 صوّر الفاتورة أولاً!', false); return; }
+  const name = getRvName();
+  if(!name) { toast('⚠️ ' + (_rvMode === 'client' ? 'اختر الزبون' : 'أدخل الاسم'), false); return; }
   const amtD = getD('rv-d', 'rv-iq');
-  if(!amtD) { toast('⚠️ أدخل المبلغ'); return; }
+  if(!amtD) { toast('⚠️ أدخل المبلغ', false); return; }
 
-  const tx = {
-    id: Date.now(),
-    from,
-    desc: document.getElementById('rv-desc').value,
-    amtD,
-    amtIQ: getIQ('rv-d', 'rv-iq'),
-    type: document.getElementById('rv-type').value,
-    date: document.getElementById('rv-date').value || dk,
-    isClient: _rvMode === 'client'
-  };
-  S.recv.push(tx);
+  const amtIQ = getIQ('rv-d', 'rv-iq');
+  const date  = document.getElementById('rv-date').value || dk;
+  const desc  = document.getElementById('rv-desc').value.trim();
+  const type  = document.getElementById('rv-type').value;
+  const cid   = getRvClientId();
 
-  // اذا زبون محفوظ، سجل في كشف حسابه تلقائياً
-  if(_rvMode === 'client') {
-    const client = S.clients.find(c => c.name === from);
-    if(client) {
-      client.txs.push({
+  // أضف للسجل العام
+  S.recv.push({ id: Date.now(), name, desc, amtD, amtIQ, type, date, cid });
+
+  // اذا زبون محفوظ — سجل في كشف حسابه تلقائياً كدائن (تسديد)
+  if(cid) {
+    const cl = S.clients.find(c => c.id === cid);
+    if(cl) {
+      cl.txs.push({
         id: Date.now() + 1,
-        type: 'cr', // دائن = تسديد / دفع
-        desc: tx.desc || 'استلام',
+        type: 'cr',
+        desc: desc || 'استلام',
         amt: amtD,
-        amtIQ: tx.amtIQ,
-        date: tx.date,
-        autoFromRecv: true
+        amtIQ,
+        date
       });
     }
   }
 
-  ['rv-desc','rv-d','rv-iq'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-  const rvSel = document.getElementById('rv-client-sel');
-  if(rvSel) rvSel.value = '';
-  const rvManual = document.getElementById('rv-from-manual');
-  if(rvManual) rvManual.value = '';
+  // Reset form
+  ['rv-desc','rv-d','rv-iq'].forEach(id => { const el=document.getElementById(id); if(el)el.value=''; });
   document.getElementById('rv-date').value = dk;
+  document.getElementById('rv-cl-sel').value = '';
+  const manual = document.getElementById('rv-manual'); if(manual) manual.value='';
   resetPhoto('rv');
-  rRecv();
-  rClients();
-  save();
+
+  rRecv(); rClients(); fillSelects(); save();
   toast('📥 تم تسجيل المستلم!');
 }
 
-function delRecv(id) {
-  S.recv = S.recv.filter(r => r.id !== id);
-  rRecv(); save();
+// ===== SAVE EXP =====
+function saveExp() {
+  if(!_exPhoto) { toast('📷 صوّر الفاتورة أولاً!', false); return; }
+  const name = getExName();
+  if(!name) { toast('⚠️ ' + (_exMode === 'client' ? 'اختر الزبون' : 'أدخل الجهة'), false); return; }
+  const amtD = getD('ex-d', 'ex-iq');
+  if(!amtD) { toast('⚠️ أدخل المبلغ', false); return; }
+
+  const amtIQ = getIQ('ex-d', 'ex-iq');
+  const date  = document.getElementById('ex-date').value || dk;
+  const desc  = document.getElementById('ex-desc').value.trim();
+  const cat   = document.getElementById('ex-cat').value;
+  const cid   = getExClientId();
+
+  S.exp.push({ id: Date.now(), name, desc, amtD, amtIQ, cat, date, cid });
+
+  // اذا زبون محفوظ — سجل في كشف حسابه كمدين (عليه)
+  if(cid) {
+    const cl = S.clients.find(c => c.id === cid);
+    if(cl) {
+      cl.txs.push({
+        id: Date.now() + 1,
+        type: 'dr',
+        desc: desc || 'صرف',
+        amt: amtD,
+        amtIQ,
+        date
+      });
+    }
+  }
+
+  ['ex-desc','ex-d','ex-iq'].forEach(id => { const el=document.getElementById(id); if(el)el.value=''; });
+  document.getElementById('ex-date').value = dk;
+  document.getElementById('ex-cl-sel').value = '';
+  const manual = document.getElementById('ex-manual'); if(manual) manual.value='';
+  resetPhoto('ex');
+
+  rExp(); rClients(); fillSelects(); save();
+  toast('📤 تم تسجيل المصروف!');
 }
 
+// ===== RENDER RECV =====
 function rRecv() {
-  const todayList = S.recv.filter(r => r.date === dk);
-  const todayTotal = todayList.reduce((s, r) => s + r.amtD, 0);
-  $('rv-today', fD(todayTotal));
+  const todayD  = S.recv.filter(r => r.date === dk).reduce((s,r) => s + r.amtD, 0);
+  const todayIQ = S.recv.filter(r => r.date === dk).reduce((s,r) => s + r.amtIQ, 0);
+  $('rv-today', fD(todayD));
+  $('rv-today-iq', fIQ(todayIQ));
 
   const el = document.getElementById('rv-list'); if(!el) return;
-  const list = [...S.recv].reverse().slice(0, 20);
-  const typeL = { cash:'💵 نقد', transfer:'🏦 تحويل', ajal:'📅 آجل', sale:'🏭 بيع ماكينة' };
+  const tL = { cash:'💵 نقد', transfer:'🏦 تحويل', ajal:'📅 آجل', sale:'🏭 بيع ماكينة' };
+  const list = [...S.recv].reverse().slice(0, 30);
   el.innerHTML = list.length ? list.map(r => `
     <div class="txr">
       <div class="tx-ico" style="background:var(--gl)">📥</div>
       <div style="flex:1">
-        <div style="font-size:0.84rem;font-weight:700;color:var(--gn)">${r.from}</div>
+        <div style="font-size:0.84rem;font-weight:700;color:var(--gn)">${r.name}</div>
         ${r.desc ? `<div style="font-size:0.7rem;color:var(--mt)">${r.desc}</div>` : ''}
-        <div style="font-size:0.67rem;color:var(--mt)">${typeL[r.type]||r.type} | ${r.date}</div>
+        <div style="font-size:0.67rem;color:var(--mt)">${tL[r.type]||r.type} | ${r.date}</div>
       </div>
       <div style="text-align:left">
-        <div style="font-weight:700;color:var(--gn);font-size:0.9rem">${fD(r.amtD)}</div>
+        <div style="font-weight:700;color:var(--gn)">${fD(r.amtD)}</div>
         <div style="font-size:0.64rem;color:var(--mt)">${fIQ(r.amtIQ)}</div>
       </div>
       <button class="btn-del" onclick="delRecv(${r.id})">×</button>
-    </div>`).join('') : '<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:16px">لا توجد مستلمات بعد</div>';
+    </div>`).join('') : '<div class="empty">لا توجد مستلمات بعد</div>';
 }
+function delRecv(id) { S.recv = S.recv.filter(r => r.id !== id); rRecv(); save(); }
 
-// ===== EXPENSE =====
-function saveExp() {
-  if(!_exPhoto) { toast('📷 صوّر الفاتورة أولاً!'); return; }
-  const to = getExTo();
-  if(!to) { toast(_exMode === 'client' ? '⚠️ اختر الزبون' : '⚠️ أدخل الجهة'); return; }
-  const amtD = getD('ex-d', 'ex-iq');
-  if(!amtD) { toast('⚠️ أدخل المبلغ'); return; }
-
-  const tx = {
-    id: Date.now(),
-    to,
-    desc: document.getElementById('ex-desc').value,
-    amtD,
-    amtIQ: getIQ('ex-d', 'ex-iq'),
-    cat: document.getElementById('ex-cat').value,
-    date: document.getElementById('ex-date').value || dk,
-    isClient: _exMode === 'client'
-  };
-  S.expenses.push(tx);
-
-  // اذا زبون محفوظ، سجل في كشف حسابه تلقائياً
-  if(_exMode === 'client') {
-    const client = S.clients.find(c => c.name === to);
-    if(client) {
-      client.txs.push({
-        id: Date.now() + 1,
-        type: 'dr', // مدين = بضاعة / دين عليه
-        desc: tx.desc || 'صرف',
-        amt: amtD,
-        amtIQ: tx.amtIQ,
-        date: tx.date,
-        autoFromExp: true
-      });
-    }
-  }
-
-  ['ex-desc','ex-d','ex-iq'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-  const exSel = document.getElementById('ex-client-sel');
-  if(exSel) exSel.value = '';
-  const exManual = document.getElementById('ex-to-manual');
-  if(exManual) exManual.value = '';
-  document.getElementById('ex-date').value = dk;
-  resetPhoto('ex');
-  rExp();
-  rClients();
-  save();
-  toast('📤 تم تسجيل المصروف!');
-}
-
-function delExp(id) {
-  S.expenses = S.expenses.filter(e => e.id !== id);
-  rExp(); save();
-}
-
+// ===== RENDER EXP =====
 function rExp() {
-  const todayList = S.expenses.filter(e => e.date === dk);
-  const todayTotal = todayList.reduce((s, e) => s + e.amtD, 0);
-  $('ex-today', fD(todayTotal));
+  const todayD  = S.exp.filter(e => e.date === dk).reduce((s,e) => s + e.amtD, 0);
+  const todayIQ = S.exp.filter(e => e.date === dk).reduce((s,e) => s + e.amtIQ, 0);
+  $('ex-today', fD(todayD));
+  $('ex-today-iq', fIQ(todayIQ));
 
   const el = document.getElementById('ex-list'); if(!el) return;
   const cats = { shipping:'🚢', customs:'🏛', transport:'🚚', salary:'👷', rent:'🏠', ads:'📢', loan:'💸', other:'📌' };
-  const list = [...S.expenses].reverse().slice(0, 20);
+  const list = [...S.exp].reverse().slice(0, 30);
   el.innerHTML = list.length ? list.map(e => `
     <div class="txr">
       <div class="tx-ico" style="background:var(--rl)">${cats[e.cat]||'📌'}</div>
       <div style="flex:1">
-        <div style="font-size:0.84rem;font-weight:700;color:var(--rd)">${e.to}</div>
+        <div style="font-size:0.84rem;font-weight:700;color:var(--rd)">${e.name}</div>
         ${e.desc ? `<div style="font-size:0.7rem;color:var(--mt)">${e.desc}</div>` : ''}
         <div style="font-size:0.67rem;color:var(--mt)">${e.date}</div>
       </div>
       <div style="text-align:left">
-        <div style="font-weight:700;color:var(--rd);font-size:0.9rem">-${fD(e.amtD)}</div>
+        <div style="font-weight:700;color:var(--rd)">-${fD(e.amtD)}</div>
         <div style="font-size:0.64rem;color:var(--mt)">${fIQ(e.amtIQ)}</div>
       </div>
       <button class="btn-del" onclick="delExp(${e.id})">×</button>
-    </div>`).join('') : '<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:16px">لا توجد مصروفات بعد</div>';
+    </div>`).join('') : '<div class="empty">لا توجد مصروفات بعد</div>';
 }
-
-// ===== CALCULATOR =====
-function ca(key) {
-  const disp = document.getElementById('c-disp');
-  const expr = document.getElementById('c-expr');
-  if(!disp || !expr) return;
-
-  if(key === 'C') {
-    _expr = ''; _calcResult = '0';
-    disp.textContent = '0'; expr.textContent = '';
-    return;
-  }
-  if(key === '=') {
-    try {
-      const res = Function('"use strict"; return (' + _expr + ')')();
-      _calcResult = String(Math.round(res * 1000) / 1000);
-      expr.textContent = _expr + ' =';
-      disp.textContent = Number(_calcResult).toLocaleString();
-      _expr = _calcResult;
-    } catch(e) { disp.textContent = 'خطأ ⚠️'; _expr = ''; }
-    return;
-  }
-  if(key === '%') {
-    try {
-      const v = parseFloat(_expr) || 0;
-      _calcResult = String(v / 100);
-      _expr = _calcResult;
-      disp.textContent = Number(_calcResult).toLocaleString();
-      expr.textContent = v + '% =';
-    } catch(e) {}
-    return;
-  }
-  _expr += key;
-  expr.textContent = _expr;
-  try {
-    const v = Function('"use strict"; return (' + _expr + ')')();
-    if(isFinite(v)) disp.textContent = Number(Math.round(v * 1000) / 1000).toLocaleString();
-  } catch(e) {}
-}
-
-function calcTo(target) {
-  const v = parseFloat(_calcResult) || 0;
-  if(!v) { toast('⚠️ الحاسبة فارغة'); return; }
-  if(target === 'recv') {
-    showPg('recv', document.querySelectorAll('.bb')[0]);
-    document.getElementById('rv-d').value = v;
-    toast('💰 تم نقل المبلغ للمستلم');
-  } else {
-    showPg('exp', document.querySelectorAll('.bb')[1]);
-    document.getElementById('ex-d').value = v;
-    toast('💰 تم نقل المبلغ للمصروف');
-  }
-}
+function delExp(id) { S.exp = S.exp.filter(e => e.id !== id); rExp(); save(); }
 
 // ===== CLIENTS =====
 function addClient() {
-  const name = document.getElementById('cl-name').value.trim();
-  if(!name) { toast('⚠️ أدخل اسم الزبون'); return; }
-  if(S.clients.find(c => c.name === name)) { toast('⚠️ الزبون موجود بالفعل!'); return; }
+  const name = (document.getElementById('cl-name')?.value || '').trim();
+  if(!name) { toast('⚠️ أدخل اسم الزبون', false); return; }
+  if(S.clients.find(c => c.name === name)) { toast('⚠️ الزبون موجود بالفعل!', false); return; }
   S.clients.push({
-    id: Date.now(), name,
-    phone: document.getElementById('cl-phone').value,
-    co: document.getElementById('cl-co').value,
-    addr: document.getElementById('cl-addr').value,
-    txs: []
+    id:    Date.now(),
+    name,
+    phone: document.getElementById('cl-phone')?.value || '',
+    co:    document.getElementById('cl-co')?.value    || '',
+    addr:  document.getElementById('cl-addr')?.value  || '',
+    txs:   []
   });
-  ['cl-name','cl-phone','cl-co','cl-addr'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value = '';
-  });
-  rClients(); updateClientSelects(); save();
+  ['cl-name','cl-phone','cl-co','cl-addr'].forEach(id => { const el=document.getElementById(id); if(el)el.value=''; });
+  rClients(); fillSelects(); save();
   toast('👤 تم إضافة الزبون!');
 }
 
-function searchCl() {
-  const q = document.getElementById('cl-search').value.toLowerCase();
-  rClients(q);
-}
-
-function rClients(query = '') {
+function rClients(query) {
+  // Total debts
   const tot = S.clients.reduce((s, c) => {
-    const b = c.txs.reduce((s2, t) => s2 + (t.type === 'dr' ? t.amt : -t.amt), 0);
+    const b = c.txs.reduce((s2, t) => s2 + (t.type==='dr' ? t.amt : -t.amt), 0);
     return s + (b > 0 ? b : 0);
   }, 0);
-  $('cl-tot', fD(tot));
+  $('cl-tot-all', fD(tot));
 
   const el = document.getElementById('cl-list'); if(!el) return;
-  const list = query
-    ? S.clients.filter(c => c.name.toLowerCase().includes(query) || (c.co && c.co.toLowerCase().includes(query)))
-    : S.clients;
+  const q = (document.getElementById('cl-search')?.value || '').toLowerCase();
+  const list = q ? S.clients.filter(c =>
+    c.name.toLowerCase().includes(q) || (c.co && c.co.toLowerCase().includes(q))
+  ) : S.clients;
 
-  el.innerHTML = list.length ? list.map(c => {
-    const bal = c.txs.reduce((s, t) => s + (t.type === 'dr' ? t.amt : -t.amt), 0);
+  if(!list.length) { el.innerHTML = '<div class="empty">لا توجد زبائن</div>'; return; }
+
+  el.innerHTML = list.map(c => {
+    const bal = c.txs.reduce((s, t) => s + (t.type==='dr' ? t.amt : -t.amt), 0);
+    const cls = bal > 0 ? 'dr' : bal < 0 ? 'cr' : 'zero';
+    const lbl = bal > 0 ? '🔴 عليه' : bal < 0 ? '🟢 له' : '✅ مصفى';
     return `<div class="cc" onclick="openClient(${c.id})">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
-          <div style="font-size:0.92rem;font-weight:800">${c.name}</div>
-          ${c.co ? `<div style="font-size:0.7rem;color:var(--mt);font-family:Tajawal">🏭 ${c.co}</div>` : ''}
-          ${c.phone ? `<div style="font-size:0.68rem;color:var(--mt)">📞 ${c.phone}</div>` : ''}
+          <div class="cc-name">${c.name}</div>
+          ${c.co    ? `<div class="cc-info">🏭 ${c.co}</div>` : ''}
+          ${c.phone ? `<div class="cc-info">📞 ${c.phone}</div>` : ''}
+          ${c.addr  ? `<div class="cc-info">📍 ${c.addr}</div>` : ''}
         </div>
         <div style="text-align:left">
-          <div style="font-size:1rem;font-weight:900;color:${bal > 0 ? 'var(--rd)' : bal < 0 ? 'var(--gn)' : 'var(--mt)'}">${fD(Math.abs(bal))}</div>
-          <div style="font-size:0.6rem;color:var(--mt);font-family:Tajawal">${bal > 0 ? '🔴 متبقي عليه' : bal < 0 ? '🟢 متبقي له' : '✅ مصفى'}</div>
+          <div class="cc-bal ${cls}">${fD(Math.abs(bal))}</div>
+          <div style="font-size:0.62rem;color:var(--mt);font-family:Tajawal">${lbl}</div>
         </div>
       </div>
     </div>`;
-  }).join('') : '<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:16px">لا توجد زبائن — أضف زبون جديد 👆</div>';
+  }).join('');
 }
 
-// Client detail modal
-let _clType = 'dr';
-
+// ===== OPEN CLIENT =====
 function openClient(id) {
   const c = S.clients.find(x => x.id === id); if(!c) return;
-  const bal = c.txs.reduce((s, t) => s + (t.type === 'dr' ? t.amt : -t.amt), 0);
+  const bal = c.txs.reduce((s, t) => s + (t.type==='dr' ? t.amt : -t.amt), 0);
+  const balCls = bal > 0 ? 'exp' : bal < 0 ? 'inc' : 'info';
+  const balLbl = bal > 0 ? '🔴 متبقي عليه' : bal < 0 ? '🟢 متبقي له' : '✅ حساب مصفى';
+  _clTxType = 'dr';
 
-  document.getElementById('cl-modal-content').innerHTML = `
+  document.getElementById('cl-modal-body').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
       <div class="mt2" style="margin:0">👤 ${c.name}</div>
-      <button class="btn-del" onclick="closeModal()" style="font-size:1.4rem">×</button>
+      <button class="btn-del" onclick="closeModals()" style="font-size:1.5rem">×</button>
     </div>
 
-    <div class="card" style="background:var(--bll);padding:10px;margin-bottom:9px">
-      ${c.co ? `<div style="font-size:0.76rem;color:var(--mt)">🏭 ${c.co}</div>` : ''}
+    ${c.co || c.phone || c.addr ? `
+    <div class="card" style="background:var(--bll);padding:10px;margin-bottom:10px">
+      ${c.co    ? `<div style="font-size:0.76rem;color:var(--mt)">🏭 ${c.co}</div>` : ''}
       ${c.phone ? `<div style="font-size:0.76rem;color:var(--mt)">📞 ${c.phone}</div>` : ''}
-      ${c.addr ? `<div style="font-size:0.76rem;color:var(--mt)">📍 ${c.addr}</div>` : ''}
-    </div>
+      ${c.addr  ? `<div style="font-size:0.76rem;color:var(--mt)">📍 ${c.addr}</div>` : ''}
+    </div>` : ''}
 
-    <div class="sc ${bal > 0 ? 'exp' : bal < 0 ? 'inc' : 'info'}" style="margin-bottom:9px">
-      <div class="sc-lbl ${bal > 0 ? 'exp' : bal < 0 ? 'inc' : 'info'}">${bal > 0 ? '🔴 متبقي عليه' : bal < 0 ? '🟢 متبقي له' : '✅ حساب مصفى'}</div>
-      <div class="sc-amt ${bal > 0 ? 'exp' : bal < 0 ? 'inc' : 'info'}">${fD(Math.abs(bal))}</div>
-      ${bal !== 0 ? `<div class="sub">${fIQ(Math.abs(bal) * rate())}</div>` : ''}
+    <div class="sc ${balCls}" style="margin-bottom:10px">
+      <div class="sc-lbl ${balCls}">${balLbl}</div>
+      <div class="sc-amt ${balCls}">${fD(Math.abs(bal))}</div>
+      <div class="sub">${fIQ(Math.abs(bal) * rate())}</div>
     </div>
 
     <div class="card">
-      <div class="ct">➕ إضافة حركة</div>
-      <div class="g2" style="margin-bottom:8px">
-        <button id="cl-dr-btn" onclick="setClT('dr')" style="padding:11px;border-radius:10px;background:var(--rl);border:2px solid #EF9A9A;color:var(--rd);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer">📤 مدين (عليه)</button>
-        <button id="cl-cr-btn" onclick="setClT('cr')" style="padding:11px;border-radius:10px;background:var(--bg);border:2px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer">📥 دائن (تسديد)</button>
+      <div class="ct">➕ إضافة حركة يدوية</div>
+      <div class="type-toggle mb">
+        <button id="cl-dr-btn" class="tt on-ex" onclick="setClTx('dr')">📤 مدين (عليه)</button>
+        <button id="cl-cr-btn" class="tt" onclick="setClTx('cr')">📥 دائن (تسديد)</button>
       </div>
-      <input class="inp mb" type="text" id="cl-tx-desc" placeholder="التبويب (بيع ماكينة / تسديد / اكسسورات...)">
+      <input class="inp mb" type="text" id="cl-tx-desc" placeholder="التبويب (بيع ماكينة / تسديد...)">
       <div class="ar">
         <input class="inp" type="number" id="cl-tx-d" placeholder="$ دولار" inputmode="decimal">
         <span>أو</span>
@@ -769,76 +737,142 @@ function openClient(id) {
 
     ${c.txs.length ? `
     <div class="card">
-      <div class="ct">📋 كشف الحساب — الميزان: ${fD(Math.abs(bal))} ${bal > 0 ? 'عليه' : bal < 0 ? 'له' : 'مصفى'}</div>
+      <div class="ct">📋 كشف الحساب (${c.txs.length} حركة)</div>
       ${[...c.txs].reverse().map(t => `
         <div class="txr">
-          <div class="tx-ico" style="background:${t.type === 'dr' ? 'var(--rl)' : 'var(--gl)'}">${t.type === 'dr' ? '📤' : '📥'}</div>
+          <div class="tx-ico" style="background:${t.type==='dr'?'var(--rl)':'var(--gl)'}">${t.type==='dr'?'📤':'📥'}</div>
           <div style="flex:1">
             <div style="font-size:0.82rem;font-weight:600">${t.desc || '—'}</div>
             <div style="font-size:0.67rem;color:var(--mt)">${t.date}</div>
           </div>
           <div style="text-align:left">
-            <span style="font-weight:700;font-size:0.9rem;color:${t.type === 'dr' ? 'var(--rd)' : 'var(--gn)'}">${t.type === 'dr' ? '+' : '-'}${fD(t.amt)}</span>
+            <div style="font-weight:700;color:${t.type==='dr'?'var(--rd)':'var(--gn)'}">
+              ${t.type==='dr'?'+':'-'}${fD(t.amt)}
+            </div>
           </div>
           <button class="btn-del" onclick="delClTx(${c.id},${t.id})">×</button>
         </div>`).join('')}
     </div>` : ''}
 
     <div class="g2" style="margin-top:8px">
-      <button style="padding:11px;border-radius:11px;background:var(--rl);border:none;color:var(--rd);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer" onclick="delClient(${c.id})">🗑 حذف الزبون</button>
-      <button class="btn-sm" style="padding:11px;border-radius:11px" onclick="closeModal()">إغلاق</button>
+      <button style="padding:11px;border-radius:11px;background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer" onclick="openEditClient(${c.id})">✏️ تعديل</button>
+      <button style="padding:11px;border-radius:11px;background:var(--rl);border:none;color:var(--rd);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer" onclick="delClient(${c.id})">🗑 حذف</button>
     </div>`;
 
   document.getElementById('cl-modal').classList.add('on');
-  _clType = 'dr';
 }
 
-function setClT(t) {
-  _clType = t;
-  const dr = document.getElementById('cl-dr-btn');
-  const cr = document.getElementById('cl-cr-btn');
-  if(dr) dr.style.cssText = `padding:11px;border-radius:10px;background:${t==='dr'?'var(--rl)':'var(--bg)'};border:2px solid ${t==='dr'?'#EF9A9A':'var(--br)'};color:${t==='dr'?'var(--rd)':'var(--mt)'};font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer`;
-  if(cr) cr.style.cssText = `padding:11px;border-radius:10px;background:${t==='cr'?'var(--gl)':'var(--bg)'};border:2px solid ${t==='cr'?'#81C784':'var(--br)'};color:${t==='cr'?'var(--gn)':'var(--mt)'};font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer`;
+function setClTx(type) {
+  _clTxType = type;
+  const drBtn = document.getElementById('cl-dr-btn');
+  const crBtn = document.getElementById('cl-cr-btn');
+  if(drBtn) drBtn.className = 'tt' + (type==='dr' ? ' on-ex' : '');
+  if(crBtn) crBtn.className = 'tt' + (type==='cr' ? ' on-rv' : '');
 }
 
 function addClTx(cid) {
   const c = S.clients.find(x => x.id === cid); if(!c) return;
   const amt = getD('cl-tx-d', 'cl-tx-iq');
-  if(!amt) { toast('⚠️ أدخل المبلغ'); return; }
+  if(!amt) { toast('⚠️ أدخل المبلغ', false); return; }
   c.txs.push({
-    id: Date.now(),
-    type: _clType,
-    desc: document.getElementById('cl-tx-desc').value,
+    id:     Date.now(),
+    type:   _clTxType,
+    desc:   document.getElementById('cl-tx-desc')?.value || '',
     amt,
-    amtIQ: getIQ('cl-tx-d', 'cl-tx-iq'),
-    date: document.getElementById('cl-tx-date').value || dk
+    amtIQ:  getIQ('cl-tx-d', 'cl-tx-iq'),
+    date:   document.getElementById('cl-tx-date')?.value || dk
   });
-  save(); closeModal(); openClient(cid); rClients();
-  toast('✅ تم!');
+  save(); closeModals(); openClient(cid); rClients();
+  toast('✅ تم إضافة الحركة!');
 }
 
 function delClTx(cid, tid) {
   const c = S.clients.find(x => x.id === cid); if(!c) return;
   c.txs = c.txs.filter(x => x.id !== tid);
-  save(); closeModal(); openClient(cid); rClients();
+  save(); closeModals(); openClient(cid); rClients();
 }
 
 function delClient(id) {
-  if(!confirm('حذف هذا الزبون؟')) return;
+  if(!confirm('حذف هذا الزبون وكل سجلاته؟')) return;
   S.clients = S.clients.filter(x => x.id !== id);
-  closeModal(); rClients(); save();
+  closeModals(); rClients(); fillSelects(); save();
   toast('🗑 تم الحذف');
 }
 
-function closeModal() {
-  document.querySelectorAll('.modal').forEach(m => m.classList.remove('on'));
+// ===== EDIT CLIENT =====
+function openEditClient(id) {
+  const c = S.clients.find(x => x.id === id); if(!c) return;
+  _editId = id;
+  document.getElementById('edit-name').value  = c.name  || '';
+  document.getElementById('edit-phone').value = c.phone || '';
+  document.getElementById('edit-co').value    = c.co    || '';
+  document.getElementById('edit-addr').value  = c.addr  || '';
+  document.getElementById('cl-modal').classList.remove('on');
+  document.getElementById('edit-modal').classList.add('on');
 }
-document.querySelectorAll('.modal').forEach(m => {
-  m.addEventListener('click', e => { if(e.target === m) closeModal(); });
-});
 
-// btn-sm style helper
-document.head.insertAdjacentHTML('beforeend','<style>.btn-sm{background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer;border-radius:11px;padding:11px;text-align:center}</style>');
+function saveEditClient() {
+  const c = S.clients.find(x => x.id === _editId); if(!c) return;
+  const name = (document.getElementById('edit-name')?.value || '').trim();
+  if(!name) { toast('⚠️ أدخل اسم الزبون', false); return; }
+  c.name  = name;
+  c.phone = document.getElementById('edit-phone')?.value || '';
+  c.co    = document.getElementById('edit-co')?.value    || '';
+  c.addr  = document.getElementById('edit-addr')?.value  || '';
+  save(); closeModals(); rClients(); fillSelects();
+  toast('✅ تم حفظ التعديلات!');
+}
+
+// ===== CALCULATOR =====
+function ca(key) {
+  const disp = document.getElementById('c-num');
+  const expr = document.getElementById('c-expr');
+  if(!disp || !expr) return;
+  if(key === 'C') {
+    _calcExpr = ''; _calcVal = '0';
+    disp.textContent = '0'; expr.textContent = ''; return;
+  }
+  if(key === '=') {
+    try {
+      const res = Function('"use strict";return(' + _calcExpr + ')')();
+      _calcVal = String(Math.round(res * 1000) / 1000);
+      expr.textContent = _calcExpr + ' =';
+      disp.textContent = Number(_calcVal).toLocaleString();
+      _calcExpr = _calcVal;
+    } catch(e) { disp.textContent = 'خطأ'; _calcExpr = ''; }
+    return;
+  }
+  if(key === '%') {
+    try {
+      const v = parseFloat(_calcExpr) || 0;
+      _calcVal = String(v / 100);
+      _calcExpr = _calcVal;
+      disp.textContent = Number(_calcVal).toLocaleString();
+      expr.textContent = v + '% =';
+    } catch(e) {}
+    return;
+  }
+  _calcExpr += key;
+  expr.textContent = _calcExpr;
+  try {
+    const v = Function('"use strict";return(' + _calcExpr + ')')();
+    if(isFinite(v)) disp.textContent = Number(Math.round(v * 1000) / 1000).toLocaleString();
+  } catch(e) {}
+}
+
+function calcTo(target) {
+  const v = parseFloat(_calcVal) || 0;
+  if(!v) { toast('⚠️ الحاسبة فارغة', false); return; }
+  if(target === 'recv') {
+    showPg('recv', document.querySelectorAll('.bb')[0]);
+    const el = document.getElementById('rv-d'); if(el) el.value = v;
+    toast('💰 تم نقل المبلغ للمستلم');
+  } else {
+    showPg('exp', document.querySelectorAll('.bb')[1]);
+    const el = document.getElementById('ex-d'); if(el) el.value = v;
+    toast('💰 تم نقل المبلغ للمصروف');
+  }
+}
 </script>
 <script>
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');

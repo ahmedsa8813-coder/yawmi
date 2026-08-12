@@ -1,4 +1,4 @@
-const CACHE = 'mohasib-v4';
+const CACHE = 'mohasib-v5';
 const FILES = ['./', './index.html', './manifest.json', './icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
@@ -13,8 +13,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request).then(res => {
-      const clone = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, clone));
+      caches.open(CACHE).then(c => c.put(e.request, res.clone()));
       return res;
     }).catch(() => caches.match(e.request))
   );
