@@ -119,7 +119,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 
 <!-- ===== PAGE: مستلم ===== -->
 <div class="pg on" id="pg-recv">
-  <div class="pt">📥 تسجيل مستلم</div>
+  <div class="pt">📥 تسجيل مستلم <span style="font-size:0.6rem;background:var(--bl);color:white;padding:2px 8px;border-radius:99px;font-weight:700">v3</span></div>
 
   <div class="sc inc">
     <div class="sc-lbl inc">📥 إجمالي المستلم اليوم</div>
@@ -652,7 +652,8 @@ function addClient() {
   });
   ['cl-name','cl-phone','cl-co','cl-addr'].forEach(id => { const el=document.getElementById(id); if(el)el.value=''; });
   rClients(); fillSelects(); save();
-  toast('👤 تم إضافة الزبون!');
+  console.log('Client saved. Total:', S.clients.length, JSON.stringify(S.clients.map(c=>c.name)));
+  toast('👤 تم إضافة الزبون! ('+S.clients.length+' زبون)');
 }
 
 function rClients(query) {
