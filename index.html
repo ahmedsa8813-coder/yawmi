@@ -120,7 +120,19 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 
   <div class="card" style="border:2px solid #81C784">
     <div class="ct" style="color:var(--gn)">➕ مستلم جديد</div>
-    <input class="inp mb" type="text" id="rv-from" placeholder="من؟ (اسم العميل / المصدر)">
+    <!-- اختيار الزبون أو كتابة يدوية -->
+    <div style="display:flex;gap:7px;margin-bottom:8px">
+      <button id="rv-client-btn" onclick="setRvMode('client')" style="flex:1;padding:9px;border-radius:10px;background:var(--bl);color:white;border:none;font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">👥 زبون محفوظ</button>
+      <button id="rv-other-btn" onclick="setRvMode('other')" style="flex:1;padding:9px;border-radius:10px;background:var(--bg);color:var(--mt);border:1.5px solid var(--br);font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">✏️ غير زبون</button>
+    </div>
+    <div id="rv-client-div">
+      <select class="sel mb" id="rv-client-sel">
+        <option value="">-- اختر الزبون --</option>
+      </select>
+    </div>
+    <div id="rv-other-div" style="display:none">
+      <input class="inp mb" type="text" id="rv-from-manual" placeholder="من؟ (اسم المصدر)">
+    </div>
     <input class="inp mb" type="text" id="rv-desc" placeholder="الوصف / التبويب">
     <div class="ar">
       <input class="inp" type="number" id="rv-d" placeholder="$ دولار" inputmode="decimal">
@@ -166,7 +178,19 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
 
   <div class="card" style="border:2px solid #EF9A9A">
     <div class="ct" style="color:var(--rd)">➕ مصروف جديد</div>
-    <input class="inp mb" type="text" id="ex-to" placeholder="لمن؟ (مورد / جهة)">
+    <!-- اختيار الزبون أو كتابة يدوية -->
+    <div style="display:flex;gap:7px;margin-bottom:8px">
+      <button id="ex-client-btn" onclick="setExMode('client')" style="flex:1;padding:9px;border-radius:10px;background:var(--rd);color:white;border:none;font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">👥 زبون محفوظ</button>
+      <button id="ex-other-btn" onclick="setExMode('other')" style="flex:1;padding:9px;border-radius:10px;background:var(--bg);color:var(--mt);border:1.5px solid var(--br);font-family:Cairo;font-size:0.8rem;font-weight:700;cursor:pointer">✏️ غير زبون</button>
+    </div>
+    <div id="ex-client-div">
+      <select class="sel mb" id="ex-client-sel">
+        <option value="">-- اختر الزبون --</option>
+      </select>
+    </div>
+    <div id="ex-other-div" style="display:none">
+      <input class="inp mb" type="text" id="ex-to-manual" placeholder="لمن؟ (مورد / جهة)">
+    </div>
     <input class="inp mb" type="text" id="ex-desc" placeholder="الوصف / التبويب">
     <div class="ar">
       <input class="inp" type="number" id="ex-d" placeholder="$ دولار" inputmode="decimal">
@@ -313,6 +337,7 @@ document.getElementById('ex-date').value = dk;
 rRecv();
 rExp();
 rClients();
+updateClientSelects();
 
 // ===== NAV =====
 function showPg(id, btn) {
@@ -385,29 +410,104 @@ function resetPhoto(type) {
 }
 
 // ===== RECEIVE =====
+// Mode: 'client' or 'other'
+let _rvMode = 'client';
+let _exMode = 'client';
+
+function setRvMode(mode) {
+  _rvMode = mode;
+  const isClient = mode === 'client';
+  document.getElementById('rv-client-div').style.display = isClient ? 'block' : 'none';
+  document.getElementById('rv-other-div').style.display = isClient ? 'none' : 'block';
+  const cb = document.getElementById('rv-client-btn');
+  const ob = document.getElementById('rv-other-btn');
+  if(cb) { cb.style.background = isClient ? 'var(--bl)' : 'var(--bg)'; cb.style.color = isClient ? 'white' : 'var(--mt)'; cb.style.border = isClient ? 'none' : '1.5px solid var(--br)'; }
+  if(ob) { ob.style.background = isClient ? 'var(--bg)' : 'var(--bl)'; ob.style.color = isClient ? 'var(--mt)' : 'white'; ob.style.border = isClient ? '1.5px solid var(--br)' : 'none'; }
+}
+
+function setExMode(mode) {
+  _exMode = mode;
+  const isClient = mode === 'client';
+  document.getElementById('ex-client-div').style.display = isClient ? 'block' : 'none';
+  document.getElementById('ex-other-div').style.display = isClient ? 'none' : 'block';
+  const cb = document.getElementById('ex-client-btn');
+  const ob = document.getElementById('ex-other-btn');
+  if(cb) { cb.style.background = isClient ? 'var(--rd)' : 'var(--bg)'; cb.style.color = isClient ? 'white' : 'var(--mt)'; cb.style.border = isClient ? 'none' : '1.5px solid var(--br)'; }
+  if(ob) { ob.style.background = isClient ? 'var(--bg)' : 'var(--rd)'; ob.style.color = isClient ? 'var(--mt)' : 'white'; ob.style.border = isClient ? '1.5px solid var(--br)' : 'none'; }
+}
+
+function getRvFrom() {
+  if(_rvMode === 'client') {
+    const sel = document.getElementById('rv-client-sel');
+    return sel ? sel.value : '';
+  }
+  const el = document.getElementById('rv-from-manual');
+  return el ? el.value.trim() : '';
+}
+
+function getExTo() {
+  if(_exMode === 'client') {
+    const sel = document.getElementById('ex-client-sel');
+    return sel ? sel.value : '';
+  }
+  const el = document.getElementById('ex-to-manual');
+  return el ? el.value.trim() : '';
+}
+
+// Update client dropdowns when clients change
+function updateClientSelects() {
+  const opts = '<option value="">-- اختر الزبون --</option>' +
+    S.clients.map(c => `<option value="${c.name}">${c.name}${c.co ? ' — ' + c.co : ''}</option>`).join('');
+  const rvSel = document.getElementById('rv-client-sel');
+  const exSel = document.getElementById('ex-client-sel');
+  if(rvSel) rvSel.innerHTML = opts;
+  if(exSel) exSel.innerHTML = opts;
+}
+
 function saveRecv() {
   if(!_rvPhoto) { toast('📷 صوّر الفاتورة أولاً!'); return; }
-  const from = document.getElementById('rv-from').value.trim();
-  if(!from) { toast('⚠️ أدخل اسم العميل'); return; }
+  const from = getRvFrom();
+  if(!from) { toast(_rvMode === 'client' ? '⚠️ اختر الزبون' : '⚠️ أدخل الاسم'); return; }
   const amtD = getD('rv-d', 'rv-iq');
   if(!amtD) { toast('⚠️ أدخل المبلغ'); return; }
 
-  S.recv.push({
+  const tx = {
     id: Date.now(),
     from,
     desc: document.getElementById('rv-desc').value,
     amtD,
     amtIQ: getIQ('rv-d', 'rv-iq'),
     type: document.getElementById('rv-type').value,
-    date: document.getElementById('rv-date').value || dk
-  });
+    date: document.getElementById('rv-date').value || dk,
+    isClient: _rvMode === 'client'
+  };
+  S.recv.push(tx);
 
-  ['rv-from','rv-desc','rv-d','rv-iq'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value = '';
-  });
+  // اذا زبون محفوظ، سجل في كشف حسابه تلقائياً
+  if(_rvMode === 'client') {
+    const client = S.clients.find(c => c.name === from);
+    if(client) {
+      client.txs.push({
+        id: Date.now() + 1,
+        type: 'cr', // دائن = تسديد / دفع
+        desc: tx.desc || 'استلام',
+        amt: amtD,
+        amtIQ: tx.amtIQ,
+        date: tx.date,
+        autoFromRecv: true
+      });
+    }
+  }
+
+  ['rv-desc','rv-d','rv-iq'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  const rvSel = document.getElementById('rv-client-sel');
+  if(rvSel) rvSel.value = '';
+  const rvManual = document.getElementById('rv-from-manual');
+  if(rvManual) rvManual.value = '';
   document.getElementById('rv-date').value = dk;
   resetPhoto('rv');
   rRecv();
+  rClients();
   save();
   toast('📥 تم تسجيل المستلم!');
 }
@@ -444,27 +544,48 @@ function rRecv() {
 // ===== EXPENSE =====
 function saveExp() {
   if(!_exPhoto) { toast('📷 صوّر الفاتورة أولاً!'); return; }
-  const to = document.getElementById('ex-to').value.trim();
-  if(!to) { toast('⚠️ أدخل الجهة'); return; }
+  const to = getExTo();
+  if(!to) { toast(_exMode === 'client' ? '⚠️ اختر الزبون' : '⚠️ أدخل الجهة'); return; }
   const amtD = getD('ex-d', 'ex-iq');
   if(!amtD) { toast('⚠️ أدخل المبلغ'); return; }
 
-  S.expenses.push({
+  const tx = {
     id: Date.now(),
     to,
     desc: document.getElementById('ex-desc').value,
     amtD,
     amtIQ: getIQ('ex-d', 'ex-iq'),
     cat: document.getElementById('ex-cat').value,
-    date: document.getElementById('ex-date').value || dk
-  });
+    date: document.getElementById('ex-date').value || dk,
+    isClient: _exMode === 'client'
+  };
+  S.expenses.push(tx);
 
-  ['ex-to','ex-desc','ex-d','ex-iq'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value = '';
-  });
+  // اذا زبون محفوظ، سجل في كشف حسابه تلقائياً
+  if(_exMode === 'client') {
+    const client = S.clients.find(c => c.name === to);
+    if(client) {
+      client.txs.push({
+        id: Date.now() + 1,
+        type: 'dr', // مدين = بضاعة / دين عليه
+        desc: tx.desc || 'صرف',
+        amt: amtD,
+        amtIQ: tx.amtIQ,
+        date: tx.date,
+        autoFromExp: true
+      });
+    }
+  }
+
+  ['ex-desc','ex-d','ex-iq'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  const exSel = document.getElementById('ex-client-sel');
+  if(exSel) exSel.value = '';
+  const exManual = document.getElementById('ex-to-manual');
+  if(exManual) exManual.value = '';
   document.getElementById('ex-date').value = dk;
   resetPhoto('ex');
   rExp();
+  rClients();
   save();
   toast('📤 تم تسجيل المصروف!');
 }
@@ -566,7 +687,7 @@ function addClient() {
   ['cl-name','cl-phone','cl-co','cl-addr'].forEach(id => {
     const el = document.getElementById(id); if(el) el.value = '';
   });
-  rClients(); save();
+  rClients(); updateClientSelects(); save();
   toast('👤 تم إضافة الزبون!');
 }
 
