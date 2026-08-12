@@ -2,921 +2,1108 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>يومي — الاتحاد كروب</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الاتحاد كروب — نظام مالي</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="يومي">
-<meta name="theme-color" content="#1976D2">
+<meta name="apple-mobile-web-app-title" content="الاتحاد">
+<meta name="theme-color" content="#1565C0">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap');
-:root {
-  --bg:#F0F4FF; --white:#FFFFFF; --blue:#1976D2; --blue2:#2196F3;
-  --blue-light:#E3F2FD; --blue-mid:#BBDEFB; --text:#1A237E; --text2:#424242;
-  --muted:#90A4AE; --green:#2E7D32; --green-light:#E8F5E9; --red:#C62828;
-  --red-light:#FFEBEE; --gold:#F57F17; --gold-light:#FFF8E1;
-  --border:#E3F2FD; --shadow:0 2px 12px rgba(25,118,210,0.10);
-}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text2);min-height:100vh;max-width:480px;margin:0 auto}
+:root{
+  --bg:#F0F4FF;--w:#fff;--bl:#1565C0;--b2:#1976D2;--b3:#2196F3;
+  --bll:#E3F2FD;--bm:#BBDEFB;--tx:#212121;--mt:#78909C;
+  --gn:#2E7D32;--gl:#E8F5E9;--rd:#B71C1C;--rl:#FFEBEE;
+  --gd:#E65100;--gdl:#FFF3E0;--pu:#4A148C;--cy:#00838F;--cyl:#E0F7FA;
+  --br:#DDEEFF;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:"Cairo",sans-serif;background:var(--bg);color:var(--tx);max-width:480px;margin:0 auto;display:flex;flex-direction:column}
 
-/* ===== MAIN NAV (bottom) ===== */
-.main-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px;box-shadow:0 -4px 20px rgba(25,118,210,0.08)}
-.main-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted);cursor:pointer;font-family:'Tajawal';font-size:0.62rem;font-weight:500;transition:all 0.2s;padding:4px 0}
-.main-btn.active{color:var(--blue)}
-.main-btn .ico{font-size:1.5rem}
+/* ===== LOGIN SCREEN ===== */
+#login-screen{
+  position:fixed;inset:0;background:linear-gradient(160deg,#0D47A1 0%,#1565C0 40%,#1976D2 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;padding:24px;
+}
+.login-logo{font-size:3rem;margin-bottom:8px}
+.login-title{font-size:1.4rem;font-weight:900;color:white;margin-bottom:4px}
+.login-sub{font-size:0.82rem;color:rgba(255,255,255,0.7);font-family:Tajawal;margin-bottom:32px}
+.login-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:340px;margin-bottom:28px}
+.login-card{
+  background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);
+  border-radius:16px;padding:18px 12px;text-align:center;cursor:pointer;
+  transition:all 0.2s;
+}
+.login-card:hover,.login-card.sel{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.5)}
+.login-card .lc-ico{font-size:2rem;margin-bottom:8px}
+.login-card .lc-title{font-size:0.9rem;font-weight:700;color:white;margin-bottom:4px}
+.login-card .lc-desc{font-size:0.66rem;color:rgba(255,255,255,0.65);font-family:Tajawal}
+.pin-wrap{width:100%;max-width:280px}
+.pin-label{font-size:0.8rem;color:rgba(255,255,255,0.8);font-family:Tajawal;margin-bottom:8px;text-align:center}
+.pin-input{
+  width:100%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);
+  border-radius:12px;padding:13px;color:white;font-family:Cairo;font-size:1.1rem;
+  outline:none;text-align:center;letter-spacing:6px;
+}
+.pin-input::placeholder{color:rgba(255,255,255,0.4);letter-spacing:2px}
+.pin-input:focus{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.6)}
+.pin-btn{
+  width:100%;margin-top:10px;padding:13px;border-radius:12px;
+  background:white;border:none;color:var(--bl);font-family:Cairo;font-size:0.95rem;
+  font-weight:900;cursor:pointer;transition:opacity 0.2s;
+}
+.pin-btn:active{opacity:0.85}
+.pin-err{font-size:0.76rem;color:#FF8A80;font-family:Tajawal;text-align:center;margin-top:8px;min-height:20px}
 
-/* ===== MAIN SECTIONS ===== */
-.section{display:none}
-.section.active{display:flex;flex-direction:column;min-height:100vh}
+/* ===== APP SHELL ===== */
+#app{display:none;flex:1;flex-direction:column;overflow:hidden}
+#app.show{display:flex}
 
-/* ===== SIDE TABS ===== */
-.layout{display:flex;flex:1;padding-bottom:80px;min-height:100vh;position:relative}
-.sidebar{width:76px;flex-shrink:0;background:var(--white);border-left:1px solid var(--border);padding:12px 6px;display:flex;flex-direction:column;gap:8px;position:sticky;top:0;height:calc(100vh - 80px);overflow-y:auto;z-index:10}
-.side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;background:transparent;border:none;cursor:pointer;font-family:'Tajawal';font-size:0.58rem;color:var(--muted);font-weight:600;width:100%;transition:all 0.2s;line-height:1.3}
-.side-btn .sico{font-size:1.4rem}
-.side-btn.active{background:var(--blue);color:white;box-shadow:0 3px 10px rgba(25,118,210,0.3)}
-.content{flex:1;padding:16px 14px;overflow-y:auto;min-width:0;max-width:calc(100% - 76px)}
+/* TOP BAR */
+.topbar{
+  background:var(--bl);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;
+}
+.topbar-title{font-size:0.9rem;font-weight:700;color:white}
+.topbar-role{font-size:0.7rem;color:rgba(255,255,255,0.75);font-family:Tajawal}
+.logout-btn{background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 12px;border-radius:8px;font-family:Cairo;font-size:0.72rem;cursor:pointer}
 
-/* ===== CARDS ===== */
-.card{background:var(--white);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
-.card-title{font-size:0.7rem;letter-spacing:1px;color:var(--blue);font-weight:700;margin-bottom:10px;text-transform:uppercase}
-.page-title{font-size:1.1rem;font-weight:900;color:var(--text);margin-bottom:14px;padding-top:4px}
+/* BOTTOM NAV */
+.bnav{flex-shrink:0;background:var(--w);border-top:1px solid var(--br);display:flex;padding:4px 0 env(safe-area-inset-bottom,8px);box-shadow:0 -2px 12px rgba(0,0,0,0.08);z-index:100}
+.bb{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:none;cursor:pointer;font-family:Tajawal;font-size:0.56rem;color:var(--mt);padding:5px 0}
+.bb .ni{font-size:1.35rem}
+.bb.on{color:var(--bl)}
 
-/* ===== INPUTS ===== */
-.inp{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text2);font-family:'Cairo';font-size:0.85rem;outline:none;transition:border 0.2s;margin-bottom:8px}
-.inp:focus{border-color:var(--blue);background:white}
-.sel{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text2);font-family:'Cairo';font-size:0.82rem;outline:none;margin-bottom:8px}
-.row{display:flex;gap:8px;margin-bottom:8px}
-.btn-primary{padding:12px;border-radius:12px;background:var(--blue);border:none;color:white;font-family:'Cairo';font-size:0.88rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 3px 10px rgba(25,118,210,0.25)}
-.btn-sm{padding:9px 14px;border-radius:10px;background:var(--blue-light);border:1.5px solid var(--blue-mid);color:var(--blue);font-family:'Cairo';font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
-.btn-add{width:40px;height:40px;border-radius:10px;background:var(--blue);border:none;color:white;font-size:1.4rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:2px}
-.btn-del:hover{color:var(--red)}
+/* SECTIONS */
+.sec{display:none;flex:1;overflow:hidden;flex-direction:row}
+.sec.on{display:flex}
+.sb{width:64px;flex-shrink:0;background:var(--w);border-left:1px solid var(--br);overflow-y:auto;padding:8px 4px;display:flex;flex-direction:column;gap:5px}
+.sbx{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border-radius:10px;background:none;border:none;cursor:pointer;font-family:Tajawal;font-size:0.52rem;color:var(--mt);width:100%;line-height:1.2}
+.sbx .si{font-size:1.25rem}
+.sbx.on{background:var(--bl);color:white}
+.cnt{flex:1;overflow-y:auto;padding:11px 10px 20px;-webkit-overflow-scrolling:touch}
+.tab{display:none}.tab.on{display:block}
 
-/* ===== TYPE TOGGLE ===== */
-.type-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.type-btn{padding:10px;border-radius:10px;background:var(--bg);border:2px solid var(--border);font-family:'Cairo';font-size:0.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.2s}
-.type-btn.inc{background:var(--green-light);border-color:#81C784;color:var(--green)}
-.type-btn.exp{background:var(--red-light);border-color:#EF9A9A;color:var(--red)}
+/* CARDS */
+.card{background:var(--w);border-radius:13px;padding:12px;margin-bottom:9px;box-shadow:0 2px 8px rgba(21,101,192,0.07)}
+.ct{font-size:0.63rem;letter-spacing:0.8px;color:var(--bl);font-weight:700;margin-bottom:8px;text-transform:uppercase}
+.pt{font-size:0.98rem;font-weight:900;color:#0D47A1;margin-bottom:10px}
 
-/* ===== SUMMARY CARDS ===== */
-.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.sum-card{border-radius:14px;padding:12px;text-align:center}
-.sum-card.inc{background:var(--green-light)}
-.sum-card.exp{background:var(--red-light)}
-.sum-card.net{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;grid-column:span 2;padding:14px}
-.sum-lbl{font-size:0.65rem;font-weight:700;font-family:'Tajawal';margin-bottom:4px}
-.sum-lbl.inc{color:var(--green)}
-.sum-lbl.exp{color:var(--red)}
-.sum-lbl.net{color:rgba(255,255,255,0.85)}
-.sum-amt{font-size:1.2rem;font-weight:900}
-.sum-amt.inc{color:var(--green)}
-.sum-amt.exp{color:var(--red)}
-.sum-amt.net{color:white;font-size:1.4rem}
+/* INPUTS */
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:9px;padding:9px 11px;color:var(--tx);font-family:Cairo;font-size:0.82rem;outline:none;display:block}
+.inp:focus{border-color:var(--bl);background:white}
+.sel{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:9px;padding:8px 11px;color:var(--tx);font-family:Cairo;font-size:0.78rem;outline:none;display:block}
+.mb{margin-bottom:7px}
+.row{display:flex;gap:7px;align-items:center}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
 
-/* ===== GOAL BAR ===== */
-.goal-row{margin-bottom:12px}
-.goal-hd{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:5px}
-.goal-lbl{font-weight:700;color:var(--text2)}
-.goal-val{font-weight:700;color:var(--blue)}
-.goal-bar{background:var(--blue-light);border-radius:99px;height:9px;overflow:hidden}
-.goal-fill{height:100%;border-radius:99px;transition:width 0.8s}
-.fill-blue{background:linear-gradient(to left,var(--blue2),var(--blue))}
-.fill-green{background:linear-gradient(to left,#43A047,#2E7D32)}
-.fill-gold{background:linear-gradient(to left,#FFA000,#F57F17)}
-.fill-purple{background:linear-gradient(to left,#7B1FA2,#512DA8)}
+/* BUTTONS */
+.btn{width:100%;padding:12px;border-radius:11px;background:var(--bl);border:none;color:white;font-family:Cairo;font-size:0.84rem;font-weight:700;cursor:pointer;display:block;margin-top:7px}
+.btn-green{background:var(--gn) !important}
+.btn-red{background:var(--rd) !important}
+.btn-sm{padding:7px 12px;border-radius:8px;background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:Cairo;font-size:0.74rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-add{width:40px;height:40px;border-radius:9px;background:var(--bl);border:none;color:white;font-size:1.4rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn-del{background:none;border:none;color:#B0BEC5;cursor:pointer;font-size:1.1rem;padding:2px 5px}
 
-/* ===== TASK ITEM ===== */
-.task-item{display:flex;gap:8px;align-items:flex-start;padding:11px;border-radius:12px;border:1.5px solid var(--border);margin-bottom:7px;cursor:pointer;transition:all 0.15s;background:var(--white)}
-.task-item:hover{background:var(--blue-light);border-color:var(--blue2)}
-.task-item.done{opacity:0.45}
-.task-item.done .tl{text-decoration:line-through}
-.chk{width:22px;height:22px;flex-shrink:0;border-radius:6px;border:2px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;font-size:0.75rem;background:white;transition:all 0.2s}
-.chk.done{background:var(--blue);border-color:var(--blue);color:white}
-.tl{font-size:0.85rem;font-weight:600;color:var(--text2)}
-.tc{font-size:0.62rem;padding:2px 7px;border-radius:99px;font-weight:700;display:inline-block;margin-top:3px}
-.tc-biz{background:var(--blue-light);color:var(--blue)}
-.tc-personal{background:#EDE7F6;color:#512DA8}
-.tc-health{background:var(--green-light);color:var(--green)}
-.tc-urgent{background:var(--red-light);color:var(--red)}
+/* AMOUNT ROW */
+.ar{display:grid;grid-template-columns:1fr auto 1fr;gap:5px;align-items:center;margin-bottom:7px}
+.ar span{text-align:center;font-size:0.7rem;color:var(--mt)}
 
-/* ===== HABIT GRID ===== */
-.habit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.habit-card{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all 0.2s}
-.habit-card.done{background:var(--green-light);border-color:#81C784}
-.habit-card.done .hn{color:var(--green)}
-.hi{font-size:1.6rem;margin-bottom:4px}
-.hn{font-size:0.75rem;font-weight:700;color:var(--text2)}
-.hd{font-size:0.62rem;color:var(--muted);font-family:'Tajawal'}
+/* SUMMARY CARDS */
+.sc{border-radius:12px;padding:11px;margin-bottom:7px;text-align:center}
+.sc.inc{background:var(--gl)}.sc.exp{background:var(--rl)}.sc.net{background:linear-gradient(135deg,var(--bl),var(--b3));color:white}
+.sc.warn{background:var(--rl)}.sc.info{background:var(--bll)}.sc.gold{background:var(--gdl)}.sc.cy{background:var(--cyl)}
+.sc-lbl{font-size:0.58rem;font-weight:700;font-family:Tajawal;margin-bottom:2px}
+.sc-lbl.inc{color:var(--gn)}.sc-lbl.exp{color:var(--rd)}.sc-lbl.net{color:rgba(255,255,255,0.85)}
+.sc-lbl.info{color:var(--bl)}.sc-lbl.gold{color:var(--gd)}.sc-lbl.cy{color:var(--cy)}
+.sc-amt{font-size:1.05rem;font-weight:900}
+.sc-amt.inc{color:var(--gn)}.sc-amt.exp{color:var(--rd)}.sc-amt.net{color:white;font-size:1.2rem}
+.sc-amt.info{color:var(--bl)}.sc-amt.gold{color:var(--gd)}.sc-amt.cy{color:var(--cy)}
+.sub{font-size:0.63rem;margin-top:2px;opacity:0.72}
 
-/* ===== SCHEDULE ===== */
-.sched-item{display:flex;gap:8px;align-items:center;padding:11px;border-radius:11px;border:1.5px solid var(--border);margin-bottom:7px;background:var(--white);cursor:pointer;transition:all 0.15s}
-.sched-item.done{opacity:0.4}
-.sched-time{font-size:0.75rem;font-weight:700;color:var(--blue);width:44px;flex-shrink:0}
-.sched-bar{width:4px;height:32px;border-radius:2px;flex-shrink:0}
-.sched-title{flex:1;font-size:0.82rem;font-weight:600;color:var(--text2)}
+/* GOAL BAR */
+.gb{background:var(--bll);border-radius:99px;height:7px;overflow:hidden;margin-bottom:8px}
+.gf{height:100%;border-radius:99px;transition:width 0.7s}
+.fb{background:linear-gradient(to left,var(--b3),var(--bl))}
+.fg{background:linear-gradient(to left,#43A047,#2E7D32)}
+.fp{background:linear-gradient(to left,#7B1FA2,var(--pu))}
 
-/* ===== ORDER CARD ===== */
-.order-card{background:var(--bg);border-radius:11px;padding:11px;margin-bottom:7px;border:1.5px solid var(--border)}
+/* CONTAINER CARD */
+.conc{background:var(--w);border-radius:12px;padding:11px;margin-bottom:7px;border:1.5px solid var(--br);cursor:pointer}
+.conc:hover{border-color:var(--bl)}
+.cs{font-size:0.6rem;padding:3px 8px;border-radius:99px;font-weight:700}
+.cs.act{background:var(--bll);color:var(--bl)}.cs.win{background:var(--gl);color:var(--gn)}.cs.loss{background:var(--rl);color:var(--rd)}
 
-/* ===== ENERGY ===== */
-.energy-row{display:flex;gap:6px}
-.energy-btn{flex:1;padding:9px 2px;border-radius:9px;background:var(--bg);border:2px solid var(--border);color:var(--muted);font-family:'Cairo';font-size:0.68rem;cursor:pointer;text-align:center;transition:all 0.2s;font-weight:600}
-.energy-btn.sel{background:var(--blue-light);border-color:var(--blue);color:var(--blue);font-weight:700}
+/* CLIENT CARD */
+.cc{background:var(--w);border-radius:12px;padding:11px;margin-bottom:7px;border:1.5px solid var(--br);cursor:pointer}
+.cc:hover{border-color:var(--bl)}
 
-/* ===== MOTIVATION ===== */
-.motivation{background:var(--gold-light);border-right:4px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:12px;font-size:0.8rem;color:var(--gold);font-style:italic;line-height:1.5;font-weight:600}
+/* TX ROW */
+.txr{padding:9px;border-bottom:1px solid var(--br);display:flex;gap:7px;align-items:center}
+.txr:last-child{border-bottom:none}
+.tx-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.88rem;flex-shrink:0}
 
-/* ===== BIG Q ===== */
-.big-q{background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(25,118,210,0.2)}
-.big-q p{font-size:0.8rem;color:rgba(255,255,255,0.85);font-family:'Tajawal';margin-bottom:8px}
-.big-q textarea{width:100%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;padding:9px;color:white;font-family:'Cairo';font-size:0.85rem;resize:none;min-height:65px;outline:none}
-.big-q textarea::placeholder{color:rgba(255,255,255,0.55)}
+/* TASK */
+.ti{display:flex;gap:7px;align-items:flex-start;padding:10px;border-radius:11px;border:1.5px solid var(--br);margin-bottom:6px;cursor:pointer;background:var(--w)}
+.ti.dn{opacity:0.4}.ti.dn .tl{text-decoration:line-through}
+.ck{width:20px;height:20px;flex-shrink:0;border-radius:5px;border:2px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:0.7rem;background:white;margin-top:1px}
+.ck.dn{background:var(--bl);border-color:var(--bl);color:white}
+.tl{font-size:0.82rem;font-weight:600}
 
-/* ===== STATS ===== */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.stat{background:var(--blue-light);border-radius:11px;padding:10px;text-align:center}
-.stat-num{font-size:1.3rem;font-weight:900;color:var(--blue)}
-.stat-lbl{font-size:0.62rem;color:var(--muted);font-family:'Tajawal';margin-top:2px}
+/* HABIT */
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.hc{background:var(--bg);border:2px solid var(--br);border-radius:11px;padding:11px;text-align:center;cursor:pointer}
+.hc.dn{background:var(--gl);border-color:#A5D6A7}.hc.dn .hn{color:var(--gn)}
+.hi{font-size:1.5rem;margin-bottom:3px}.hn{font-size:0.7rem;font-weight:700}.hd{font-size:0.56rem;color:var(--mt);font-family:Tajawal}
 
-/* ===== REVIEW ===== */
-.rev-lbl{font-size:0.78rem;color:var(--muted);font-family:'Tajawal';margin-bottom:5px;font-weight:600}
-.rev-inp{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px;color:var(--text2);font-family:'Cairo';font-size:0.82rem;resize:none;min-height:56px;outline:none;margin-bottom:10px}
-.rev-inp:focus{border-color:var(--blue)}
+/* STAT */
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
+.st{background:var(--bll);border-radius:10px;padding:9px;text-align:center}
+.sn{font-size:1.1rem;font-weight:900;color:var(--bl)}.sl2{font-size:0.56rem;color:var(--mt);font-family:Tajawal;margin-top:2px}
+
+/* SCHEDULE */
+.shi{display:flex;gap:7px;align-items:center;padding:10px;border-radius:10px;border:1.5px solid var(--br);margin-bottom:6px;background:var(--w);cursor:pointer}
+.shi.dn{opacity:0.4}.sht{font-size:0.7rem;font-weight:700;color:var(--bl);width:40px;flex-shrink:0}
+.shb{width:3px;height:30px;border-radius:2px;flex-shrink:0}.shn{flex:1;font-size:0.78rem;font-weight:600}
+
+/* ENERGY */
+.er{display:flex;gap:5px}
+.eb{flex:1;padding:8px 2px;border-radius:8px;background:var(--bg);border:1.5px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.63rem;cursor:pointer;text-align:center;font-weight:600}
+.eb.on{background:var(--bll);border-color:var(--bl);color:var(--bl);font-weight:700}
+
+/* MOTIVATION */
+.mot{background:var(--gdl);border-right:3px solid var(--gd);border-radius:10px;padding:10px;margin-bottom:9px;font-size:0.74rem;color:var(--gd);font-style:italic;line-height:1.5;font-weight:600}
+
+/* BIG Q */
+.bq{background:linear-gradient(135deg,#0D47A1,var(--b2));border-radius:13px;padding:12px;margin-bottom:9px}
+.bq p{font-size:0.74rem;color:rgba(255,255,255,0.85);font-family:Tajawal;margin-bottom:7px}
+.bq textarea{width:100%;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);border-radius:8px;padding:8px;color:white;font-family:Cairo;font-size:0.8rem;resize:none;height:60px;outline:none}
+.bq textarea::placeholder{color:rgba(255,255,255,0.48)}
+
+/* REVIEW */
+.ri{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:8px;padding:8px;color:var(--tx);font-family:Cairo;font-size:0.78rem;resize:none;height:52px;outline:none;margin-bottom:7px;display:block}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.mbox{background:var(--w);border-radius:18px 18px 0 0;padding:18px 14px 30px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto}
+.mt2{font-size:0.92rem;font-weight:900;color:#0D47A1;margin-bottom:12px}
+
+/* PAY BUTTON */
+.bp{padding:5px 9px;border-radius:7px;font-family:Cairo;font-size:0.64rem;font-weight:700;cursor:pointer;border:1.5px solid}
+.bp.pay{background:var(--bll);border-color:var(--bm);color:var(--bl)}
+.bp.paid{background:var(--gl);border-color:#A5D6A7;color:var(--gn)}
+.bp.dr{background:var(--rl);border-color:#EF9A9A;color:var(--rd)}
+.bp.cr{background:var(--gl);border-color:#A5D6A7;color:var(--gn)}
 
 /* TOAST */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--blue);color:white;padding:11px 22px;border-radius:99px;font-family:'Cairo';font-weight:700;font-size:0.85rem;transition:transform 0.4s;z-index:9999;box-shadow:0 4px 20px rgba(25,118,210,0.35);pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--bl);color:white;padding:9px 20px;border-radius:99px;font-family:Cairo;font-weight:700;font-size:0.78rem;z-index:9999;transition:top 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 18px rgba(21,101,192,0.35)}
+.toast.on{top:14px}
+
+/* ACCOUNTANT QUICK ENTRY */
+.quick-type{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.qt-btn{padding:18px 10px;border-radius:14px;border:2px solid var(--br);background:var(--bg);font-family:Cairo;font-size:0.82rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s}
+.qt-btn.recv{border-color:#A5D6A7;background:var(--gl);color:var(--gn)}
+.qt-btn.exp{border-color:#EF9A9A;background:var(--rl);color:var(--rd)}
+.qt-ico{font-size:1.8rem;display:block;margin-bottom:5px}
+
+/* INVENTORY TABLE */
+.inv-row{display:flex;gap:8px;align-items:center;padding:9px;border-bottom:1px solid var(--br)}
+.inv-row:last-child{border-bottom:none}
 </style>
 </head>
 <body>
 
-<!-- ========== SECTION 1: إدارة أعمال ========== -->
-<div class="section active" id="sec-business">
-  <div class="layout">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <button class="side-btn active" onclick="switchTab('business','b-tasks',this)">
-        <span class="sico">📋</span>مهام
-      </button>
-      <button class="side-btn" onclick="switchTab('business','b-accounts',this)">
-        <span class="sico">💰</span>حسابات
-      </button>
-      <button class="side-btn" onclick="switchTab('business','b-orders',this)">
-        <span class="sico">📦</span>أوردرات
-      </button>
-      <button class="side-btn" onclick="switchTab('business','b-goals',this)">
-        <span class="sico">🎯</span>أهداف
-      </button>
-      <button class="side-btn" onclick="switchTab('business','b-review',this)">
-        <span class="sico">📊</span>مراجعة
-      </button>
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-logo">🏭</div>
+  <div class="login-title">الاتحاد كروب</div>
+  <div class="login-sub">نظام المحاسبة المالية</div>
+  <div class="login-cards">
+    <div class="login-card" onclick="selRole('accountant')" id="card-accountant">
+      <div class="lc-ico">👨‍💼</div>
+      <div class="lc-title">محاسب</div>
+      <div class="lc-desc">تسجيل استلام ومصروف</div>
     </div>
+    <div class="login-card" onclick="selRole('manager')" id="card-manager">
+      <div class="lc-ico">👑</div>
+      <div class="lc-title">مدير مالي</div>
+      <div class="lc-desc">الهيكل المالي الكامل</div>
+    </div>
+  </div>
+  <div class="pin-wrap">
+    <div class="pin-label" id="pin-label">اختر دورك أولاً</div>
+    <input class="pin-input" type="password" id="pin-input" placeholder="• • • •" maxlength="6" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="pin-btn" onclick="doLogin()">دخول →</button>
+    <div class="pin-err" id="pin-err"></div>
+  </div>
+</div>
 
-    <!-- Content -->
-    <div class="content">
+<!-- ===== APP ===== -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">🏭 الاتحاد كروب</div>
+      <div class="topbar-role" id="topbar-role"></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">خروج ↩</button>
+  </div>
 
-      <!-- مهام الأعمال -->
-      <div class="tab" id="b-tasks">
-        <div class="page-title">📋 مهام الأعمال</div>
-        <div class="motivation" id="daily-quote"></div>
-        <div class="big-q">
-          <p>⭐ أهم مهمة اليوم؟</p>
-          <textarea id="big-q-input" placeholder="المهمة الأهم اللي لو أنجزتها يحس يومك ناجح..."></textarea>
+  <!-- ===== ACCOUNTANT SECTIONS ===== -->
+  <div id="accountant-app" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+
+    <!-- SECTIONS -->
+    <div class="sec on" id="ac-recv-sec">
+      <div class="cnt">
+        <div class="pt">📥 تسجيل مستلم</div>
+        <div class="sc inc" style="margin-bottom:12px">
+          <div class="sc-lbl inc">📥 إجمالي المستلم اليوم</div>
+          <div class="sc-amt inc" id="ac-today-recv">$0</div>
+          <div class="sub" style="color:var(--gn)" id="ac-today-recv-iq">0 د.ع</div>
         </div>
         <div class="card">
-          <div class="card-title">⚡ طاقتي اليوم</div>
-          <div class="energy-row">
-            <button class="energy-btn" onclick="setEnergy(this,'🔥 ممتاز')">🔥 ممتاز</button>
-            <button class="energy-btn" onclick="setEnergy(this,'✅ جيد')">✅ جيد</button>
-            <button class="energy-btn" onclick="setEnergy(this,'⚠️ متعب')">⚠️ متعب</button>
-            <button class="energy-btn" onclick="setEnergy(this,'😴 منهك')">😴 منهك</button>
+          <div class="ct">➕ مستلم جديد</div>
+          <input class="inp mb" type="text" id="ac-rv-from" placeholder="من؟ (اسم العميل / المصدر)">
+          <input class="inp mb" type="text" id="ac-rv-desc" placeholder="الوصف / التبويب">
+          <div class="ar">
+            <input class="inp" type="number" id="ac-rv-d" placeholder="$ دولار">
+            <span>أو</span>
+            <input class="inp" type="number" id="ac-rv-iq" placeholder="د.ع">
           </div>
-        </div>
-        <div class="card">
-          <div class="card-title">📌 مهام اليوم</div>
-          <select class="sel" id="new-task-cat">
-            <option value="biz">🏭 أعمال</option>
-            <option value="urgent">🚨 عاجل</option>
+          <select class="sel mb" id="ac-rv-type">
+            <option value="cash">💵 نقد</option>
+            <option value="transfer">🏦 تحويل</option>
+            <option value="ajal">📅 آجل مُحصَّل</option>
+            <option value="sale">🏭 بيع ماكينة</option>
           </select>
-          <div class="row">
-            <input class="inp" style="margin:0;flex:1" type="text" id="new-task" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addTask()">
-            <button class="btn-add" onclick="addTask()">+</button>
-          </div>
-          <div id="tasks-list" style="margin-top:8px"></div>
+          <input class="inp mb" type="date" id="ac-rv-date">
+          <button class="btn btn-green" onclick="acAddRv()">💾 تسجيل المستلم</button>
+        </div>
+        <div class="card">
+          <div class="ct">📋 آخر المستلمات</div>
+          <div id="ac-rv-list"></div>
         </div>
       </div>
+    </div>
 
-      <!-- حسابات الأعمال -->
-      <div class="tab" id="b-accounts" style="display:none">
-        <div class="page-title">💰 حسابات الأعمال</div>
-        <div class="sum-grid">
-          <div class="sum-card inc"><div class="sum-lbl inc">📈 إيرادات</div><div class="sum-amt inc" id="b-income">$0</div></div>
-          <div class="sum-card exp"><div class="sum-lbl exp">📉 مصاريف</div><div class="sum-amt exp" id="b-expense">$0</div></div>
-          <div class="sum-card net"><div class="sum-lbl net">💎 صافي الربح</div><div class="sum-amt net" id="b-net">$0</div></div>
+    <div class="sec" id="ac-exp-sec">
+      <div class="cnt">
+        <div class="pt">📤 تسجيل مصروف</div>
+        <div class="sc exp" style="margin-bottom:12px">
+          <div class="sc-lbl exp">📤 إجمالي المصروف اليوم</div>
+          <div class="sc-amt exp" id="ac-today-exp">$0</div>
+          <div class="sub" style="color:var(--rd)" id="ac-today-exp-iq">0 د.ع</div>
         </div>
         <div class="card">
-          <div class="card-title">🏦 رأس المال</div>
-          <div class="row">
-            <input class="inp" style="margin:0;flex:1" type="number" id="capital-inp" placeholder="أدخل رأس المال ($)">
-            <button class="btn-sm" onclick="updateCapital()">حفظ</button>
+          <div class="ct">➕ مصروف جديد</div>
+          <input class="inp mb" type="text" id="ac-ex-to" placeholder="لمن؟ (مورد / جهة)">
+          <input class="inp mb" type="text" id="ac-ex-desc" placeholder="الوصف / التبويب">
+          <div class="ar">
+            <input class="inp" type="number" id="ac-ex-d" placeholder="$ دولار">
+            <span>أو</span>
+            <input class="inp" type="number" id="ac-ex-iq" placeholder="د.ع">
           </div>
-          <div style="font-size:1.4rem;font-weight:900;color:var(--blue);text-align:center;margin:10px 0" id="capital-disp">$700,000</div>
-          <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:5px">
-            <span style="color:var(--muted)">الهدف: $1,000,000</span>
-            <span style="color:var(--blue);font-weight:700" id="capital-pct">70%</span>
-          </div>
-          <div class="goal-bar"><div class="goal-fill fill-blue" id="capital-bar" style="width:70%"></div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">💳 إضافة معاملة</div>
-          <div class="type-row">
-            <button class="type-btn inc" id="b-inc-btn" onclick="setBTxType('income')">📈 إيراد</button>
-            <button class="type-btn" id="b-exp-btn" onclick="setBTxType('expense')">📉 مصروف</button>
-          </div>
-          <input class="inp" type="text" id="b-tx-desc" placeholder="الوصف...">
-          <input class="inp" type="number" id="b-tx-amt" placeholder="المبلغ ($)">
-          <select class="sel" id="b-tx-cat">
-            <option value="sales">💼 مبيعات</option>
-            <option value="shipping">🚢 شحن</option>
-            <option value="customs">🏛 جمارك</option>
+          <select class="sel mb" id="ac-ex-cat">
+            <option value="shipping">🚢 شحن بحري</option>
+            <option value="customs">🏛 جمارك ورسوم</option>
+            <option value="transport">🚚 نقل داخلي</option>
             <option value="salary">👷 رواتب</option>
             <option value="rent">🏠 إيجار</option>
-            <option value="other">📌 أخرى</option>
+            <option value="ads">📢 ترويج</option>
+            <option value="loan">💸 سلفة / تمويل</option>
+            <option value="other">📌 متفرقات</option>
           </select>
-          <button class="btn-primary" onclick="addBTx()">💾 إضافة</button>
+          <input class="inp mb" type="date" id="ac-ex-date">
+          <button class="btn btn-red" onclick="acAddEx()">💾 تسجيل المصروف</button>
         </div>
         <div class="card">
-          <div class="card-title">📋 آخر المعاملات</div>
-          <div id="b-tx-list"></div>
+          <div class="ct">📋 آخر المصروفات</div>
+          <div id="ac-ex-list"></div>
         </div>
       </div>
-
-      <!-- أوردرات -->
-      <div class="tab" id="b-orders" style="display:none">
-        <div class="page-title">📦 الأوردرات</div>
-        <div class="card">
-          <div class="card-title">➕ أوردر جديد</div>
-          <input class="inp" type="text" id="ord-name" placeholder="اسم العميل">
-          <input class="inp" type="number" id="ord-amt" placeholder="المبلغ ($)">
-          <select class="sel" id="ord-status">
-            <option value="pending">⏳ قيد التنفيذ</option>
-            <option value="shipped">🚢 تم الشحن</option>
-            <option value="delivered">✅ تم التسليم</option>
-            <option value="paid">💰 تم الدفع</option>
-          </select>
-          <button class="btn-primary" onclick="addOrder()">💾 إضافة الأوردر</button>
-        </div>
-        <div class="card">
-          <div class="card-title">📦 الأوردرات النشطة</div>
-          <div id="orders-list"></div>
-        </div>
-      </div>
-
-      <!-- أهداف الأعمال -->
-      <div class="tab" id="b-goals" style="display:none">
-        <div class="page-title">🎯 أهداف الأعمال</div>
-        <div class="card">
-          <div class="card-title">💰 الأهداف المالية</div>
-          <div class="goal-row">
-            <div class="goal-hd"><span class="goal-lbl">رأس المال</span><span class="goal-val" id="g-capital">$700K / $1M</span></div>
-            <div class="goal-bar"><div class="goal-fill fill-blue" id="g-cap-bar" style="width:70%"></div></div>
-          </div>
-          <div class="goal-row">
-            <div class="goal-hd"><span class="goal-lbl">هدف عمر 38 — $1M</span><span class="goal-val" id="g38">70%</span></div>
-            <div class="goal-bar"><div class="goal-fill fill-blue" id="g38-bar" style="width:70%"></div></div>
-          </div>
-          <div class="goal-row">
-            <div class="goal-hd"><span class="goal-lbl">هدف عمر 40 — $2.5M</span><span class="goal-val" id="g40">28%</span></div>
-            <div class="goal-bar"><div class="goal-fill fill-green" id="g40-bar" style="width:28%"></div></div>
-          </div>
-          <div class="goal-row">
-            <div class="goal-hd"><span class="goal-lbl">هدف عمر 45 — $5M</span><span class="goal-val" id="g45">14%</span></div>
-            <div class="goal-bar"><div class="goal-fill fill-purple" id="g45-bar" style="width:14%"></div></div>
-          </div>
-          <div class="row" style="margin-top:8px">
-            <input class="inp" style="margin:0;flex:1" type="number" id="cap-update" placeholder="تحديث رأس المال ($)">
-            <button class="btn-sm" onclick="updateCapitalGoal()">تحديث</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">🚀 مشاريع الاتحاد</div>
-          <div id="biz-goals"></div>
-        </div>
-      </div>
-
-      <!-- مراجعة الأعمال -->
-      <div class="tab" id="b-review" style="display:none">
-        <div class="page-title">📊 مراجعة الأعمال</div>
-        <div class="stats-row">
-          <div class="stat"><div class="stat-num" id="b-done-tasks">0</div><div class="stat-lbl">مهمة منجزة</div></div>
-          <div class="stat"><div class="stat-num" id="b-orders-count">0</div><div class="stat-lbl">أوردر نشط</div></div>
-          <div class="stat"><div class="stat-num" id="b-net-stat">$0</div><div class="stat-lbl">صافي ربح</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">✍️ تأمل الأسبوع</div>
-          <div class="rev-lbl">أفضل إنجاز هذا الأسبوع؟</div>
-          <textarea class="rev-inp" id="r1" placeholder="اكتب هنا..."></textarea>
-          <div class="rev-lbl">أكبر تحدي في العمل؟</div>
-          <textarea class="rev-inp" id="r2" placeholder="اكتب هنا..."></textarea>
-          <div class="rev-lbl">خطة الأسبوع القادم؟</div>
-          <textarea class="rev-inp" id="r3" placeholder="اكتب هنا..."></textarea>
-          <button class="btn-primary" onclick="saveReview()">💾 حفظ</button>
-        </div>
-      </div>
-
     </div>
+
+    <div class="sec" id="ac-inv-sec">
+      <div class="cnt">
+        <div class="pt">📋 الجرد</div>
+        <div class="g2" style="margin-bottom:10px">
+          <div class="sc gold"><div class="sc-lbl gold">📦 غير مباع</div><div class="sc-amt gold" id="ac-inv-total">$0</div></div>
+          <div class="sc cy"><div class="sc-lbl cy">🔧 قطع غيار</div><div class="sc-amt cy" id="ac-part-total">$0</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">🏭 إضافة منتج للمخزون</div>
+          <input class="inp mb" type="text" id="ac-inv-name" placeholder="اسم المنتج">
+          <div class="g2 mb">
+            <input class="inp" type="number" id="ac-inv-qty" placeholder="العدد">
+            <input class="inp" type="number" id="ac-inv-price" placeholder="سعر البيع $">
+          </div>
+          <button class="btn" onclick="acAddInv()">💾 إضافة</button>
+        </div>
+        <div class="card">
+          <div class="ct">📦 قائمة المخزون</div>
+          <div id="ac-inv-list"></div>
+        </div>
+        <div class="card">
+          <div class="ct">🔧 إضافة قطعة غيار</div>
+          <input class="inp mb" type="text" id="ac-part-name" placeholder="اسم القطعة">
+          <div class="g2 mb">
+            <input class="inp" type="number" id="ac-part-qty" placeholder="العدد">
+            <input class="inp" type="number" id="ac-part-price" placeholder="السعر $">
+          </div>
+          <button class="btn" onclick="acAddPart()">💾 إضافة</button>
+        </div>
+        <div class="card">
+          <div class="ct">🔧 قطع الغيار</div>
+          <div id="ac-part-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTANT NAV -->
+    <nav class="bnav">
+      <button class="bb on" onclick="acShowSec('recv',this)"><span class="ni">📥</span>مستلم</button>
+      <button class="bb" onclick="acShowSec('exp',this)"><span class="ni">📤</span>مصروف</button>
+      <button class="bb" onclick="acShowSec('inv',this)"><span class="ni">📋</span>جرد</button>
+    </nav>
+  </div>
+
+  <!-- ===== MANAGER SECTIONS ===== -->
+  <div id="manager-app" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+
+    <div class="sec on" id="mg-acc-sec">
+      <div class="sb">
+        <button class="sbx on" onclick="stab('mg-acc-sec','mg-safe',this)"><span class="si">🏦</span>صندوق</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-cont',this)"><span class="si">📦</span>حاويات</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-recv',this)"><span class="si">📥</span>مستلم</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-exp',this)"><span class="si">📤</span>مصروف</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-debt',this)"><span class="si">💳</span>ديون</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-clients',this)"><span class="si">👥</span>زبائن</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-inv',this)"><span class="si">📋</span>مخزون</button>
+        <button class="sbx" onclick="stab('mg-acc-sec','mg-quick',this)"><span class="si">⚡</span>محاسب</button>
+      </div>
+      <div class="cnt">
+
+        <!-- صندوق -->
+        <div class="tab on" id="mg-safe">
+          <div class="pt">🏦 الصندوق العام</div>
+          <div class="card" style="background:var(--bll);padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:0.78rem;font-weight:700;color:var(--bl)">💱 سعر الصرف: $1 =</span>
+              <div style="display:flex;gap:5px;align-items:center">
+                <input type="number" id="exrate" value="1520" style="width:65px;padding:5px 7px;border:1.5px solid var(--bm);border-radius:7px;font-family:Cairo;font-size:0.8rem;outline:none;background:white;text-align:center" onchange="updRate()">
+                <span style="font-size:0.74rem;color:var(--mt)">د.ع</span>
+              </div>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="sc inc"><div class="sc-lbl inc">📥 مستلم كلي</div><div class="sc-amt inc" id="sf-rv">$0</div><div class="sub" style="color:var(--gn)" id="sf-rv-iq">0 د.ع</div></div>
+            <div class="sc exp"><div class="sc-lbl exp">📤 مصروف كلي</div><div class="sc-amt exp" id="sf-ex">$0</div><div class="sub" style="color:var(--rd)" id="sf-ex-iq">0 د.ع</div></div>
+          </div>
+          <div class="sc net"><div class="sc-lbl net">💎 الصندوق الصافي</div><div class="sc-amt net" id="sf-net">$0</div><div class="sub" style="color:rgba(255,255,255,0.8)" id="sf-net-iq">0 د.ع</div></div>
+          <div class="g2">
+            <div class="sc warn"><div class="sc-lbl exp">💳 ديون عليّ</div><div class="sc-amt exp" style="font-size:0.9rem" id="sf-debt">$0</div></div>
+            <div class="sc gold"><div class="sc-lbl gold">⏳ آجل غير محصل</div><div class="sc-amt gold" style="font-size:0.9rem" id="sf-ajal">$0</div></div>
+          </div>
+          <div class="g2">
+            <div class="sc cy"><div class="sc-lbl cy">📦 تكلفة الحاويات</div><div class="sc-amt cy" style="font-size:0.9rem" id="sf-concost">$0</div></div>
+            <div class="sc inc"><div class="sc-lbl inc">🏭 مبيعات محصلة</div><div class="sc-amt inc" style="font-size:0.9rem" id="sf-consell">$0</div></div>
+          </div>
+          <div class="card">
+            <div class="ct">🏦 رأس المال</div>
+            <div style="font-size:1.35rem;font-weight:900;color:var(--bl);text-align:center;margin:5px 0" id="cap-disp">$700,000</div>
+            <div style="display:flex;justify-content:space-between;font-size:0.68rem;margin-bottom:4px"><span style="color:var(--mt)">الهدف $1M</span><span style="color:var(--bl);font-weight:700" id="cap-pct">70%</span></div>
+            <div class="gb"><div class="gf fb" id="cap-bar" style="width:70%"></div></div>
+            <div class="row" style="margin-top:6px">
+              <input class="inp" style="flex:1" type="number" id="cap-inp" placeholder="تحديث رأس المال $">
+              <button class="btn-sm" onclick="updCap()">حفظ</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ct">📊 هذا الشهر</div>
+            <div style="font-size:0.7rem;color:var(--mt);font-family:Tajawal;margin-bottom:7px" id="month-label"></div>
+            <div class="g2">
+              <div style="background:var(--gl);border-radius:9px;padding:9px;text-align:center"><div style="font-size:0.58rem;color:var(--gn);font-weight:700;margin-bottom:2px">📥 مستلم الشهر</div><div style="font-size:0.9rem;font-weight:900;color:var(--gn)" id="m-recv">$0</div></div>
+              <div style="background:var(--rl);border-radius:9px;padding:9px;text-align:center"><div style="font-size:0.58rem;color:var(--rd);font-weight:700;margin-bottom:2px">📤 مصروف الشهر</div><div style="font-size:0.9rem;font-weight:900;color:var(--rd)" id="m-exp">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- حاويات -->
+        <div class="tab" id="mg-cont">
+          <div class="pt">📦 الحاويات</div>
+          <div class="g3" style="margin-bottom:9px">
+            <div class="sc info"><div class="sc-lbl info">📦 إجمالي</div><div class="sc-amt info" id="con-tot">0</div></div>
+            <div class="sc inc"><div class="sc-lbl inc">💰 ربح كلي</div><div class="sc-amt inc" id="con-prof">$0</div></div>
+            <div class="sc gold"><div class="sc-lbl gold">⏳ آجل</div><div class="sc-amt gold" id="con-ajal">$0</div></div>
+          </div>
+          <button class="btn" style="margin-bottom:9px" onclick="openConModal()">➕ حاوية جديدة</button>
+          <div id="con-list"></div>
+        </div>
+
+        <!-- مستلم المدير -->
+        <div class="tab" id="mg-recv">
+          <div class="pt">📥 المستلمات</div>
+          <div class="sc inc" style="margin-bottom:9px"><div class="sc-lbl inc">📥 إجمالي المستلم</div><div class="sc-amt inc" id="rv-tot">$0</div><div class="sub" style="color:var(--gn)" id="rv-tot-iq">0 د.ع</div></div>
+          <div class="card">
+            <div class="ct">➕ إضافة مستلم</div>
+            <input class="inp mb" type="text" id="rv-from" placeholder="من؟">
+            <input class="inp mb" type="text" id="rv-desc" placeholder="الوصف">
+            <div class="ar"><input class="inp" type="number" id="rv-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="rv-iq" placeholder="د.ع"></div>
+            <select class="sel mb" id="rv-type">
+              <option value="cash">💵 نقد</option><option value="transfer">🏦 تحويل</option>
+              <option value="ajal">📅 آجل محصل</option><option value="sale">🏭 بيع ماكينة</option>
+            </select>
+            <input class="inp mb" type="date" id="rv-date">
+            <button class="btn" onclick="addRv()">💾 إضافة</button>
+          </div>
+          <div class="card"><div class="ct">📋 السجل</div><div id="rv-list"></div></div>
+        </div>
+
+        <!-- مصروف المدير -->
+        <div class="tab" id="mg-exp">
+          <div class="pt">📤 المصروفات</div>
+          <div class="sc exp" style="margin-bottom:9px"><div class="sc-lbl exp">📤 إجمالي المصروف</div><div class="sc-amt exp" id="ex-tot">$0</div><div class="sub" style="color:var(--rd)" id="ex-tot-iq">0 د.ع</div></div>
+          <div class="card">
+            <div class="ct">➕ إضافة مصروف</div>
+            <input class="inp mb" type="text" id="ex-to" placeholder="لمن؟">
+            <input class="inp mb" type="text" id="ex-desc" placeholder="الوصف">
+            <div class="ar"><input class="inp" type="number" id="ex-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="ex-iq" placeholder="د.ع"></div>
+            <select class="sel mb" id="ex-cat">
+              <option value="shipping">🚢 شحن بحري</option><option value="customs">🏛 جمارك</option>
+              <option value="transport">🚚 نقل</option><option value="salary">👷 رواتب</option>
+              <option value="rent">🏠 إيجار</option><option value="ads">📢 ترويج</option>
+              <option value="loan">💸 سلفة / تمويل</option><option value="other">📌 متفرقات</option>
+            </select>
+            <input class="inp mb" type="date" id="ex-date">
+            <button class="btn" onclick="addEx()">💾 إضافة</button>
+          </div>
+          <div class="card"><div class="ct">📋 السجل</div><div id="ex-list"></div></div>
+        </div>
+
+        <!-- ديون -->
+        <div class="tab" id="mg-debt">
+          <div class="pt">💳 الديون عليّ</div>
+          <div class="sc warn" style="margin-bottom:9px"><div class="sc-lbl exp">💳 الديون النشطة</div><div class="sc-amt exp" id="dt-tot">$0</div><div class="sub" style="color:var(--rd)" id="dt-tot-iq">0 د.ع</div></div>
+          <div class="card">
+            <div class="ct">➕ دين جديد</div>
+            <input class="inp mb" type="text" id="dt-to" placeholder="لمن؟">
+            <input class="inp mb" type="text" id="dt-desc" placeholder="السبب">
+            <div class="ar"><input class="inp" type="number" id="dt-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="dt-iq" placeholder="د.ع"></div>
+            <input class="inp mb" type="date" id="dt-due">
+            <button class="btn" onclick="addDt()">💾 إضافة</button>
+          </div>
+          <div class="card"><div class="ct">📋 الديون</div><div id="dt-list"></div></div>
+        </div>
+
+        <!-- زبائن -->
+        <div class="tab" id="mg-clients">
+          <div class="pt">👥 كشوفات الزبائن</div>
+          <div class="sc exp" style="margin-bottom:9px"><div class="sc-lbl exp">💰 إجمالي ديون الزبائن</div><div class="sc-amt exp" id="cl-tot">$0</div></div>
+          <button class="btn" style="margin-bottom:9px" onclick="openClientModal()">➕ زبون جديد</button>
+          <div id="cl-list"></div>
+        </div>
+
+        <!-- مخزون -->
+        <div class="tab" id="mg-inv">
+          <div class="pt">📋 المخزون</div>
+          <div class="g2" style="margin-bottom:9px">
+            <div class="sc gold"><div class="sc-lbl gold">📦 غير مباع</div><div class="sc-amt gold" id="inv-unsold">$0</div></div>
+            <div class="sc cy"><div class="sc-lbl cy">🔧 قطع غيار</div><div class="sc-amt cy" id="inv-parts">$0</div></div>
+          </div>
+          <div class="card">
+            <div class="ct">🏭 المنتجات</div>
+            <button class="btn" style="margin-bottom:8px" onclick="openInvModal()">➕ إضافة منتج</button>
+            <div id="inv-list"></div>
+          </div>
+          <div class="card">
+            <div class="ct">🔧 قطع الغيار</div>
+            <button class="btn" style="margin-bottom:8px" onclick="openPartModal()">➕ إضافة قطعة</button>
+            <div id="part-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sec" id="mg-biz-sec">
+      <div class="sb">
+        <button class="sbx on" onclick="stab('mg-biz-sec','mg-tasks',this)"><span class="si">📋</span>مهام</button>
+        <button class="sbx" onclick="stab('mg-biz-sec','mg-goals',this)"><span class="si">🎯</span>أهداف</button>
+        <button class="sbx" onclick="stab('mg-biz-sec','mg-rev',this)"><span class="si">📊</span>مراجعة</button>
+      </div>
+      <div class="cnt">
+        <div class="tab on" id="mg-tasks">
+          <div class="pt">📋 مهام اليوم</div>
+          <div class="mot" id="quote"></div>
+          <div class="bq"><p>⭐ أهم مهمة اليوم؟</p><textarea id="bq" placeholder="المهمة الأهم..."></textarea></div>
+          <div class="card">
+            <div class="ct">⚡ طاقتي</div>
+            <div class="er">
+              <button class="eb" onclick="setE(this,'🔥 ممتاز')">🔥 ممتاز</button>
+              <button class="eb" onclick="setE(this,'✅ جيد')">✅ جيد</button>
+              <button class="eb" onclick="setE(this,'⚠️ متعب')">⚠️ متعب</button>
+              <button class="eb" onclick="setE(this,'😴 منهك')">😴 منهك</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ct">📌 المهام</div>
+            <select class="sel mb" id="ntc">
+              <option value="biz">🏭 أعمال</option><option value="urgent">🚨 عاجل</option>
+              <option value="follow">📞 متابعة</option><option value="ship">🚢 شحن</option>
+            </select>
+            <div class="row mb">
+              <input class="inp" style="flex:1" type="text" id="nt" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addT()">
+              <button class="btn-add" onclick="addT()">+</button>
+            </div>
+            <div id="tlist"></div>
+          </div>
+        </div>
+        <!-- ⚡ نافذة المحاسب -->
+        <div class="tab" id="mg-quick">
+          <div class="pt">⚡ تسجيل سريع</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+            <button onclick="setQType('recv')" id="q-recv-btn" style="padding:14px 8px;border-radius:12px;background:var(--gl);border:2px solid #81C784;color:var(--gn);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer">📥 مستلم</button>
+            <button onclick="setQType('exp')" id="q-exp-btn" style="padding:14px 8px;border-radius:12px;background:var(--bg);border:2px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer">📤 مصروف</button>
+          </div>
+          <div class="card">
+            <div class="ct">🖊️ تسجيل سريع</div>
+            <input class="inp mb" type="text" id="q-from" placeholder="من / لمن؟">
+            <input class="inp mb" type="text" id="q-desc" placeholder="الوصف / التبويب">
+            <div class="ar">
+              <input class="inp" type="number" id="q-d" placeholder="$ دولار">
+              <span>أو</span>
+              <input class="inp" type="number" id="q-iq" placeholder="د.ع">
+            </div>
+            <select class="sel mb" id="q-cat">
+              <option value="sales">💼 مبيعات</option>
+              <option value="shipping">🚢 شحن</option>
+              <option value="customs">🏛 جمارك</option>
+              <option value="transport">🚚 نقل</option>
+              <option value="salary">👷 رواتب</option>
+              <option value="rent">🏠 إيجار</option>
+              <option value="other">📌 متفرقات</option>
+            </select>
+            <input class="inp mb" type="date" id="q-date">
+            <button class="btn" onclick="addQuick()" id="q-btn">💾 تسجيل</button>
+          </div>
+          <div class="card">
+            <div class="ct">📋 آخر التسجيلات</div>
+            <div id="q-list"></div>
+          </div>
+        </div>
+
+        <div class="tab" id="mg-goals">
+          <div class="pt">🎯 الأهداف المالية</div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px"><span style="font-weight:700">رأس المال</span><span style="color:var(--bl);font-weight:700" id="g-cap">$700K</span></div>
+            <div class="gb"><div class="gf fb" id="g-cap-b" style="width:70%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px"><span style="font-weight:700">هدف 38 — $1M</span><span style="color:var(--bl);font-weight:700" id="g38">70%</span></div>
+            <div class="gb"><div class="gf fb" id="g38b" style="width:70%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px"><span style="font-weight:700">هدف 40 — $2.5M</span><span style="color:var(--gn);font-weight:700" id="g40">28%</span></div>
+            <div class="gb"><div class="gf fg" id="g40b" style="width:28%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px"><span style="font-weight:700">هدف 45 — $5M</span><span style="color:var(--pu);font-weight:700" id="g45">14%</span></div>
+            <div class="gb"><div class="gf fp" id="g45b" style="width:14%"></div></div>
+            <div class="row" style="margin-top:5px">
+              <input class="inp" style="flex:1" type="number" id="cap-upd" placeholder="تحديث رأس المال $">
+              <button class="btn-sm" onclick="updCapGoal()">تحديث</button>
+            </div>
+          </div>
+          <div class="card"><div class="ct">🚀 مشاريع الاتحاد</div><div id="biz-goals"></div></div>
+        </div>
+        <div class="tab" id="mg-rev">
+          <div class="pt">📊 المراجعة</div>
+          <div class="sg">
+            <div class="st"><div class="sn" id="rv-tasks">0</div><div class="sl2">مهمة</div></div>
+            <div class="st"><div class="sn" id="rv-cons">0</div><div class="sl2">حاوية</div></div>
+            <div class="st"><div class="sn" id="rv-net2">$0</div><div class="sl2">صافي</div></div>
+          </div>
+          <div class="card">
+            <div class="ct">✍️ تأمل الأسبوع</div>
+            <div style="font-size:0.72rem;color:var(--mt);margin-bottom:4px;font-family:Tajawal">أفضل إنجاز؟</div>
+            <textarea class="ri" id="r1" placeholder="اكتب هنا..."></textarea>
+            <div style="font-size:0.72rem;color:var(--mt);margin-bottom:4px;font-family:Tajawal">أكبر تحدي؟</div>
+            <textarea class="ri" id="r2" placeholder="اكتب هنا..."></textarea>
+            <div style="font-size:0.72rem;color:var(--mt);margin-bottom:4px;font-family:Tajawal">خطة الأسبوع الجاي؟</div>
+            <textarea class="ri" id="r3" placeholder="اكتب هنا..."></textarea>
+            <button class="btn" onclick="saveRev()">💾 حفظ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" id="mg-per-sec">
+      <div class="sb">
+        <button class="sbx on" onclick="stab('mg-per-sec','mg-hab',this)"><span class="si">🔄</span>عادات</button>
+        <button class="sbx" onclick="stab('mg-per-sec','mg-ptsk',this)"><span class="si">📝</span>مهام</button>
+        <button class="sbx" onclick="stab('mg-per-sec','mg-pgoal',this)"><span class="si">🏠</span>أهداف</button>
+      </div>
+      <div class="cnt">
+        <div class="tab on" id="mg-hab">
+          <div class="pt">🔄 عاداتي</div>
+          <div class="card"><div class="ct">✅ عادات يومية</div><div class="hg" id="hab-grid"></div></div>
+          <div class="sg">
+            <div class="st"><div class="sn" id="h-dn">0</div><div class="sl2">اليوم</div></div>
+            <div class="st"><div class="sn" id="h-pct">0%</div><div class="sl2">إنجاز</div></div>
+            <div class="st"><div class="sn" id="h-str">0🔥</div><div class="sl2">متتالي</div></div>
+          </div>
+        </div>
+        <div class="tab" id="mg-ptsk">
+          <div class="pt">📝 مهام شخصية</div>
+          <div class="card">
+            <div class="row mb"><input class="inp" style="flex:1" type="text" id="pt-inp" placeholder="أضف مهمة..." onkeydown="if(event.key==='Enter')addPT()"><button class="btn-add" onclick="addPT()">+</button></div>
+            <div id="pt-list"></div>
+          </div>
+        </div>
+        <div class="tab" id="mg-pgoal">
+          <div class="pt">🏠 الأهداف الشخصية</div>
+          <div class="card"><div class="ct">🏆 الإنجازات</div><div id="per-goals"></div></div>
+          <div class="card">
+            <div class="ct">💪 كلمة لنفسك</div>
+            <textarea class="ri" style="height:72px" id="self-note" placeholder="شجع نفسك..."></textarea>
+            <button class="btn" onclick="saveSelf()">💾 حفظ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" id="mg-sch-sec">
+      <div class="sb">
+        <button class="sbx on" onclick="stab('mg-sch-sec','mg-schd',this)"><span class="si">☀️</span>اليوم</button>
+        <button class="sbx" onclick="stab('mg-sch-sec','mg-sadd',this)"><span class="si">➕</span>إضافة</button>
+      </div>
+      <div class="cnt">
+        <div class="tab on" id="mg-schd">
+          <div class="pt">🗓 جدول اليوم</div>
+          <div class="card" style="background:linear-gradient(135deg,#0D47A1,var(--b2));padding:11px;text-align:center;margin-bottom:9px">
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);font-family:Tajawal" id="td-date"></div>
+            <div style="font-size:0.9rem;font-weight:700;color:white;margin-top:3px" id="td-greet"></div>
+          </div>
+          <div id="sch-list"></div>
+        </div>
+        <div class="tab" id="mg-sadd">
+          <div class="pt">➕ موعد جديد</div>
+          <div class="card">
+            <input class="inp mb" type="text" id="s-title" placeholder="عنوان الموعد...">
+            <select class="sel mb" id="s-time">
+              <option value="07:00">7:00 صباح</option><option value="08:00">8:00 صباح</option>
+              <option value="09:00">9:00 صباح</option><option value="10:00">10:00 صباح</option>
+              <option value="11:00">11:00 صباح</option><option value="12:00">12:00 ظهر</option>
+              <option value="13:00">1:00 مساء</option><option value="14:00">2:00 مساء</option>
+              <option value="15:00">3:00 مساء</option><option value="16:00">4:00 مساء</option>
+              <option value="17:00">5:00 مساء</option><option value="20:00">8:00 مساء</option>
+            </select>
+            <select class="sel mb" id="s-type">
+              <option value="work">🏭 عمل</option><option value="meet">🤝 اجتماع</option>
+              <option value="call">📞 مكالمة</option><option value="personal">👤 شخصي</option><option value="rest">😴 راحة</option>
+            </select>
+            <button class="btn" onclick="addSch()">💾 إضافة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGER NAV -->
+    <nav class="bnav">
+      <button class="bb on" onclick="mgShowSec('acc',this)"><span class="ni">💰</span>حسابات</button>
+      <button class="bb" onclick="mgShowSec('biz',this)"><span class="ni">🏭</span>أعمال</button>
+      <button class="bb" onclick="mgShowSec('per',this)"><span class="ni">👤</span>شخصي</button>
+      <button class="bb" onclick="mgShowSec('sch',this)"><span class="ni">🗓</span>مواعيد</button>
+    </nav>
   </div>
 </div>
 
-<!-- ========== SECTION 2: شخصي ========== -->
-<div class="section" id="sec-personal">
-  <div class="layout">
-    <div class="sidebar">
-      <button class="side-btn active" onclick="switchTab('personal','p-habits',this)">
-        <span class="sico">🔄</span>عادات
-      </button>
-      <button class="side-btn" onclick="switchTab('personal','p-accounts',this)">
-        <span class="sico">💳</span>مصاريف
-      </button>
-      <button class="side-btn" onclick="switchTab('personal','p-tasks',this)">
-        <span class="sico">📝</span>مهام
-      </button>
-      <button class="side-btn" onclick="switchTab('personal','p-goals',this)">
-        <span class="sico">🏠</span>أهداف
-      </button>
-    </div>
-    <div class="content">
-
-      <!-- عادات -->
-      <div class="tab" id="p-habits">
-        <div class="page-title">🔄 عاداتي اليومية</div>
-        <div class="card">
-          <div class="card-title">✅ عادات رجل الأعمال</div>
-          <div class="habit-grid" id="habits-grid"></div>
-        </div>
-        <div class="stats-row">
-          <div class="stat"><div class="stat-num" id="h-done">0</div><div class="stat-lbl">اليوم</div></div>
-          <div class="stat"><div class="stat-num" id="h-pct">0%</div><div class="stat-lbl">إنجاز</div></div>
-          <div class="stat"><div class="stat-num" id="h-streak">0🔥</div><div class="stat-lbl">متتالي</div></div>
-        </div>
-      </div>
-
-      <!-- مصاريف شخصية -->
-      <div class="tab" id="p-accounts" style="display:none">
-        <div class="page-title">💳 المصاريف الشخصية</div>
-        <div class="sum-grid">
-          <div class="sum-card inc"><div class="sum-lbl inc">📈 دخل</div><div class="sum-amt inc" id="p-income">$0</div></div>
-          <div class="sum-card exp"><div class="sum-lbl exp">📉 مصاريف</div><div class="sum-amt exp" id="p-expense">$0</div></div>
-          <div class="sum-card net"><div class="sum-lbl net">💎 المتبقي</div><div class="sum-amt net" id="p-net">$0</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">💳 إضافة</div>
-          <div class="type-row">
-            <button class="type-btn inc" id="p-inc-btn" onclick="setPTxType('income')">📈 دخل</button>
-            <button class="type-btn" id="p-exp-btn" onclick="setPTxType('expense')">📉 مصروف</button>
-          </div>
-          <input class="inp" type="text" id="p-tx-desc" placeholder="الوصف...">
-          <input class="inp" type="number" id="p-tx-amt" placeholder="المبلغ ($)">
-          <select class="sel" id="p-tx-cat">
-            <option value="food">🍽 طعام ومطعم</option>
-            <option value="transport">🚗 مواصلات</option>
-            <option value="health">💊 صحة</option>
-            <option value="family">👨‍👩‍👧 عائلة</option>
-            <option value="education">📚 تعليم</option>
-            <option value="other">📌 أخرى</option>
-          </select>
-          <button class="btn-primary" onclick="addPTx()">💾 إضافة</button>
-        </div>
-        <div class="card">
-          <div class="card-title">📋 السجل</div>
-          <div id="p-tx-list"></div>
-        </div>
-      </div>
-
-      <!-- مهام شخصية -->
-      <div class="tab" id="p-tasks" style="display:none">
-        <div class="page-title">📝 المهام الشخصية</div>
-        <div class="card">
-          <div class="row">
-            <input class="inp" style="margin:0;flex:1" type="text" id="p-new-task" placeholder="أضف مهمة شخصية..." onkeydown="if(event.key==='Enter')addPTask()">
-            <button class="btn-add" onclick="addPTask()">+</button>
-          </div>
-          <div id="p-tasks-list" style="margin-top:8px"></div>
-        </div>
-      </div>
-
-      <!-- أهداف شخصية -->
-      <div class="tab" id="p-goals" style="display:none">
-        <div class="page-title">🏠 الأهداف الشخصية</div>
-        <div class="card">
-          <div class="card-title">🏆 الإنجازات</div>
-          <div id="personal-goals"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">💪 كلمة لنفسك</div>
-          <textarea class="rev-inp" id="self-note" placeholder="اكتب كلمة تشجيع لنفسك..."></textarea>
-          <button class="btn-primary" onclick="saveSelfNote()">💾 حفظ</button>
-        </div>
-      </div>
-
-    </div>
+<!-- MODALS (shared) -->
+<div class="modal" id="con-modal">
+  <div class="mbox">
+    <div class="mt2">📦 حاوية جديدة</div>
+    <input class="inp mb" type="text" id="cn-name" placeholder="اسم الحاوية">
+    <select class="sel mb" id="cn-type"><option value="20ft">20 قدم</option><option value="40ft">40 قدم</option><option value="40hq">40 HQ</option></select>
+    <input class="inp mb" type="text" id="cn-supp" placeholder="المورد الصيني">
+    <input class="inp mb" type="date" id="cn-date">
+    <div class="ct">💰 تكلفة البضاعة</div>
+    <div class="ar"><input class="inp" type="number" id="cn-cost-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="cn-cost-iq" placeholder="د.ع"></div>
+    <div class="ct">🚢 تكلفة الشحن</div>
+    <div class="ar"><input class="inp" type="number" id="cn-ship-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="cn-ship-iq" placeholder="د.ع"></div>
+    <div class="ct">🏛 الجمارك</div>
+    <div class="ar"><input class="inp" type="number" id="cn-cust-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="cn-cust-iq" placeholder="د.ع"></div>
+    <div class="ct">🚚 نقل ومتفرقات</div>
+    <div class="ar"><input class="inp" type="number" id="cn-misc-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="cn-misc-iq" placeholder="د.ع"></div>
+    <button class="btn" onclick="saveCon()">💾 حفظ الحاوية</button>
+    <button class="btn" style="background:var(--bg);color:var(--mt);border:1.5px solid var(--br);margin-top:5px" onclick="closeModals()">إلغاء</button>
   </div>
 </div>
-
-<!-- ========== SECTION 3: مواعيد ========== -->
-<div class="section" id="sec-schedule">
-  <div class="layout">
-    <div class="sidebar">
-      <button class="side-btn active" onclick="switchTab('schedule','s-today',this)">
-        <span class="sico">☀️</span>اليوم
-      </button>
-      <button class="side-btn" onclick="switchTab('schedule','s-add',this)">
-        <span class="sico">➕</span>إضافة
-      </button>
-    </div>
-    <div class="content">
-
-      <!-- جدول اليوم -->
-      <div class="tab" id="s-today">
-        <div class="page-title">🗓 جدول اليوم</div>
-        <div class="card" style="background:linear-gradient(135deg,var(--blue),var(--blue2));padding:14px;text-align:center">
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.8);font-family:Tajawal" id="today-date-disp"></div>
-          <div style="font-size:1rem;font-weight:700;color:white;margin-top:4px" id="today-greeting"></div>
-        </div>
-        <div id="schedule-list"></div>
-      </div>
-
-      <!-- إضافة موعد -->
-      <div class="tab" id="s-add" style="display:none">
-        <div class="page-title">➕ موعد جديد</div>
-        <div class="card">
-          <input class="inp" type="text" id="s-title" placeholder="عنوان الموعد...">
-          <select class="sel" id="s-time">
-            <option value="07:00">7:00 صباح</option>
-            <option value="08:00">8:00 صباح</option>
-            <option value="09:00">9:00 صباح</option>
-            <option value="10:00">10:00 صباح</option>
-            <option value="11:00">11:00 صباح</option>
-            <option value="12:00">12:00 ظهر</option>
-            <option value="13:00">1:00 مساء</option>
-            <option value="14:00">2:00 مساء</option>
-            <option value="15:00">3:00 مساء</option>
-            <option value="16:00">4:00 مساء</option>
-            <option value="17:00">5:00 مساء</option>
-            <option value="18:00">6:00 مساء</option>
-            <option value="19:00">7:00 مساء</option>
-            <option value="20:00">8:00 مساء</option>
-          </select>
-          <select class="sel" id="s-type">
-            <option value="work">🏭 عمل</option>
-            <option value="meet">🤝 اجتماع</option>
-            <option value="call">📞 مكالمة</option>
-            <option value="personal">👤 شخصي</option>
-            <option value="rest">😴 راحة</option>
-          </select>
-          <button class="btn-primary" onclick="addSchedule()">💾 إضافة الموعد</button>
-        </div>
-        <div class="card" style="background:var(--blue-light)">
-          <div class="card-title">⏰ الجدول الافتراضي</div>
-          <div style="font-size:0.78rem;color:var(--text2);line-height:2;font-family:Tajawal">
-            🌅 7:00 — صحيان + قهوة + تخطيط<br>
-            ⭐ 7:30 — أهم مهمة بدون هاتف<br>
-            🤝 9:00 — اجتماعات وزيارات<br>
-            😴 12:00 — غداء وراحة<br>
-            📋 1:00 — متابعة وردود<br>
-            ✅ 4:00 — مراجعة اليوم<br>
-            🏠 5:00 — عائلة فقط
-          </div>
-        </div>
-      </div>
-
-    </div>
+<div class="modal" id="con-detail-modal"><div class="mbox" id="con-detail-content"></div></div>
+<div class="modal" id="cl-modal">
+  <div class="mbox">
+    <div class="mt2">👤 زبون جديد</div>
+    <input class="inp mb" type="text" id="cl-name" placeholder="اسم الزبون">
+    <input class="inp mb" type="text" id="cl-addr" placeholder="العنوان / المنطقة">
+    <input class="inp mb" type="text" id="cl-phone" placeholder="رقم الموبايل">
+    <input class="inp mb" type="text" id="cl-co" placeholder="اسم الشركة / الورشة">
+    <button class="btn" onclick="saveCl()">💾 إضافة</button>
+    <button class="btn" style="background:var(--bg);color:var(--mt);border:1.5px solid var(--br);margin-top:5px" onclick="closeModals()">إلغاء</button>
   </div>
 </div>
-
-<!-- ========== BOTTOM NAV ========== -->
-<nav class="main-nav">
-  <button class="main-btn active" onclick="showSection('business',this)">
-    <span class="ico">🏭</span>أعمال
-  </button>
-  <button class="main-btn" onclick="showSection('personal',this)">
-    <span class="ico">👤</span>شخصي
-  </button>
-  <button class="main-btn" onclick="showSection('schedule',this)">
-    <span class="ico">🗓</span>مواعيد
-  </button>
-</nav>
-
+<div class="modal" id="cl-detail-modal"><div class="mbox" id="cl-detail-content"></div></div>
+<div class="modal" id="inv-modal">
+  <div class="mbox">
+    <div class="mt2">🏭 منتج جديد</div>
+    <input class="inp mb" type="text" id="inv-name" placeholder="اسم المنتج">
+    <div class="g2 mb"><input class="inp" type="number" id="inv-qty" placeholder="العدد"><input class="inp" type="number" id="inv-price" placeholder="سعر البيع $"></div>
+    <button class="btn" onclick="saveInv()">💾 إضافة</button>
+    <button class="btn" style="background:var(--bg);color:var(--mt);border:1.5px solid var(--br);margin-top:5px" onclick="closeModals()">إلغاء</button>
+  </div>
+</div>
+<div class="modal" id="part-modal">
+  <div class="mbox">
+    <div class="mt2">🔧 قطعة غيار</div>
+    <input class="inp mb" type="text" id="part-name" placeholder="اسم القطعة">
+    <div class="g2 mb"><input class="inp" type="number" id="part-qty" placeholder="العدد"><input class="inp" type="number" id="part-price" placeholder="السعر $"></div>
+    <button class="btn" onclick="savePart()">💾 إضافة</button>
+    <button class="btn" style="background:var(--bg);color:var(--mt);border:1.5px solid var(--br);margin-top:5px" onclick="closeModals()">إلغاء</button>
+  </div>
+</div>
 <div class="toast" id="toast">✅ تم!</div>
 
 <script>
 // ===== STATE =====
-let S = JSON.parse(localStorage.getItem('yawmi_v4')||'{}');
-const def = {
-  capital:700000, bTx:[], pTx:[], orders:[], bTasks:[], pTasks:[],
-  habits:{}, streak:0, schedule:{}, bigQ:'', energy:'', reviews:{},
-  bizGoals:{}, selfNote:'', capital:700000
-};
-Object.keys(def).forEach(k=>{ if(S[k]===undefined) S[k]=def[k]; });
+let S=JSON.parse(localStorage.getItem('yw9')||'{}');
+const D={tasks:[],pTasks:[],habits:{},schedule:{},reviews:{},recv:[],expenses:[],debts:[],containers:[],clients:[],inventory:[],parts:[],bizGoals:{},capital:700000,streak:0,exrate:1520,bigQ:'',energy:'',selfNote:''};
+Object.keys(D).forEach(k=>{if(S[k]===undefined)S[k]=D[k];});
+const rate=()=>parseFloat(document.getElementById('exrate')?.value)||S.exrate||1520;
+const toD=(iq)=>iq/rate();const toIQ=(d)=>d*rate();
+const fD=(v)=>'$'+Math.round(v).toLocaleString();const fIQ=(v)=>Math.round(v).toLocaleString()+' د.ع';
+function getD(a,b){const d=parseFloat(document.getElementById(a)?.value)||0;const iq=parseFloat(document.getElementById(b)?.value)||0;return d>0?d:iq>0?toD(iq):0;}
+function getIQ(a,b){const d=parseFloat(document.getElementById(a)?.value)||0;const iq=parseFloat(document.getElementById(b)?.value)||0;return iq>0?iq:d>0?toIQ(d):0;}
+function $(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function save(){localStorage.setItem('yw9',JSON.stringify(S));}
 
-let bTxType='income', pTxType='income';
-const todayKey = new Date().toISOString().split('T')[0];
-const today = new Date().toLocaleDateString('ar-IQ',{weekday:'long',day:'numeric',month:'long'});
-
-const HABITS=[
-  {id:'wake',icon:'🌅',name:'صحيان بكير',desc:'قبل 7:30'},
-  {id:'plan',icon:'📋',name:'تخطيط اليوم',desc:'10 دقائق'},
-  {id:'focus',icon:'🎯',name:'ساعة تركيز',desc:'بدون هاتف'},
-  {id:'exercise',icon:'💪',name:'رياضة',desc:'30 دقيقة'},
-  {id:'read',icon:'📚',name:'قراءة',desc:'15 دقيقة'},
-  {id:'review',icon:'✅',name:'مراجعة اليوم',desc:'5 دقائق'},
-  {id:'family',icon:'👨‍👩‍👧',name:'وقت العائلة',desc:'بدون هاتف'},
-  {id:'gratitude',icon:'🙏',name:'امتنان',desc:'3 أشياء'},
-];
-
-const BIZ_GOALS=[
-  {id:'machines',icon:'🏭',name:'استقبال المكائن + 8 صفقات'},
-  {id:'survey',icon:'📋',name:'مسح 300 معمل'},
-  {id:'social',icon:'📱',name:'10K متابع فيسبوك'},
-  {id:'exit',icon:'🤝',name:'التخارج من المقاولات'},
-  {id:'maintenance',icon:'🔧',name:'قسم الصيانة'},
-  {id:'factory',icon:'🏗️',name:'ورشة التصنيع'},
-];
-
-const PERSONAL_GOALS=[
-  {id:'house1',icon:'🏠',name:'السكن الأول',done:true},
-  {id:'house2',icon:'🏠',name:'السكن الثاني',done:true},
-  {id:'cars',icon:'🚗',name:'سيارتين',done:true},
-  {id:'health',icon:'💪',name:'صحة جيدة',done:false},
-  {id:'family',icon:'👨‍👩‍👧',name:'استقرار عائلي',done:true},
-];
-
-const DEFAULT_SCHED=[
-  {id:1,time:'07:00',type:'personal',title:'صحيان + قهوة + تخطيط اليوم',done:false},
-  {id:2,time:'07:30',type:'work',title:'⭐ أهم مهمة — بدون هاتف',done:false},
-  {id:3,time:'09:00',type:'meet',title:'اجتماعات + زيارات + مكالمات',done:false},
-  {id:4,time:'12:00',type:'rest',title:'غداء + راحة',done:false},
-  {id:5,time:'13:00',type:'work',title:'متابعة + ردود + إدارة',done:false},
-  {id:6,time:'16:00',type:'work',title:'مراجعة اليوم + تخطيط الغد',done:false},
-  {id:7,time:'17:00',type:'personal',title:'🏠 عائلة فقط — لا شغل',done:false},
-];
-
-const QUOTES=[
-  'من $12,000 إلى $700,000 — أنت تثبت كل يوم إنك قادر 💪',
-  'يوم واحد بتركيز يساوي أسبوع بتشتت 🎯',
-  'أعظم رجال الأعمال خافوا — لكنهم ما وقفوا 💡',
-  'الراحة مو كسل — الراحة وقود للنجاح ⚡',
-  'كل صفقة خطوة نحو $1M 🚀',
-  'زوجتك تثق بك — أنت لا تخذل من يحبك 🤍',
-  'أنت لست موظفاً — أنت باني مستقبل 🏆',
-];
-
-// ===== NAVIGATION =====
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.main-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
-  btn.classList.add('active');
+// ===== QUICK ACCOUNTANT =====
+let _qType = 'recv';
+function setQType(t){
+  _qType = t;
+  const rb = document.getElementById('q-recv-btn');
+  const eb = document.getElementById('q-exp-btn');
+  const btn = document.getElementById('q-btn');
+  if(rb && eb) {
+    rb.style.cssText = t==='recv' ? 'padding:14px 8px;border-radius:12px;background:var(--gl);border:2px solid #81C784;color:var(--gn);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer' : 'padding:14px 8px;border-radius:12px;background:var(--bg);border:2px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer';
+    eb.style.cssText = t==='exp' ? 'padding:14px 8px;border-radius:12px;background:var(--rl);border:2px solid #EF9A9A;color:var(--rd);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer' : 'padding:14px 8px;border-radius:12px;background:var(--bg);border:2px solid var(--br);color:var(--mt);font-family:Cairo;font-size:0.85rem;font-weight:700;cursor:pointer';
+  }
+  if(btn) btn.textContent = t==='recv' ? '💾 تسجيل مستلم' : '💾 تسجيل مصروف';
+  if(btn) btn.style.background = t==='recv' ? 'var(--gn)' : 'var(--rd)';
 }
-
-function switchTab(section, tabId, btn) {
-  const sec = document.getElementById('sec-'+section);
-  sec.querySelectorAll('.tab').forEach(t=>t.style.display='none');
-  sec.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(tabId).style.display='block';
-  btn.classList.add('active');
+function addQuick(){
+  const from = document.getElementById('q-from').value.trim();
+  if(!from){ toast('⚠️ أدخل المصدر / الجهة'); return; }
+  const amtD = getD('q-d','q-iq');
+  if(!amtD){ toast('⚠️ أدخل المبلغ'); return; }
+  const amtIQ = getIQ('q-d','q-iq');
+  const dateVal = document.getElementById('q-date').value || dk;
+  const desc = document.getElementById('q-desc').value;
+  const cat = document.getElementById('q-cat').value;
+  if(_qType === 'recv'){
+    S.recv.push({id:Date.now(), from, desc, amtD, amtIQ, type:'cash', date:dateVal});
+    toast('📥 تم تسجيل المستلم!');
+  } else {
+    S.expenses.push({id:Date.now(), to:from, desc, amtD, amtIQ, cat, date:dateVal});
+    toast('📤 تم تسجيل المصروف!');
+  }
+  ['q-from','q-desc','q-d','q-iq'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('q-date').value = dk;
+  rQuick(); rSafe(); rRecv(); rExp(); save();
 }
-
-// ===== INIT =====
-document.getElementById('daily-quote').textContent = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-document.getElementById('big-q-input').value = S.bigQ||'';
-document.getElementById('big-q-input').oninput = ()=>{ S.bigQ=document.getElementById('big-q-input').value; save(); };
-document.getElementById('today-date-disp').textContent = today;
-const hr = new Date().getHours();
-document.getElementById('today-greeting').textContent = hr<12?'☀️ صباح الخير':'hr<17?🌤️ مساء الخير':'🌙 مساء الخير';
-if(S.energy) document.querySelectorAll('.energy-btn').forEach(b=>{ if(b.textContent.trim()===S.energy) b.classList.add('sel'); });
-if(S.selfNote) document.getElementById('self-note').value = S.selfNote;
-
-renderBTasks(); renderHabits(); renderBAccounts(); renderPAccounts();
-renderOrders(); renderGoals(); renderSchedule(); renderPersonalGoals();
-renderPTasks(); renderReview();
-
-// ===== ENERGY =====
-function setEnergy(btn,val){
-  document.querySelectorAll('.energy-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel'); S.energy=val; save();
-}
-
-// ===== BUSINESS TASKS =====
-function addTask(){
-  const inp=document.getElementById('new-task');
-  const t=inp.value.trim(); if(!t) return;
-  S.bTasks.push({id:Date.now(),title:t,cat:document.getElementById('new-task-cat').value,done:false,date:todayKey});
-  inp.value=''; renderBTasks(); save();
-}
-function toggleBTask(id){
-  const t=S.bTasks.find(t=>t.id===id);
-  if(t){t.done=!t.done; renderBTasks(); save();}
-}
-function renderBTasks(){
-  const list=S.bTasks.filter(t=>t.date===todayKey);
-  const el=document.getElementById('tasks-list');
-  if(!el) return;
-  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">أضف أول مهمة 👆</div>';return;}
-  const cats={biz:'🏭 أعمال',urgent:'🚨 عاجل'};
-  const cls={biz:'tc-biz',urgent:'tc-urgent'};
-  el.innerHTML=list.map(t=>`
-    <div class="task-item ${t.done?'done':''}" onclick="toggleBTask(${t.id})">
-      <div class="chk ${t.done?'done':''}">✓</div>
-      <div style="flex:1"><div class="tl">${t.title}</div><span class="tc ${cls[t.cat]||'tc-biz'}">${cats[t.cat]||t.cat}</span></div>
-    </div>`).join('');
-  if(document.getElementById('b-done-tasks')) document.getElementById('b-done-tasks').textContent=list.filter(t=>t.done).length;
-}
-
-// ===== PERSONAL TASKS =====
-function addPTask(){
-  const inp=document.getElementById('p-new-task');
-  const t=inp.value.trim(); if(!t) return;
-  S.pTasks.push({id:Date.now(),title:t,done:false,date:todayKey});
-  inp.value=''; renderPTasks(); save();
-}
-function togglePTask(id){
-  const t=S.pTasks.find(t=>t.id===id);
-  if(t){t.done=!t.done; renderPTasks(); save();}
-}
-function renderPTasks(){
-  const list=S.pTasks.filter(t=>t.date===todayKey);
-  const el=document.getElementById('p-tasks-list');
-  if(!el) return;
-  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">أضف مهمة شخصية 👆</div>';return;}
-  el.innerHTML=list.map(t=>`
-    <div class="task-item ${t.done?'done':''}" onclick="togglePTask(${t.id})">
-      <div class="chk ${t.done?'done':''}">✓</div>
-      <div style="flex:1"><div class="tl">${t.title}</div></div>
-    </div>`).join('');
-}
-
-// ===== HABITS =====
-function toggleHabit(id){
-  if(!S.habits[todayKey]) S.habits[todayKey]={};
-  S.habits[todayKey][id]=!S.habits[todayKey][id];
-  renderHabits(); save();
-}
-function renderHabits(){
-  const todayH=S.habits[todayKey]||{};
-  const el=document.getElementById('habits-grid');
-  if(!el) return;
-  el.innerHTML=HABITS.map(h=>`
-    <div class="habit-card ${todayH[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
-      <div class="hi">${h.icon}</div>
-      <div class="hn">${h.name}</div>
-      <div class="hd">${h.desc}</div>
-    </div>`).join('');
-  const done=Object.values(todayH).filter(Boolean).length;
-  const pct=Math.round(done/HABITS.length*100);
-  if(document.getElementById('h-done')) document.getElementById('h-done').textContent=done+'/'+HABITS.length;
-  if(document.getElementById('h-pct')) document.getElementById('h-pct').textContent=pct+'%';
-  if(document.getElementById('h-streak')) document.getElementById('h-streak').textContent=S.streak+'🔥';
-}
-
-// ===== BUSINESS ACCOUNTS =====
-function setBTxType(t){
-  bTxType=t;
-  document.getElementById('b-inc-btn').className='type-btn'+(t==='income'?' inc':'');
-  document.getElementById('b-exp-btn').className='type-btn'+(t==='expense'?' exp':'');
-}
-function addBTx(){
-  const desc=document.getElementById('b-tx-desc').value.trim();
-  const amt=parseFloat(document.getElementById('b-tx-amt').value);
-  if(!desc||!amt) return;
-  S.bTx.push({id:Date.now(),type:bTxType,desc,amount:amt,cat:document.getElementById('b-tx-cat').value,date:todayKey});
-  document.getElementById('b-tx-desc').value='';
-  document.getElementById('b-tx-amt').value='';
-  renderBAccounts(); save(); showToast(bTxType==='income'?'📈 تم إضافة الإيراد!':'📉 تم إضافة المصروف!');
-}
-function delBTx(id){S.bTx=S.bTx.filter(t=>t.id!==id); renderBAccounts(); save();}
-function renderBAccounts(){
-  const inc=S.bTx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
-  const exp=S.bTx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
-  const net=inc-exp;
-  if(document.getElementById('b-income')) document.getElementById('b-income').textContent='$'+inc.toLocaleString();
-  if(document.getElementById('b-expense')) document.getElementById('b-expense').textContent='$'+exp.toLocaleString();
-  if(document.getElementById('b-net')) document.getElementById('b-net').textContent=(net>=0?'+':'')+' $'+net.toLocaleString();
-  if(document.getElementById('b-net-stat')) document.getElementById('b-net-stat').textContent='$'+net.toLocaleString();
-  const cap=S.capital||700000;
-  const pct=Math.min(100,Math.round(cap/1000000*100));
-  if(document.getElementById('capital-disp')) document.getElementById('capital-disp').textContent='$'+cap.toLocaleString();
-  if(document.getElementById('capital-pct')) document.getElementById('capital-pct').textContent=pct+'%';
-  if(document.getElementById('capital-bar')) document.getElementById('capital-bar').style.width=pct+'%';
-  const el=document.getElementById('b-tx-list');
-  if(!el) return;
-  const last=[...S.bTx].reverse().slice(0,10);
-  el.innerHTML=last.length?last.map(t=>`
-    <div style="display:flex;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--border)">
-      <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${t.type==='income'?'var(--green-light)':'var(--red-light)'}">
-        ${t.type==='income'?'📈':'📉'}</div>
-      <div style="flex:1"><div style="font-size:0.85rem;font-weight:600">${t.desc}</div><div style="font-size:0.68rem;color:var(--muted)">${t.date}</div></div>
-      <span style="font-weight:700;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
-      <button class="btn-del" onclick="delBTx(${t.id})">×</button>
-    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد معاملات بعد</div>';
-}
-function updateCapital(){
-  const v=parseFloat(document.getElementById('capital-inp').value);
-  if(v>0){S.capital=v; renderBAccounts(); renderGoals(); save(); showToast('💰 تم تحديث رأس المال!');}
-}
-
-// ===== PERSONAL ACCOUNTS =====
-function setPTxType(t){
-  pTxType=t;
-  document.getElementById('p-inc-btn').className='type-btn'+(t==='income'?' inc':'');
-  document.getElementById('p-exp-btn').className='type-btn'+(t==='expense'?' exp':'');
-}
-function addPTx(){
-  const desc=document.getElementById('p-tx-desc').value.trim();
-  const amt=parseFloat(document.getElementById('p-tx-amt').value);
-  if(!desc||!amt) return;
-  S.pTx.push({id:Date.now(),type:pTxType,desc,amount:amt,cat:document.getElementById('p-tx-cat').value,date:todayKey});
-  document.getElementById('p-tx-desc').value='';
-  document.getElementById('p-tx-amt').value='';
-  renderPAccounts(); save(); showToast(pTxType==='income'?'📈 تم!':'📉 تم!');
-}
-function delPTx(id){S.pTx=S.pTx.filter(t=>t.id!==id); renderPAccounts(); save();}
-function renderPAccounts(){
-  const inc=S.pTx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
-  const exp=S.pTx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
-  if(document.getElementById('p-income')) document.getElementById('p-income').textContent='$'+inc.toLocaleString();
-  if(document.getElementById('p-expense')) document.getElementById('p-expense').textContent='$'+exp.toLocaleString();
-  if(document.getElementById('p-net')) document.getElementById('p-net').textContent='$'+(inc-exp).toLocaleString();
-  const el=document.getElementById('p-tx-list');
-  if(!el) return;
-  const last=[...S.pTx].reverse().slice(0,10);
-  el.innerHTML=last.length?last.map(t=>`
-    <div style="display:flex;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--border)">
-      <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${t.type==='income'?'var(--green-light)':'var(--red-light)'}">
-        ${t.type==='income'?'📈':'📉'}</div>
-      <div style="flex:1"><div style="font-size:0.85rem;font-weight:600">${t.desc}</div><div style="font-size:0.68rem;color:var(--muted)">${t.date}</div></div>
-      <span style="font-weight:700;color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}$${t.amount.toLocaleString()}</span>
-      <button class="btn-del" onclick="delPTx(${t.id})">×</button>
-    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد معاملات بعد</div>';
-}
-
-// ===== ORDERS =====
-function addOrder(){
-  const name=document.getElementById('ord-name').value.trim();
-  if(!name) return;
-  S.orders.push({id:Date.now(),name,amount:parseFloat(document.getElementById('ord-amt').value)||0,status:document.getElementById('ord-status').value,date:todayKey});
-  document.getElementById('ord-name').value='';
-  document.getElementById('ord-amt').value='';
-  renderOrders(); save(); showToast('📦 تم إضافة الأوردر!');
-}
-function updateOrdStatus(id,status){const o=S.orders.find(o=>o.id===id);if(o){o.status=status;renderOrders();save();}}
-function delOrder(id){S.orders=S.orders.filter(o=>o.id!==id);renderOrders();save();}
-function renderOrders(){
-  const el=document.getElementById('orders-list');
-  if(!el) return;
-  if(document.getElementById('b-orders-count')) document.getElementById('b-orders-count').textContent=S.orders.length;
-  const sL={pending:'⏳ قيد التنفيذ',shipped:'🚢 شحن',delivered:'✅ تسليم',paid:'💰 مدفوع'};
-  el.innerHTML=S.orders.length?S.orders.map(o=>`
-    <div class="order-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:0.88rem;font-weight:700">${o.name}</span>
-        <button class="btn-del" onclick="delOrder(${o.id})">🗑</button>
+function rQuick(){
+  const el = document.getElementById('q-list'); if(!el) return;
+  const allTx = [
+    ...S.recv.map(r=>({...r, _type:'recv'})),
+    ...S.expenses.map(e=>({...e, from:e.to, _type:'exp'}))
+  ].sort((a,b)=>b.id-a.id).slice(0,10);
+  el.innerHTML = allTx.length ? allTx.map(t=>`
+    <div class="txr">
+      <div class="tx-ico" style="background:${t._type==='recv'?'var(--gl)':'var(--rl)'}">${t._type==='recv'?'📥':'📤'}</div>
+      <div style="flex:1">
+        <div style="font-size:0.8rem;font-weight:700;color:${t._type==='recv'?'var(--gn)':'var(--rd)'}">${t.from||t.to||'—'}</div>
+        ${t.desc?`<div style="font-size:0.68rem;color:var(--mt)">${t.desc}</div>`:''}
+        <div style="font-size:0.66rem;color:var(--mt)">${t.date}</div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:0.9rem;color:var(--blue);font-weight:700">$${o.amount.toLocaleString()}</span>
-        <select onchange="updateOrdStatus(${o.id},this.value)" style="background:white;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text2);font-size:0.72rem;font-family:Cairo;outline:none">
-          ${['pending','shipped','delivered','paid'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${sL[s]}</option>`).join('')}
-        </select>
-      </div>
-    </div>`).join(''):'<div style="text-align:center;color:var(--muted);font-family:Tajawal;padding:16px">لا توجد أوردرات بعد</div>';
+      <div style="font-weight:700;color:${t._type==='recv'?'var(--gn)':'var(--rd)'}">${t._type==='recv'?'+':'-'}${fD(t.amtD)}</div>
+    </div>`).join('') : '<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد تسجيلات بعد</div>';
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('on');requestAnimationFrame(()=>requestAnimationFrame(()=>{t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}));}
+function updRate(){S.exrate=parseFloat(document.getElementById('exrate').value)||1520;save();rSafe();rRecv();rExp();rDebt();}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('on'));}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals();}));
+
+
+const PASS={accountant:'1234',manager:'123456'};
+let currentRole=null;
+const dk=new Date().toISOString().split('T')[0];
+const dn2=new Date().toLocaleDateString('ar-IQ',{weekday:'long',day:'numeric',month:'long'});
+const hr=new Date().getHours();
+const curM=dk.slice(0,7);
+
+// DATA
+const HABITS=[{id:'wake',i:'🌅',n:'صحيان بكير',d:'قبل 7:30'},{id:'plan',i:'📋',n:'تخطيط اليوم',d:'10 دقائق'},{id:'focus',i:'🎯',n:'ساعة تركيز',d:'بدون هاتف'},{id:'sport',i:'💪',n:'رياضة',d:'30 دقيقة'},{id:'read',i:'📚',n:'قراءة',d:'15 دقيقة'},{id:'review',i:'✅',n:'مراجعة',d:'5 دقائق'},{id:'fam',i:'👨‍👩‍👧',n:'وقت العائلة',d:'بدون هاتف'},{id:'thanks',i:'🙏',n:'امتنان',d:'3 أشياء'}];
+const BG=[{id:'mach',i:'🏭',n:'استقبال المكائن + 8 صفقات'},{id:'surv',i:'📋',n:'مسح 300 معمل'},{id:'soc',i:'📱',n:'10K متابع فيسبوك'},{id:'exit',i:'🤝',n:'التخارج من المقاولات'},{id:'maint',i:'🔧',n:'قسم الصيانة'},{id:'fact',i:'🏗️',n:'ورشة التصنيع'}];
+const PG=[{i:'🏠',n:'السكن الأول',d:true},{i:'🏠',n:'السكن الثاني',d:true},{i:'🚗',n:'سيارتين',d:true},{i:'💪',n:'صحة جيدة',d:false},{i:'👨‍👩‍👧',n:'استقرار عائلي',d:true}];
+const DS=[{id:1,time:'07:00',type:'personal',title:'صحيان + قهوة + تخطيط',done:false},{id:2,time:'07:30',type:'work',title:'⭐ أهم مهمة',done:false},{id:3,time:'09:00',type:'meet',title:'اجتماعات + زيارات',done:false},{id:4,time:'12:00',type:'rest',title:'غداء + راحة',done:false},{id:5,time:'13:00',type:'work',title:'متابعة + ردود',done:false},{id:6,time:'16:00',type:'work',title:'مراجعة اليوم',done:false},{id:7,time:'17:00',type:'personal',title:'🏠 عائلة فقط',done:false}];
+const QQ=['من $12,000 إلى $700,000 — أنت تثبت كل يوم إنك قادر 💪','يوم واحد بتركيز يساوي أسبوع بتشتت 🎯','كل حاوية خطوة نحو $1M 🚀','زوجتك تثق بك — لا تخذل من يحبك 🤍'];
+
+// ===== LOGIN =====
+let selRoleVal=null;
+function selRole(r){
+  selRoleVal=r;
+  document.getElementById('card-accountant').classList.toggle('sel',r==='accountant');
+  document.getElementById('card-manager').classList.toggle('sel',r==='manager');
+  document.getElementById('pin-label').textContent=r==='accountant'?'أدخل كلمة مرور المحاسب (4 أرقام)':'أدخل كلمة مرور المدير المالي (6 أرقام)';
+  document.getElementById('pin-input').focus();
+  document.getElementById('pin-err').textContent='';
+}
+function doLogin(){
+  if(!selRoleVal){document.getElementById('pin-err').textContent='اختر دورك أولاً';return;}
+  const pin=document.getElementById('pin-input').value;
+  if(pin!==PASS[selRoleVal]){document.getElementById('pin-err').textContent='كلمة المرور غلط — جرب مرة ثانية ❌';document.getElementById('pin-input').value='';return;}
+  currentRole=selRoleVal;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('show');
+  if(currentRole==='accountant'){
+    document.getElementById('accountant-app').style.display='flex';
+    document.getElementById('topbar-title').textContent='👨‍💼 نظام المحاسب';
+    document.getElementById('topbar-role').textContent='صلاحية: تسجيل مستلم ومصروف وجرد';
+    initAccountant();
+  } else {
+    document.getElementById('manager-app').style.display='flex';
+    document.getElementById('topbar-title').textContent='👑 المدير المالي';
+    document.getElementById('topbar-role').textContent='الاتحاد كروب — كامل الصلاحيات';
+    initManager();
+  }
+}
+function doLogout(){
+  currentRole=null;selRoleVal=null;
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('accountant-app').style.display='none';
+  document.getElementById('manager-app').style.display='none';
+  document.getElementById('pin-input').value='';
+  document.getElementById('pin-err').textContent='';
+  document.getElementById('card-accountant').classList.remove('sel');
+  document.getElementById('card-manager').classList.remove('sel');
+  document.getElementById('pin-label').textContent='اختر دورك أولاً';
 }
 
-// ===== GOALS =====
-function updateCapitalGoal(){
-  const v=parseFloat(document.getElementById('cap-update').value);
-  if(v>0){S.capital=v; renderGoals(); renderBAccounts(); save(); showToast('💰 تم التحديث!');}
+// ===== ACCOUNTANT INIT =====
+function initAccountant(){
+  ['ac-rv-date','ac-ex-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=dk;});
+  acRenderAll();
 }
-function toggleBizGoal(id){S.bizGoals[id]=!S.bizGoals[id];renderGoals();save();}
-function renderGoals(){
-  const cap=S.capital||700000;
-  const p1=Math.min(100,Math.round(cap/1000000*100));
-  const p2=Math.min(100,Math.round(cap/2500000*100));
-  const p3=Math.min(100,Math.round(cap/5000000*100));
-  if(document.getElementById('g-capital')) document.getElementById('g-capital').textContent='$'+cap.toLocaleString()+' / $1M';
-  if(document.getElementById('g-cap-bar')) document.getElementById('g-cap-bar').style.width=p1+'%';
-  if(document.getElementById('g38')) document.getElementById('g38').textContent=p1+'%';
-  if(document.getElementById('g38-bar')) document.getElementById('g38-bar').style.width=p1+'%';
-  if(document.getElementById('g40')) document.getElementById('g40').textContent=p2+'%';
-  if(document.getElementById('g40-bar')) document.getElementById('g40-bar').style.width=p2+'%';
-  if(document.getElementById('g45')) document.getElementById('g45').textContent=p3+'%';
-  if(document.getElementById('g45-bar')) document.getElementById('g45-bar').style.width=p3+'%';
-  const el=document.getElementById('biz-goals');
-  if(!el) return;
-  el.innerHTML=BIZ_GOALS.map(g=>`
-    <div class="task-item ${S.bizGoals[g.id]?'done':''}" onclick="toggleBizGoal('${g.id}')">
-      <div class="chk ${S.bizGoals[g.id]?'done':''}">✓</div>
-      <div style="flex:1"><div class="tl">${g.icon} ${g.name}</div></div>
-    </div>`).join('');
+function acShowSec(id,btn){
+  document.querySelectorAll('#accountant-app .sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('#accountant-app .bb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('ac-'+id+'-sec').classList.add('on');
+  btn.classList.add('on');
 }
-function renderPersonalGoals(){
-  const el=document.getElementById('personal-goals');
-  if(!el) return;
-  el.innerHTML=PERSONAL_GOALS.map(g=>`
-    <div class="task-item ${g.done?'done':''}">
-      <div class="chk ${g.done?'done':''}">✓</div>
-      <div style="flex:1"><div class="tl">${g.icon} ${g.name}</div></div>
-    </div>`).join('');
+function acRenderAll(){acRvRecalc();acExRecalc();acInvRender();}
+
+// Accountant Receive
+function acAddRv(){
+  const from=document.getElementById('ac-rv-from').value.trim();
+  const amtD=getD('ac-rv-d','ac-rv-iq');
+  if(!from||!amtD){toast('⚠️ أدخل البيانات');return;}
+  S.recv.push({id:Date.now(),from,desc:document.getElementById('ac-rv-desc').value,amtD,amtIQ:getIQ('ac-rv-d','ac-rv-iq'),type:document.getElementById('ac-rv-type').value,date:document.getElementById('ac-rv-date').value||dk,by:'accountant'});
+  ['ac-rv-from','ac-rv-desc','ac-rv-d','ac-rv-iq'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('ac-rv-date').value=dk;
+  acRvRecalc();rSafe();save();toast('📥 تم تسجيل المستلم!');
+}
+function acRvRecalc(){
+  const todayR=S.recv.filter(r=>r.date===dk);
+  const todD=todayR.reduce((s,r)=>s+r.amtD,0);
+  const todIQ=todayR.reduce((s,r)=>s+r.amtIQ,0);
+  $('ac-today-recv',fD(todD));$('ac-today-recv-iq',fIQ(todIQ));
+  const el=document.getElementById('ac-rv-list');if(!el)return;
+  const tL={cash:'💵',transfer:'🏦',ajal:'📅',sale:'🏭'};
+  el.innerHTML=[...S.recv].reverse().slice(0,20).map(r=>`
+    <div class="txr">
+      <div class="tx-ico" style="background:var(--gl)">${tL[r.type]||'📥'}</div>
+      <div style="flex:1"><div style="font-size:0.8rem;font-weight:700;color:var(--gn)">${r.from}</div>
+      ${r.desc?`<div style="font-size:0.68rem;color:var(--mt)">${r.desc}</div>`:''}
+      <div style="font-size:0.66rem;color:var(--mt)">${r.date}</div></div>
+      <div style="text-align:left"><div style="font-weight:700;color:var(--gn)">${fD(r.amtD)}</div>
+      <div style="font-size:0.62rem;color:var(--mt)">${fIQ(r.amtIQ)}</div></div>
+    </div>`).join('')||'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد مستلمات بعد</div>';
 }
 
-// ===== SCHEDULE =====
-function addSchedule(){
-  const title=document.getElementById('s-title').value.trim();
-  if(!title) return;
-  if(!S.schedule[todayKey]) S.schedule[todayKey]=JSON.parse(JSON.stringify(DEFAULT_SCHED));
-  S.schedule[todayKey].push({id:Date.now(),time:document.getElementById('s-time').value,type:document.getElementById('s-type').value,title,done:false});
-  S.schedule[todayKey].sort((a,b)=>a.time.localeCompare(b.time));
-  document.getElementById('s-title').value='';
-  renderSchedule(); save(); showToast('🗓 تم إضافة الموعد!');
+// Accountant Expense
+function acAddEx(){
+  const to=document.getElementById('ac-ex-to').value.trim();
+  const amtD=getD('ac-ex-d','ac-ex-iq');
+  if(!to||!amtD){toast('⚠️ أدخل البيانات');return;}
+  S.expenses.push({id:Date.now(),to,desc:document.getElementById('ac-ex-desc').value,amtD,amtIQ:getIQ('ac-ex-d','ac-ex-iq'),cat:document.getElementById('ac-ex-cat').value,date:document.getElementById('ac-ex-date').value||dk,by:'accountant'});
+  ['ac-ex-to','ac-ex-desc','ac-ex-d','ac-ex-iq'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('ac-ex-date').value=dk;
+  acExRecalc();rSafe();save();toast('📤 تم تسجيل المصروف!');
 }
-function toggleSched(id){
-  const items=S.schedule[todayKey]||DEFAULT_SCHED;
-  const item=items.find(i=>i.id===id);
-  if(item){item.done=!item.done;renderSchedule();save();}
-}
-function delSched(id){
-  if(!S.schedule[todayKey]) S.schedule[todayKey]=JSON.parse(JSON.stringify(DEFAULT_SCHED));
-  S.schedule[todayKey]=S.schedule[todayKey].filter(i=>i.id!==id);
-  renderSchedule();save();
-}
-function renderSchedule(){
-  const items=S.schedule[todayKey]||DEFAULT_SCHED;
-  const colors={work:'#1976D2',meet:'#7B1FA2',call:'#2E7D32',personal:'#F57F17',rest:'#90A4AE'};
-  const el=document.getElementById('schedule-list');
-  if(!el) return;
-  el.innerHTML=items.map(i=>`
-    <div class="sched-item ${i.done?'done':''}" onclick="toggleSched(${i.id})">
-      <div class="sched-time">${i.time}</div>
-      <div class="sched-bar" style="background:${colors[i.type]||'#1976D2'}"></div>
-      <div class="sched-title" style="${i.done?'text-decoration:line-through':''}">${i.title}</div>
-      <div style="display:flex;gap:4px;align-items:center">
-        <div style="width:20px;height:20px;border-radius:5px;border:2px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;font-size:0.7rem;${i.done?'background:var(--blue);border-color:var(--blue);color:white':'background:white'}">✓</div>
-        <button class="btn-del" onclick="event.stopPropagation();delSched(${i.id})">×</button>
-      </div>
-    </div>`).join('');
+function acExRecalc(){
+  const todayE=S.expenses.filter(e=>e.date===dk);
+  const todD=todayE.reduce((s,e)=>s+e.amtD,0);
+  const todIQ=todayE.reduce((s,e)=>s+e.amtIQ,0);
+  $('ac-today-exp',fD(todD));$('ac-today-exp-iq',fIQ(todIQ));
+  const el=document.getElementById('ac-ex-list');if(!el)return;
+  const cats={shipping:'🚢',customs:'🏛',transport:'🚚',salary:'👷',rent:'🏠',ads:'📢',loan:'💸',other:'📌'};
+  el.innerHTML=[...S.expenses].reverse().slice(0,20).map(e=>`
+    <div class="txr">
+      <div class="tx-ico" style="background:var(--rl)">${cats[e.cat]||'📌'}</div>
+      <div style="flex:1"><div style="font-size:0.8rem;font-weight:700;color:var(--rd)">${e.to}</div>
+      ${e.desc?`<div style="font-size:0.68rem;color:var(--mt)">${e.desc}</div>`:''}
+      <div style="font-size:0.66rem;color:var(--mt)">${e.date}</div></div>
+      <div style="text-align:left"><div style="font-weight:700;color:var(--rd)">-${fD(e.amtD)}</div>
+      <div style="font-size:0.62rem;color:var(--mt)">${fIQ(e.amtIQ)}</div></div>
+    </div>`).join('')||'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد مصروفات بعد</div>';
 }
 
-// ===== REVIEW =====
-function saveReview(){
-  S.reviews[todayKey]={r1:document.getElementById('r1').value,r2:document.getElementById('r2').value,r3:document.getElementById('r3').value};
-  save(); showToast('📊 تم حفظ المراجعة!');
-}
-function renderReview(){
-  const r=(S.reviews||{})[todayKey]||{};
-  if(document.getElementById('r1')) document.getElementById('r1').value=r.r1||'';
-  if(document.getElementById('r2')) document.getElementById('r2').value=r.r2||'';
-  if(document.getElementById('r3')) document.getElementById('r3').value=r.r3||'';
+// Accountant Inventory
+function acAddInv(){const n=document.getElementById('ac-inv-name').value.trim();if(!n)return;S.inventory.push({id:Date.now(),name:n,qty:parseInt(document.getElementById('ac-inv-qty').value)||0,price:parseFloat(document.getElementById('ac-inv-price').value)||0});['ac-inv-name','ac-inv-qty','ac-inv-price'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});acInvRender();save();toast('🏭 تم!');}
+function acAddPart(){const n=document.getElementById('ac-part-name').value.trim();if(!n)return;S.parts.push({id:Date.now(),name:n,qty:parseInt(document.getElementById('ac-part-qty').value)||0,price:parseFloat(document.getElementById('ac-part-price').value)||0});['ac-part-name','ac-part-qty','ac-part-price'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});acInvRender();save();toast('🔧 تم!');}
+function acInvRender(){
+  const iu=S.inventory.reduce((s,x)=>s+x.qty*x.price,0);
+  const ip=S.parts.reduce((s,x)=>s+x.qty*x.price,0);
+  $('ac-inv-total',fD(iu));$('ac-part-total',fD(ip));
+  const il=document.getElementById('ac-inv-list');if(il)il.innerHTML=S.inventory.length?S.inventory.map(x=>`<div class="inv-row"><div class="tx-ico" style="background:var(--gdl)">🏭</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${x.name}</div><div style="font-size:0.68rem;color:var(--mt)">العدد: ${x.qty} | ${fD(x.price)}</div></div><div style="font-weight:700;color:var(--gd)">${fD(x.qty*x.price)}</div></div>`).join(''):'<div style="text-align:center;color:var(--mt);padding:12px;font-family:Tajawal">لا يوجد مخزون</div>';
+  const pl=document.getElementById('ac-part-list');if(pl)pl.innerHTML=S.parts.length?S.parts.map(x=>`<div class="inv-row"><div class="tx-ico" style="background:var(--cyl)">🔧</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${x.name}</div><div style="font-size:0.68rem;color:var(--mt)">العدد: ${x.qty} | ${fD(x.price)}</div></div><div style="font-weight:700;color:var(--cy)">${fD(x.qty*x.price)}</div></div>`).join(''):'<div style="text-align:center;color:var(--mt);padding:12px;font-family:Tajawal">لا توجد قطع</div>';
 }
 
-function saveSelfNote(){S.selfNote=document.getElementById('self-note').value;save();showToast('🤍 تم الحفظ!');}
+// ===== MANAGER INIT =====
+function initManager(){
+  const el=document.getElementById('quote');if(el)el.textContent=QQ[Math.floor(Math.random()*QQ.length)];
+  const td=document.getElementById('td-date');if(td)td.textContent=dn2;
+  const tg=document.getElementById('td-greet');if(tg)tg.textContent=hr<12?'☀️ صباح الخير':hr<17?'🌤️ مساء النور':'🌙 مساء الخير';
+  const ex=document.getElementById('exrate');if(ex)ex.value=S.exrate||1520;
+  const bq=document.getElementById('bq');if(bq){bq.value=S.bigQ||'';bq.oninput=()=>{S.bigQ=bq.value;save();};}
+  if(S.energy)document.querySelectorAll('.eb').forEach(b=>{if(b.textContent.trim()===S.energy)b.classList.add('on');});
+  const sn=document.getElementById('self-note');if(sn)sn.value=S.selfNote||'';
+  ['r1','r2','r3'].forEach(k=>{const el=document.getElementById(k);if(el)el.value=((S.reviews||{})[dk]||{})[k]||'';});
+  const ml=document.getElementById('month-label');if(ml)ml.textContent=new Date().toLocaleDateString('ar-IQ',{month:'long',year:'numeric'});
+  ['rv-date','ex-date','dt-due','cn-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=dk;});
+  rAll();
+}
+function mgShowSec(id,btn){
+  document.querySelectorAll('#manager-app .sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('#manager-app .bnav .bb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('mg-'+id+'-sec').classList.add('on');
+  btn.classList.add('on');
+}
+function stab(secId,tabId,btn){
+  const s=document.getElementById(secId);if(!s)return;
+  s.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  s.querySelectorAll('.sbx').forEach(b=>b.classList.remove('on'));
+  document.getElementById(tabId).classList.add('on');
+  btn.classList.add('on');
+}
+
+function rAll(){rTasks();rHab();rSafe();rRecv();rExp();rDebt();rCons();rClients();rInv();rGoals();rPTasks();rPG();rSch();rRev();rQuick();}
 
 // ===== UTILS =====
-function save(){localStorage.setItem('yawmi_v4',JSON.stringify(S));}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.remove('show');
-  void t.offsetWidth; // force reflow
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-</script>
 
+
+// ENERGY
+function setE(btn,v){document.querySelectorAll('.eb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S.energy=v;save();}
+
+// TASKS
+function addT(){const v=document.getElementById('nt').value.trim();if(!v)return;S.tasks.push({id:Date.now(),t:v,c:document.getElementById('ntc').value,d:false,date:dk});document.getElementById('nt').value='';rTasks();save();}
+function togT(id){const x=S.tasks.find(t=>t.id===id);if(x){x.d=!x.d;rTasks();save();}}
+function rTasks(){const list=S.tasks.filter(t=>t.date===dk);const el=document.getElementById('tlist');if(!el)return;const cats={biz:'🏭 أعمال',urgent:'🚨 عاجل',follow:'📞 متابعة',ship:'🚢 شحن'};const bg={biz:'var(--bll)',urgent:'var(--rl)',follow:'var(--gdl)',ship:'var(--cyl)'};const co={biz:'var(--bl)',urgent:'var(--rd)',follow:'var(--gd)',ship:'var(--cy)'};el.innerHTML=list.length?list.map(t=>`<div class="ti ${t.d?'dn':''}" onclick="togT(${t.id})"><div class="ck ${t.d?'dn':''}">✓</div><div style="flex:1"><div class="tl">${t.t}</div><span style="font-size:0.6rem;padding:2px 7px;border-radius:99px;font-weight:700;display:inline-block;margin-top:3px;background:${bg[t.c]||bg.biz};color:${co[t.c]||co.biz}">${cats[t.c]||t.c}</span></div></div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">أضف أول مهمة 👆</div>';$('rv-tasks',list.filter(t=>t.d).length);}
+
+function addPT(){const v=document.getElementById('pt-inp').value.trim();if(!v)return;S.pTasks.push({id:Date.now(),t:v,d:false,date:dk});document.getElementById('pt-inp').value='';rPTasks();save();}
+function togPT(id){const x=S.pTasks.find(t=>t.id===id);if(x){x.d=!x.d;rPTasks();save();}}
+function rPTasks(){const list=S.pTasks.filter(t=>t.date===dk);const el=document.getElementById('pt-list');if(!el)return;el.innerHTML=list.length?list.map(t=>`<div class="ti ${t.d?'dn':''}" onclick="togPT(${t.id})"><div class="ck ${t.d?'dn':''}">✓</div><div style="flex:1"><div class="tl">${t.t}</div></div></div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">أضف مهمة 👆</div>';}
+
+// HABITS
+function togH(id){if(!S.habits[dk])S.habits[dk]={};S.habits[dk][id]=!S.habits[dk][id];rHab();save();}
+function rHab(){const hd=S.habits[dk]||{};const el=document.getElementById('hab-grid');if(!el)return;el.innerHTML=HABITS.map(h=>`<div class="hc ${hd[h.id]?'dn':''}" onclick="togH('${h.id}')"><div class="hi">${h.i}</div><div class="hn">${h.n}</div><div class="hd">${h.d}</div></div>`).join('');const d2=Object.values(hd).filter(Boolean).length;$('h-dn',d2+'/'+HABITS.length);$('h-pct',Math.round(d2/HABITS.length*100)+'%');$('h-str',S.streak+'🔥');}
+
+// RECEIVE (manager)
+function addRv(){const from=document.getElementById('rv-from').value.trim();if(!from){toast('⚠️ أدخل المصدر');return;}const amtD=getD('rv-d','rv-iq');if(!amtD){toast('⚠️ أدخل المبلغ');return;}S.recv.push({id:Date.now(),from,desc:document.getElementById('rv-desc').value,amtD,amtIQ:getIQ('rv-d','rv-iq'),type:document.getElementById('rv-type').value,date:document.getElementById('rv-date').value||dk});['rv-from','rv-desc','rv-d','rv-iq'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('rv-date').value=dk;rRecv();rSafe();save();toast('📥 تم!');}
+function delRv(id){S.recv=S.recv.filter(r=>r.id!==id);rRecv();rSafe();save();}
+function rRecv(){const totD=S.recv.reduce((s,r)=>s+r.amtD,0);const totIQ=S.recv.reduce((s,r)=>s+r.amtIQ,0);$('rv-tot',fD(totD));$('rv-tot-iq',fIQ(totIQ));const el=document.getElementById('rv-list');if(!el)return;const tL={cash:'💵 نقد',transfer:'🏦 تحويل',ajal:'📅 آجل محصل',sale:'🏭 بيع ماكينة'};el.innerHTML=[...S.recv].reverse().slice(0,30).map(r=>`<div class="txr"><div class="tx-ico" style="background:var(--gl)">📥</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700;color:var(--gn)">${r.from}</div>${r.desc?`<div style="font-size:0.68rem;color:var(--mt)">${r.desc}</div>`:''}<div style="font-size:0.66rem;color:var(--mt)">${tL[r.type]||r.type} | ${r.date}${r.by==='accountant'?' 👨‍💼':''}</div></div><div style="text-align:left"><div style="font-weight:700;color:var(--gn)">${fD(r.amtD)}</div><div style="font-size:0.62rem;color:var(--mt)">${fIQ(r.amtIQ)}</div></div><button class="btn-del" onclick="delRv(${r.id})">×</button></div>`).join('')||'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد مستلمات بعد</div>';}
+
+// EXPENSES (manager)
+function addEx(){const to=document.getElementById('ex-to').value.trim();if(!to){toast('⚠️ أدخل الجهة');return;}const amtD=getD('ex-d','ex-iq');if(!amtD){toast('⚠️ أدخل المبلغ');return;}S.expenses.push({id:Date.now(),to,desc:document.getElementById('ex-desc').value,amtD,amtIQ:getIQ('ex-d','ex-iq'),cat:document.getElementById('ex-cat').value,date:document.getElementById('ex-date').value||dk});['ex-to','ex-desc','ex-d','ex-iq'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('ex-date').value=dk;rExp();rSafe();save();toast('📤 تم!');}
+function delEx(id){S.expenses=S.expenses.filter(e=>e.id!==id);rExp();rSafe();save();}
+function rExp(){const totD=S.expenses.reduce((s,e)=>s+e.amtD,0);const totIQ=S.expenses.reduce((s,e)=>s+e.amtIQ,0);$('ex-tot',fD(totD));$('ex-tot-iq',fIQ(totIQ));const el=document.getElementById('ex-list');if(!el)return;const cats={shipping:'🚢',customs:'🏛',transport:'🚚',salary:'👷',rent:'🏠',ads:'📢',loan:'💸',other:'📌'};el.innerHTML=[...S.expenses].reverse().slice(0,30).map(e=>`<div class="txr"><div class="tx-ico" style="background:var(--rl)">${cats[e.cat]||'📌'}</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700;color:var(--rd)">${e.to}</div>${e.desc?`<div style="font-size:0.68rem;color:var(--mt)">${e.desc}</div>`:''}<div style="font-size:0.66rem;color:var(--mt)">${e.date}${e.by==='accountant'?' 👨‍💼':''}</div></div><div style="text-align:left"><div style="font-weight:700;color:var(--rd)">-${fD(e.amtD)}</div><div style="font-size:0.62rem;color:var(--mt)">${fIQ(e.amtIQ)}</div></div><button class="btn-del" onclick="delEx(${e.id})">×</button></div>`).join('')||'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد مصروفات بعد</div>';}
+
+// DEBTS
+function addDt(){const to=document.getElementById('dt-to').value.trim();if(!to){toast('⚠️ أدخل الجهة');return;}const amtD=getD('dt-d','dt-iq');if(!amtD){toast('⚠️ أدخل المبلغ');return;}S.debts.push({id:Date.now(),to,desc:document.getElementById('dt-desc').value,amtD,amtIQ:getIQ('dt-d','dt-iq'),due:document.getElementById('dt-due').value,paid:false,date:dk});['dt-to','dt-desc','dt-d','dt-iq','dt-due'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});rDebt();rSafe();save();toast('💳 تم!');}
+function payDt(id){const d2=S.debts.find(d2=>d2.id===id);if(d2){d2.paid=!d2.paid;rDebt();rSafe();save();toast(d2.paid?'✅ تم التسديد!':'↩️ تم إعادة الفتح');}}
+function delDt(id){S.debts=S.debts.filter(d2=>d2.id!==id);rDebt();rSafe();save();}
+function rDebt(){const active=S.debts.filter(d2=>!d2.paid);$('dt-tot',fD(active.reduce((s,d2)=>s+d2.amtD,0)));$('dt-tot-iq',fIQ(active.reduce((s,d2)=>s+d2.amtIQ,0)));const el=document.getElementById('dt-list');if(!el)return;el.innerHTML=S.debts.length?[...S.debts].map(d2=>`<div class="txr" style="opacity:${d2.paid?0.45:1}"><div class="tx-ico" style="background:var(--rl)">💳</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${d2.to}</div>${d2.desc?`<div style="font-size:0.68rem;color:var(--mt)">${d2.desc}</div>`:''}<div style="font-size:0.66rem;color:${d2.due&&d2.due<dk&&!d2.paid?'var(--rd)':'var(--mt)'}">${d2.due?'📅 '+d2.due:d2.date}${d2.due&&d2.due<dk&&!d2.paid?' ⚠️ متأخر':''}</div></div><div style="text-align:left"><div style="font-weight:700;color:var(--rd)">-${fD(d2.amtD)}</div><button class="bp ${d2.paid?'paid':'pay'}" onclick="payDt(${d2.id})" style="margin-top:3px">${d2.paid?'✅ مدفوع':'دفع ✓'}</button></div><button class="btn-del" onclick="delDt(${d2.id})">×</button></div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:14px">لا توجد ديون بعد</div>';}
+
+// SAFE
+function rSafe(){const rvD=S.recv.reduce((s,r)=>s+r.amtD,0);const rvIQ=S.recv.reduce((s,r)=>s+r.amtIQ,0);const exD=S.expenses.reduce((s,e)=>s+e.amtD,0);const exIQ=S.expenses.reduce((s,e)=>s+e.amtIQ,0);const dtD=S.debts.filter(d2=>!d2.paid).reduce((s,d2)=>s+d2.amtD,0);const dtIQ=S.debts.filter(d2=>!d2.paid).reduce((s,d2)=>s+d2.amtIQ,0);const ajalD=S.containers.reduce((s,c)=>s+(c.sales?c.sales.filter(x=>!x.paid).reduce((s2,x)=>s2+x.amtD,0):0),0);const conCostD=S.containers.reduce((s,c)=>s+c.totalCostD,0);const conSellD=S.containers.reduce((s,c)=>s+(c.sales?c.sales.filter(x=>x.paid).reduce((s2,x)=>s2+x.amtD,0):0),0);const netD=rvD-exD;const netIQ=rvIQ-exIQ;$('sf-rv',fD(rvD));$('sf-rv-iq',fIQ(rvIQ));$('sf-ex',fD(exD));$('sf-ex-iq',fIQ(exIQ));$('sf-net',(netD>=0?'+':'')+fD(netD));$('sf-net-iq',fIQ(netIQ));$('sf-debt',fD(dtD));$('sf-ajal',fD(ajalD));$('sf-concost',fD(conCostD));$('sf-consell',fD(conSellD));$('rv-net2',fD(netD));const mRv=S.recv.filter(r=>r.date&&r.date.startsWith(curM)).reduce((s,r)=>s+r.amtD,0);const mEx=S.expenses.filter(e=>e.date&&e.date.startsWith(curM)).reduce((s,e)=>s+e.amtD,0);$('m-recv',fD(mRv));$('m-exp',fD(mEx));const cap=S.capital||700000;const pct=Math.min(100,Math.round(cap/1e6*100));$('cap-disp',fD(cap));$('cap-pct',pct+'%');const cb=document.getElementById('cap-bar');if(cb)cb.style.width=pct+'%';}
+function updCap(){const v=parseFloat(document.getElementById('cap-inp').value);if(v>0){S.capital=v;rSafe();rGoals();save();toast('💰 تم!');}}
+
+// CONTAINERS
+function openConModal(){['cn-name','cn-supp','cn-cost-d','cn-cost-iq','cn-ship-d','cn-ship-iq','cn-cust-d','cn-cust-iq','cn-misc-d','cn-misc-iq'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('cn-date').value=dk;document.getElementById('con-modal').classList.add('on');}
+function saveCon(){const name=document.getElementById('cn-name').value.trim();if(!name){toast('⚠️ أدخل اسم الحاوية');return;}const cD=getD('cn-cost-d','cn-cost-iq'),sD=getD('cn-ship-d','cn-ship-iq'),cuD=getD('cn-cust-d','cn-cust-iq'),mD=getD('cn-misc-d','cn-misc-iq'),tot=cD+sD+cuD+mD;S.containers.push({id:Date.now(),name,type:document.getElementById('cn-type').value,supplier:document.getElementById('cn-supp').value,date:document.getElementById('cn-date').value||dk,costD:cD,shipD:sD,custD:cuD,miscD:mD,totalCostD:tot,totalCostIQ:toIQ(tot),sales:[]});closeModals();rCons();rSafe();save();toast('📦 تم إضافة الحاوية!');}
+
+function openConDetail(id){const c=S.containers.find(x=>x.id===id);if(!c)return;const soldD=c.sales.filter(s=>s.paid).reduce((s,x)=>s+x.amtD,0);const pendD=c.sales.filter(s=>!s.paid).reduce((s,x)=>s+x.amtD,0);const profit=soldD-c.totalCostD;const pct=c.totalCostD>0?Math.min(100,Math.round(soldD/c.totalCostD*100)):0;document.getElementById('con-detail-content').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="mt2" style="margin:0">${c.name}</div><button class="btn-del" onclick="closeModals()" style="font-size:1.3rem">×</button></div><div class="card" style="background:var(--bll)"><div class="ct">💰 تكاليف الحاوية</div>${[['🏭 البضاعة',c.costD],['🚢 الشحن',c.shipD],['🏛 الجمارك',c.custD],['🚚 متفرقات',c.miscD]].map(([l,v])=>v>0?`<div style="display:flex;justify-content:space-between;font-size:0.76rem;padding:5px 0;border-bottom:1px solid var(--br)"><span>${l}</span><span style="font-weight:700">${fD(v)}</span></div>`:'').join('')}<div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:7px 0;font-weight:900"><span>📊 التكلفة الكاملة</span><span style="color:var(--rd)">${fD(c.totalCostD)}</span></div></div><div class="g2" style="margin-bottom:7px"><div class="sc inc"><div class="sc-lbl inc">💵 مبيعات محصلة</div><div class="sc-amt inc" style="font-size:0.9rem">${fD(soldD)}</div></div><div class="sc gold"><div class="sc-lbl gold">⏳ آجل غير محصل</div><div class="sc-amt gold" style="font-size:0.9rem">${fD(pendD)}</div></div></div><div class="sc ${profit>=0?'net':'warn'}" style="margin-bottom:9px"><div class="sc-lbl net">💎 صافي الربح</div><div class="sc-amt net">${profit>=0?'+':''}${fD(profit)}</div><div class="sub" style="color:rgba(255,255,255,0.8)">${c.totalCostD>0?Math.round(profit/c.totalCostD*100):0}% هامش</div></div><div style="display:flex;justify-content:space-between;font-size:0.68rem;margin-bottom:3px"><span style="color:var(--mt)">تغطية التكلفة</span><span style="color:var(--bl);font-weight:700">${pct}%</span></div><div class="gb"><div class="gf ${pct>=100?'fg':'fb'}" style="width:${pct}%"></div></div><div class="card"><div class="ct">➕ إضافة بيعة</div><input class="inp mb" type="text" id="sl-client" placeholder="اسم العميل / الورشة"><input class="inp mb" type="text" id="sl-item" placeholder="المنتج (ATC CNC...)"><div class="ar"><input class="inp" type="number" id="sl-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="sl-iq" placeholder="د.ع"></div><div class="g2" style="margin-bottom:7px"><button id="sl-cash-btn" class="bp cr" onclick="setST('cash')" style="padding:9px;border-radius:9px;font-size:0.78rem">💵 نقد</button><button id="sl-ajal-btn" class="bp pay" onclick="setST('ajal')" style="padding:9px;border-radius:9px;font-size:0.78rem">📅 آجل</button></div><input class="inp mb" type="date" id="sl-date" value="${dk}"><button class="btn" onclick="addSale(${c.id})">💾 إضافة</button></div>${c.sales.length?`<div class="card"><div class="ct">📋 المبيعات (${c.sales.length})</div>${[...c.sales].reverse().map(s=>`<div class="txr"><div class="tx-ico" style="background:${s.paid?'var(--gl)':'var(--gdl)'}">${s.type==='cash'?'💵':'📅'}</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${s.client}</div>${s.item?`<div style="font-size:0.68rem;color:var(--mt)">${s.item}</div>`:''}<div style="font-size:0.66rem;color:var(--mt)">${s.date}</div></div><div style="text-align:left"><div style="font-weight:700;color:${s.paid?'var(--gn)':'var(--gd)'}">${fD(s.amtD)}</div>${s.type==='ajal'&&!s.paid?`<button class="bp pay" onclick="markPaid(${c.id},${s.id})" style="margin-top:2px;font-size:0.62rem">تحصيل ✓</button>`:`<span style="font-size:0.6rem;background:var(--gl);color:var(--gn);padding:2px 5px;border-radius:99px;font-weight:700">✅</span>`}</div><button class="btn-del" onclick="delSale(${c.id},${s.id})">×</button></div>`).join('')}</div>`:''}  <div class="g2" style="margin-top:7px"><button style="padding:10px;border-radius:10px;background:var(--rl);border:none;color:var(--rd);font-family:Cairo;font-size:0.78rem;font-weight:700;cursor:pointer" onclick="delCon(${c.id})">🗑 حذف</button><button class="btn-sm" onclick="closeModals()">إغلاق</button></div>`;document.getElementById('con-detail-modal').classList.add('on');window._saleType='cash';}
+
+let _saleType='cash';
+function setST(t){_saleType=t;document.getElementById('sl-cash-btn').className='bp '+(t==='cash'?'cr':'pay');document.getElementById('sl-cash-btn').style.cssText='padding:9px;border-radius:9px;font-size:0.78rem';document.getElementById('sl-ajal-btn').className='bp '+(t==='ajal'?'cr':'pay');document.getElementById('sl-ajal-btn').style.cssText='padding:9px;border-radius:9px;font-size:0.78rem';}
+function addSale(cid){const c=S.containers.find(x=>x.id===cid);if(!c)return;const client=document.getElementById('sl-client').value.trim();if(!client){toast('⚠️ أدخل اسم العميل');return;}const amtD=getD('sl-d','sl-iq');if(!amtD){toast('⚠️ أدخل المبلغ');return;}c.sales.push({id:Date.now(),client,item:document.getElementById('sl-item').value,amtD,amtIQ:getIQ('sl-d','sl-iq'),type:_saleType,paid:_saleType==='cash',date:document.getElementById('sl-date').value||dk});save();closeModals();openConDetail(cid);rCons();rSafe();toast('💰 تم!');}
+function markPaid(cid,sid){const c=S.containers.find(x=>x.id===cid);if(!c)return;const s=c.sales.find(x=>x.id===sid);if(s)s.paid=true;save();closeModals();openConDetail(cid);rSafe();toast('✅ تم التحصيل!');}
+function delSale(cid,sid){const c=S.containers.find(x=>x.id===cid);if(!c)return;c.sales=c.sales.filter(x=>x.id!==sid);save();closeModals();openConDetail(cid);rCons();rSafe();}
+function delCon(id){if(!confirm('حذف الحاوية؟'))return;S.containers=S.containers.filter(x=>x.id!==id);closeModals();rCons();rSafe();save();toast('🗑 تم الحذف');}
+function rCons(){const el=document.getElementById('con-list');if(!el)return;const totalProfit=S.containers.reduce((s,c)=>{const sold=c.sales.filter(x=>x.paid).reduce((s2,x)=>s2+x.amtD,0);return s+(sold-c.totalCostD);},0);const totalAjal=S.containers.reduce((s,c)=>s+c.sales.filter(x=>!x.paid).reduce((s2,x)=>s2+x.amtD,0),0);$('con-tot',S.containers.length);$('con-prof',(totalProfit>=0?'+':'')+fD(totalProfit));$('con-ajal',fD(totalAjal));$('rv-cons',S.containers.length);if(!S.containers.length){el.innerHTML='<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:18px">لا توجد حاويات — أضف حاوية جديدة 👆</div>';return;}el.innerHTML=[...S.containers].reverse().map(c=>{const sold=c.sales.filter(x=>x.paid).reduce((s,x)=>s+x.amtD,0);const pend=c.sales.filter(x=>!x.paid).reduce((s,x)=>s+x.amtD,0);const profit=sold-c.totalCostD;const pct2=c.totalCostD>0?Math.min(100,Math.round(sold/c.totalCostD*100)):0;return `<div class="conc" onclick="openConDetail(${c.id})"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:0.88rem;font-weight:900">${c.name}</span><span class="cs ${profit>=0&&sold>0?'win':profit<0&&sold>0?'loss':'act'}">${profit>=0&&sold>0?'✅ رابح':profit<0&&sold>0?'⚠️ خسارة':'🔄 نشطة'}</span></div><div style="font-size:0.66rem;color:var(--mt);margin-bottom:6px;font-family:Tajawal">📅 ${c.date} | ${c.type}${c.supplier?' | '+c.supplier:''}</div><div class="g2" style="margin-bottom:5px"><div style="font-size:0.74rem">التكلفة: <strong style="color:var(--rd)">${fD(c.totalCostD)}</strong></div><div style="font-size:0.74rem">مبيعات: <strong style="color:var(--gn)">${fD(sold)}</strong></div></div>${pend>0?`<div style="font-size:0.68rem;color:var(--gd);margin-bottom:4px">⏳ آجل: ${fD(pend)}</div>`:''}<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:4px"><span>الربح: <strong style="color:${profit>=0?'var(--gn)':'var(--rd)'}">${profit>=0?'+':''}${fD(profit)}</strong></span><span style="color:var(--mt)">${pct2}% تغطية</span></div><div class="gb" style="margin-bottom:0"><div class="gf ${pct2>=100?'fg':'fb'}" style="width:${pct2}%"></div></div></div>`;}).join('');}
+
+// CLIENTS
+function openClientModal(){['cl-name','cl-addr','cl-phone','cl-co'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('cl-modal').classList.add('on');}
+function saveCl(){const name=document.getElementById('cl-name').value.trim();if(!name){toast('⚠️ أدخل اسم الزبون');return;}S.clients.push({id:Date.now(),name,addr:document.getElementById('cl-addr').value,phone:document.getElementById('cl-phone').value,co:document.getElementById('cl-co').value,txs:[]});closeModals();rClients();save();toast('👤 تم!');}
+function openClientDetail(id){const c=S.clients.find(x=>x.id===id);if(!c)return;const bal=c.txs.reduce((s,t)=>s+(t.type==='dr'?t.amt:-t.amt),0);document.getElementById('cl-detail-content').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="mt2" style="margin:0">👤 ${c.name}</div><button class="btn-del" onclick="closeModals()" style="font-size:1.3rem">×</button></div><div class="card" style="background:var(--bll);padding:10px;margin-bottom:9px">${c.addr?`<div style="font-size:0.74rem;color:var(--mt)">📍 ${c.addr}</div>`:''} ${c.phone?`<div style="font-size:0.74rem;color:var(--mt)">📞 ${c.phone}</div>`:''} ${c.co?`<div style="font-size:0.74rem;color:var(--mt)">🏭 ${c.co}</div>`:''}</div><div class="sc ${bal>0?'warn':bal<0?'inc':'info'}" style="margin-bottom:9px"><div class="sc-lbl ${bal>0?'exp':bal<0?'inc':'info'}">${bal>0?'💳 متبقي عليه':bal<0?'💰 متبقي له':'✅ مصفى'}</div><div class="sc-amt ${bal>0?'exp':bal<0?'inc':'info'}">${fD(Math.abs(bal))}</div></div><div class="card"><div class="ct">➕ إضافة حركة</div><div class="g2" style="margin-bottom:7px"><button id="cl-dr-btn" class="bp dr" onclick="setClT('dr')" style="padding:9px;border-radius:9px;font-size:0.76rem">📤 مدين (عليه)</button><button id="cl-cr-btn" class="bp pay" onclick="setClT('cr')" style="padding:9px;border-radius:9px;font-size:0.76rem">📥 دائن (تسديد)</button></div><input class="inp mb" type="text" id="cl-tx-desc" placeholder="التبويب"><div class="ar"><input class="inp" type="number" id="cl-tx-d" placeholder="$ دولار"><span>أو</span><input class="inp" type="number" id="cl-tx-iq" placeholder="د.ع"></div><input class="inp mb" type="date" id="cl-tx-date" value="${dk}"><button class="btn" onclick="addClTx(${c.id})">💾 إضافة</button></div>${c.txs.length?`<div class="card"><div class="ct">📋 كشف الحساب (الميزان: ${fD(Math.abs(bal))} ${bal>0?'عليه':bal<0?'له':'مصفى'})</div>${[...c.txs].reverse().map(t=>`<div class="txr"><div class="tx-ico" style="background:${t.type==='dr'?'var(--rl)':'var(--gl)'}">${t.type==='dr'?'📤':'📥'}</div><div style="flex:1"><div style="font-size:0.78rem;font-weight:600">${t.desc||'—'}</div><div style="font-size:0.66rem;color:var(--mt)">${t.date}</div></div><span style="font-weight:700;color:${t.type==='dr'?'var(--rd)':'var(--gn)'}">${t.type==='dr'?'+':'-'}${fD(t.amt)}</span><button class="btn-del" onclick="delClTx(${c.id},${t.id})">×</button></div>`).join('')}</div>`:''}<div class="g2" style="margin-top:7px"><button style="padding:10px;border-radius:10px;background:var(--rl);border:none;color:var(--rd);font-family:Cairo;font-size:0.76rem;font-weight:700;cursor:pointer" onclick="delCl(${c.id})">🗑 حذف</button><button class="btn-sm" onclick="closeModals()">إغلاق</button></div>`;document.getElementById('cl-detail-modal').classList.add('on');window._clType='dr';}
+let _clType='dr';
+function setClT(t){_clType=t;document.getElementById('cl-dr-btn').className='bp '+(t==='dr'?'dr':'pay');document.getElementById('cl-dr-btn').style.cssText='padding:9px;border-radius:9px;font-size:0.76rem';document.getElementById('cl-cr-btn').className='bp '+(t==='cr'?'cr':'pay');document.getElementById('cl-cr-btn').style.cssText='padding:9px;border-radius:9px;font-size:0.76rem';}
+function addClTx(cid){const c=S.clients.find(x=>x.id===cid);if(!c)return;const amt=getD('cl-tx-d','cl-tx-iq');if(!amt){toast('⚠️ أدخل المبلغ');return;}c.txs.push({id:Date.now(),type:_clType,desc:document.getElementById('cl-tx-desc').value,amt,amtIQ:getIQ('cl-tx-d','cl-tx-iq'),date:document.getElementById('cl-tx-date').value||dk});save();closeModals();openClientDetail(cid);rClients();toast('✅ تم!');}
+function delClTx(cid,tid){const c=S.clients.find(x=>x.id===cid);if(!c)return;c.txs=c.txs.filter(x=>x.id!==tid);save();closeModals();openClientDetail(cid);rClients();}
+function delCl(id){if(!confirm('حذف هذا الزبون؟'))return;S.clients=S.clients.filter(x=>x.id!==id);closeModals();rClients();save();toast('🗑 تم الحذف');}
+function rClients(){const el=document.getElementById('cl-list');if(!el)return;const totalDr=S.clients.reduce((s,c)=>{const b=c.txs.reduce((s2,t)=>s2+(t.type==='dr'?t.amt:-t.amt),0);return s+(b>0?b:0);},0);$('cl-tot',fD(totalDr));if(!S.clients.length){el.innerHTML='<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:18px">لا توجد زبائن — أضف زبون جديد 👆</div>';return;}el.innerHTML=S.clients.map(c=>{const bal=c.txs.reduce((s,t)=>s+(t.type==='dr'?t.amt:-t.amt),0);return `<div class="cc" onclick="openClientDetail(${c.id})"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.88rem;font-weight:800">${c.name}</div>${c.co?`<div style="font-size:0.68rem;color:var(--mt);font-family:Tajawal">${c.co}</div>`:''}</div><div style="text-align:left"><div style="font-size:0.95rem;font-weight:900;color:${bal>0?'var(--rd)':bal<0?'var(--gn)':'var(--mt)'}">${bal>0?'+':bal<0?'-':''}${fD(Math.abs(bal))}</div><div style="font-size:0.6rem;color:var(--mt);font-family:Tajawal">${bal>0?'متبقي عليه':bal<0?'متبقي له':'مصفى'}</div></div></div></div>`;}).join('');}
+
+// INVENTORY
+function openInvModal(){['inv-name','inv-qty','inv-price'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('inv-modal').classList.add('on');}
+function saveInv(){const n=document.getElementById('inv-name').value.trim();if(!n)return;S.inventory.push({id:Date.now(),name:n,qty:parseInt(document.getElementById('inv-qty').value)||0,price:parseFloat(document.getElementById('inv-price').value)||0});closeModals();rInv();save();toast('🏭 تم!');}
+function openPartModal(){['part-name','part-qty','part-price'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('part-modal').classList.add('on');}
+function savePart(){const n=document.getElementById('part-name').value.trim();if(!n)return;S.parts.push({id:Date.now(),name:n,qty:parseInt(document.getElementById('part-qty').value)||0,price:parseFloat(document.getElementById('part-price').value)||0});closeModals();rInv();save();toast('🔧 تم!');}
+function delInv(id){S.inventory=S.inventory.filter(x=>x.id!==id);rInv();save();}
+function delPart(id){S.parts=S.parts.filter(x=>x.id!==id);rInv();save();}
+function rInv(){const iu=S.inventory.reduce((s,x)=>s+x.qty*x.price,0);const ip=S.parts.reduce((s,x)=>s+x.qty*x.price,0);$('inv-unsold',fD(iu));$('inv-parts',fD(ip));const il=document.getElementById('inv-list');if(il)il.innerHTML=S.inventory.length?S.inventory.map(x=>`<div class="txr"><div class="tx-ico" style="background:var(--gdl)">🏭</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${x.name}</div><div style="font-size:0.68rem;color:var(--mt)">العدد: ${x.qty} | ${fD(x.price)}</div></div><div style="font-weight:700;color:var(--gd)">${fD(x.qty*x.price)}</div><button class="btn-del" onclick="delInv(${x.id})">×</button></div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:12px">لا يوجد مخزون</div>';const pl=document.getElementById('part-list');if(pl)pl.innerHTML=S.parts.length?S.parts.map(x=>`<div class="txr"><div class="tx-ico" style="background:var(--cyl)">🔧</div><div style="flex:1"><div style="font-size:0.8rem;font-weight:700">${x.name}</div><div style="font-size:0.68rem;color:var(--mt)">العدد: ${x.qty} | ${fD(x.price)}</div></div><div style="font-weight:700;color:var(--cy)">${fD(x.qty*x.price)}</div><button class="btn-del" onclick="delPart(${x.id})">×</button></div>`).join(''):'<div style="text-align:center;color:var(--mt);font-family:Tajawal;padding:12px">لا توجد قطع</div>';}
+
+// GOALS
+function updCapGoal(){const v=parseFloat(document.getElementById('cap-upd').value);if(v>0){S.capital=v;rSafe();rGoals();save();toast('💰 تم!');}}
+function togBG(id){S.bizGoals[id]=!S.bizGoals[id];rGoals();save();}
+function rGoals(){const cap=S.capital||700000;const p1=Math.min(100,Math.round(cap/1e6*100));const p2=Math.min(100,Math.round(cap/2.5e6*100));const p3=Math.min(100,Math.round(cap/5e6*100));$('g-cap',fD(cap)+' / $1M');['g-cap-b','g38b'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=p1+'%';});$('g38',p1+'%');const g40b=document.getElementById('g40b');if(g40b)g40b.style.width=p2+'%';$('g40',p2+'%');const g45b=document.getElementById('g45b');if(g45b)g45b.style.width=p3+'%';$('g45',p3+'%');const el=document.getElementById('biz-goals');if(!el)return;el.innerHTML=BG.map(g=>`<div class="ti ${S.bizGoals[g.id]?'dn':''}" onclick="togBG('${g.id}')"><div class="ck ${S.bizGoals[g.id]?'dn':''}">✓</div><div style="flex:1"><div class="tl">${g.i} ${g.n}</div></div></div>`).join('');}
+function rPG(){const el=document.getElementById('per-goals');if(!el)return;el.innerHTML=PG.map(g=>`<div class="ti ${g.d?'dn':''}"><div class="ck ${g.d?'dn':''}">✓</div><div style="flex:1"><div class="tl">${g.i} ${g.n}</div></div></div>`).join('');}
+
+// SCHEDULE
+function addSch(){const t=document.getElementById('s-title').value.trim();if(!t){toast('⚠️ أدخل العنوان');return;}if(!S.schedule[dk])S.schedule[dk]=JSON.parse(JSON.stringify(DS));S.schedule[dk].push({id:Date.now(),time:document.getElementById('s-time').value,type:document.getElementById('s-type').value,title:t,done:false});S.schedule[dk].sort((a,b)=>a.time.localeCompare(b.time));document.getElementById('s-title').value='';rSch();save();toast('🗓 تم!');}
+function togSch(id){const items=S.schedule[dk]||DS;const x=items.find(i=>i.id===id);if(x){x.done=!x.done;rSch();save();}}
+function delSch(id){if(!S.schedule[dk])S.schedule[dk]=JSON.parse(JSON.stringify(DS));S.schedule[dk]=S.schedule[dk].filter(i=>i.id!==id);rSch();save();}
+function rSch(){const items=S.schedule[dk]||DS;const col={work:'#1565C0',meet:'#4A148C',call:'#2E7D32',personal:'#E65100',rest:'#78909C'};const el=document.getElementById('sch-list');if(!el)return;el.innerHTML=items.map(i=>`<div class="shi ${i.done?'dn':''}" onclick="togSch(${i.id})"><div class="sht">${i.time}</div><div class="shb" style="background:${col[i.type]||'#1565C0'}"></div><div class="shn" style="${i.done?'text-decoration:line-through':''}">${i.title}</div><div style="display:flex;gap:4px;align-items:center"><div style="width:18px;height:18px;border-radius:5px;border:2px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:0.65rem;${i.done?'background:var(--bl);border-color:var(--bl);color:white':'background:white'}">✓</div><button class="btn-del" onclick="event.stopPropagation();delSch(${i.id})">×</button></div></div>`).join('');}
+
+// REVIEW
+function saveRev(){S.reviews[dk]={r1:document.getElementById('r1').value,r2:document.getElementById('r2').value,r3:document.getElementById('r3').value};save();toast('📊 تم!');}
+function rRev(){const r=(S.reviews||{})[dk]||{};['r1','r2','r3'].forEach(k=>{const el=document.getElementById(k);if(el)el.value=r[k]||'';});}
+function saveSelf(){S.selfNote=document.getElementById('self-note').value;save();toast('🤍 تم!');}
+
+// ENTER KEY on login
+document.getElementById('pin-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+</script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
-async function requestNotifications(){
-  if(!('Notification' in window)) return;
-  const p=await Notification.requestPermission();
-  if(p==='granted'){scheduleNotifs();showToast('✅ تم تفعيل التنبيهات!');}
-}
-function scheduleNotifs(){
-  notif('morning',7,0,'☀️ خطط يومك!','افتح التطبيق وحدد أهم مهمة اليوم');
-  notif('evening',20,0,'📊 راجع يومك!','شنو أنجزت اليوم؟');
-  notif('habits',21,0,'🔄 عاداتك اليوم!','لا تنسى تسجل عاداتك قبل النوم');
-}
-function notif(id,h,m,title,body){
-  const now=new Date(),next=new Date();
-  next.setHours(h,m,0,0);
-  if(next<=now) next.setDate(next.getDate()+1);
-  setTimeout(()=>{
-    if(Notification.permission==='granted') new Notification(title,{body,icon:'icon.png'});
-    notif(id,h,m,title,body);
-  },next-now);
-}
-if(localStorage.getItem('notif_asked')!=='yes'){localStorage.setItem('notif_asked','yes');setTimeout(requestNotifications,2000);}
-if(Notification.permission==='granted') scheduleNotifs();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+async function askNotif(){if(!('Notification' in window))return;const p=await Notification.requestPermission();if(p==='granted'){doN(7,0,'☀️ خطط يومك!','افتح التطبيق');doN(20,0,'📊 راجع يومك!','شنو أنجزت؟');}}
+function doN(h,m,t,b){const now=new Date(),next=new Date();next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);setTimeout(()=>{if(Notification.permission==='granted')new Notification(t,{body:b,icon:'icon.png'});doN(h,m,t,b);},next-now);}
+if(localStorage.getItem('nask')!=='y'){localStorage.setItem('nask','y');setTimeout(askNotif,3000);}
+if(Notification.permission==='granted'){doN(7,0,'☀️ خطط يومك!','افتح التطبيق');doN(20,0,'📊 راجع يومك!','شنو أنجزت؟');}
 </script>
 </body>
 </html>
