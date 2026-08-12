@@ -1,12 +1,12 @@
 {
-  "name": "يومي — الاتحاد كروب",
-  "short_name": "يومي",
-  "description": "مخطط رواد الأعمال اليومي",
+  "name": "محاسب — الاتحاد كروب",
+  "short_name": "محاسب",
+  "description": "نظام المحاسب — الاتحاد للمكائن",
   "start_url": "/yawmi/",
   "scope": "/yawmi/",
   "display": "standalone",
-  "background_color": "#07070f",
-  "theme_color": "#d4a843",
+  "background_color": "#F0F4FF",
+  "theme_color": "#1565C0",
   "orientation": "portrait",
   "icons": [
     {
