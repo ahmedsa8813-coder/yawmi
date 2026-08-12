@@ -362,11 +362,6 @@ let _calcVal = '0';
 let _editId = null;
 let _clTxType = 'dr';
 
-// Init
-document.getElementById('rv-date').value = dk;
-document.getElementById('ex-date').value = dk;
-rAll();
-
 function rAll() { rRecv(); rExp(); rClients(); fillSelects(); }
 
 // ===== UTILS =====
@@ -874,6 +869,13 @@ function calcTo(target) {
     toast('💰 تم نقل المبلغ للمصروف');
   }
 }
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('rv-date').value = dk;
+  document.getElementById('ex-date').value = dk;
+  rAll();
+});
 </script>
 <script>
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
