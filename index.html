@@ -92,19 +92,15 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
     <div style="background:var(--bg);border-radius:9px;padding:10px;border:1px dashed var(--br)">
       <input class="inp" type="text" id="it-name" placeholder="اسم المادة / المنتج" list="prod-dl">
       <datalist id="prod-dl"></datalist>
-      <div class="g2" style="margin-bottom:7px">
+      <div class="g2" style="margin-bottom:8px">
         <div>
-          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">الكمية</div>
-          <input class="inp" style="margin:0" type="number" id="it-qty" value="1" min="1" inputmode="decimal">
-        </div>
-        <div>
-          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">سعر الوحدة $</div>
+          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">💵 المبلغ الكلي $</div>
           <input class="inp" style="margin:0" type="number" id="it-pr-d" placeholder="0" inputmode="decimal" oninput="syncPrice('d')">
         </div>
-      </div>
-      <div>
-        <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">سعر الوحدة د.ع</div>
-        <input class="inp" style="margin:0;margin-bottom:8px" type="number" id="it-pr-iq" placeholder="0" inputmode="decimal" oninput="syncPrice('iq')">
+        <div>
+          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">💴 المبلغ الكلي د.ع</div>
+          <input class="inp" style="margin:0" type="number" id="it-pr-iq" placeholder="0" inputmode="decimal" oninput="syncPrice('iq')">
+        </div>
       </div>
       <button class="btn" style="margin-top:0" onclick="addItem()">➕ إضافة المادة</button>
     </div>
@@ -396,15 +392,14 @@ function invTotalIQ(){
 function addItem(){
   var name = gval('it-name').trim();
   if(!name){ toast('⚠️ أدخل اسم المادة', true); return; }
-  var qty  = gnum('it-qty') || 1;
   var prD  = gnum('it-pr-d');
   var prIQ = gnum('it-pr-iq');
-  if(!prD && !prIQ){ toast('⚠️ أدخل السعر', true); return; }
-  var unitD  = prD  > 0 ? prD  : toD(prIQ);
-  var unitIQ = prIQ > 0 ? prIQ : toIQ(prD);
-  _items.push({ name:name, qty:qty, unitD:unitD, unitIQ:unitIQ, totD:unitD*qty, totIQ:unitIQ*qty });
+  if(!prD && !prIQ){ toast('⚠️ أدخل المبلغ', true); return; }
+  var totD  = prD  > 0 ? prD  : toD(prIQ);
+  var totIQ = prIQ > 0 ? prIQ : toIQ(prD);
+  _items.push({ name:name, totD:totD, totIQ:totIQ });
   if(S.products.indexOf(name) < 0) S.products.push(name);
-  sval('it-name',''); sval('it-qty','1'); sval('it-pr-d',''); sval('it-pr-iq','');
+  sval('it-name',''); sval('it-pr-d',''); sval('it-pr-iq','');
   rItems(); calcRem(); fillSel();
   toast('✅ تمت إضافة المادة');
 }
@@ -419,9 +414,8 @@ function rItems(){
   if(!_items.length){ el.innerHTML = '<div class="empty" style="padding:10px">لم تضف مواد بعد</div>'; stxt('inv-tot-d','$0'); stxt('inv-tot-iq','0 د.ع'); return; }
   el.innerHTML = _items.map(function(it, i){
     return '<div class="it-row">'+
-      '<div><div style="font-size:0.88rem;font-weight:700">'+it.name+'</div>'+
-      '<div style="font-size:0.72rem;color:var(--mt)">'+it.qty+' × '+fD(it.unitD)+' = <strong style="color:var(--bl)">'+fD(it.totD)+'</strong></div>'+
-      '<div style="font-size:0.65rem;color:var(--mt)">'+fIQ(it.totIQ)+'</div></div>'+
+      '<div style="flex:1"><div style="font-size:0.88rem;font-weight:700">'+it.name+'</div>'+
+      '<div style="font-size:0.76rem;color:var(--bl);font-weight:700">'+fD(it.totD)+' / '+fIQ(it.totIQ)+'</div></div>'+
       '<button class="btn-del" onclick="delItem('+i+')">×</button></div>';
   }).join('');
   stxt('inv-tot-d', fD(invTotal()));
@@ -518,10 +512,9 @@ function saveInv(){
 
 function printInv(inv, cl){
   var itemsHtml = inv.items.map(function(it){
-    return '<tr><td style="padding:7px;border:1px solid #ddd">'+it.name+'</td>'+
-      '<td style="padding:7px;border:1px solid #ddd;text-align:center">'+it.qty+'</td>'+
-      '<td style="padding:7px;border:1px solid #ddd;text-align:center">'+fD(it.unitD)+'<br><small style="color:#666">'+fIQ(it.unitIQ)+'</small></td>'+
-      '<td style="padding:7px;border:1px solid #ddd;text-align:center;font-weight:700;color:#1565C0">'+fD(it.totD)+'<br><small style="color:#666">'+fIQ(it.totIQ)+'</small></td></tr>';
+    return '<tr><td style="padding:7px;border:1px solid #ddd;font-weight:600">'+it.name+'</td>'+
+      '<td style="padding:7px;border:1px solid #ddd;text-align:center;font-weight:700;color:#1565C0">'+fD(it.totD)+'</td>'+
+      '<td style="padding:7px;border:1px solid #ddd;text-align:center;color:#666">'+fIQ(it.totIQ)+'</td></tr>';
   }).join('');
   var html = '<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:420px;margin:0 auto">'+
     '<div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px">'+
@@ -534,9 +527,8 @@ function printInv(inv, cl){
     (cl.phone?'<div><strong>موبايل:</strong> '+cl.phone+'</div>':'')+(cl.co?'<div><strong>الورشة:</strong> '+cl.co+'</div>':'')+'</div>'+
     '<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px">'+
     '<tr style="background:#E3F2FD"><th style="padding:7px;border:1px solid #ddd;text-align:right">المادة</th>'+
-    '<th style="padding:7px;border:1px solid #ddd">الكمية</th>'+
-    '<th style="padding:7px;border:1px solid #ddd">سعر الوحدة</th>'+
-    '<th style="padding:7px;border:1px solid #ddd">الإجمالي</th></tr>'+
+    '<th style="padding:7px;border:1px solid #ddd">المبلغ $</th>'+
+    '<th style="padding:7px;border:1px solid #ddd">المبلغ د.ع</th></tr>'+
     itemsHtml+'</table>'+
     '<div style="border:1px solid #ddd;border-radius:8px;padding:12px;font-size:0.85rem">'+
     '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>الإجمالي الكلي</span><strong style="color:#1565C0">'+fD(inv.totD)+' / '+fIQ(inv.totIQ)+'</strong></div>'+
@@ -559,7 +551,10 @@ function addCl(){
   S.clients.push({ id:Date.now(), name:name, phone:gval('cl-phone'), co:gval('cl-co'), addr:gval('cl-addr'), txs:[] });
   ['cl-name','cl-phone','cl-co','cl-addr'].forEach(function(id){ sval(id,''); });
   save(); rCl(); fillSel();
-  toast('👤 تم إضافة الزبون! ('+S.clients.length+')');
+  toast('👤 تم إضافة الزبون! افتح ملفه لإضافة رصيد سابق');
+  // Auto open client to add opening balance
+  var newCl = S.clients[S.clients.length-1];
+  if(newCl) openCl(newCl.id);
 }
 
 function rCl(){
@@ -622,9 +617,10 @@ function openCl(id){
 
   // إضافة دفعة / حركة يدوية
   h += '<div class="card"><div class="ct">💳 إضافة دفعة أو حركة</div>'+
-    '<div class="g2" style="margin-bottom:7px">'+
-    '<button id="cl-dr-btn" class="tt rd" onclick="setClTx(\'dr\')">📤 مدين (عليه)</button>'+
-    '<button id="cl-cr-btn" class="tt" onclick="setClTx(\'cr\')">📥 دائن (دفعة)</button>'+
+    '<div class="g3" style="margin-bottom:7px">'+
+    '<button id="cl-dr-btn" class="tt rd" onclick="setClTx(\'dr\')">📤 مدين</button>'+
+    '<button id="cl-cr-btn" class="tt" onclick="setClTx(\'cr\')">📥 دائن</button>'+
+    '<button class="tt" style="background:var(--gdl);border-color:#FFCC02;color:var(--gd)" onclick="setClTx(\'open\')">🏦 رصيد سابق</button>'+
     '</div>'+
     '<input class="inp" type="text" id="cl-tx-desc" placeholder="البيان (دفعة نقدية / تحويل...)">'+
     '<div class="g2" style="margin-bottom:7px">'+
@@ -662,6 +658,13 @@ function setClTx(t){
   var db = gel('cl-dr-btn'), cb = gel('cl-cr-btn');
   if(db) db.className = 'tt' + (t==='dr'?' rd':'');
   if(cb) cb.className = 'tt' + (t==='cr'?' gn':'');
+  // Update desc placeholder
+  var desc = gel('cl-tx-desc');
+  if(desc){
+    if(t==='open') desc.placeholder = 'رصيد سابق من قبل النظام';
+    else if(t==='cr') desc.placeholder = 'البيان (دفعة نقدية / تحويل...)';
+    else desc.placeholder = 'البيان (بضاعة / آجل...)';
+  }
 }
 
 function addClTx(cid){
@@ -671,9 +674,12 @@ function addClTx(cid){
   var amt   = d>0 ? d   : toD(iq);
   var amtIQ = iq>0 ? iq  : toIQ(d);
   if(!amt){ toast('⚠️ أدخل المبلغ', true); return; }
-  c.txs.push({ id:Date.now(), type:_clTxType, desc:gval('cl-tx-desc'), amt:amt, amtIQ:amtIQ, date:gval('cl-tx-dt')||dk });
+  // Opening balance: 'open' type = مدين (عليه رصيد سابق)
+  var txType = _clTxType === 'open' ? 'dr' : _clTxType;
+  var desc = gval('cl-tx-desc') || (_clTxType==='open' ? 'رصيد سابق من قبل النظام' : '');
+  c.txs.unshift({ id:Date.now(), type:txType, desc:desc, amt:amt, amtIQ:amtIQ, date:gval('cl-tx-dt')||dk, isOpening: _clTxType==='open' });
   save(); closeMod(); openCl(cid); rCl();
-  toast('✅ تمت الإضافة!');
+  toast(_clTxType==='open' ? '🏦 تم تسجيل الرصيد السابق!' : '✅ تمت الإضافة!');
 }
 
 function delClTx(cid, tid){
