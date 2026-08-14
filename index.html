@@ -90,19 +90,30 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);max-wid
     <div class="ct">② المواد والمنتجات</div>
     <div id="items-list"><div class="empty" style="padding:10px">لم تضف مواد بعد</div></div>
     <div style="background:var(--bg);border-radius:9px;padding:10px;border:1px dashed var(--br)">
-      <input class="inp" type="text" id="it-name" placeholder="اسم المادة / المنتج" list="prod-dl">
-      <datalist id="prod-dl"></datalist>
-      <div class="g2" style="margin-bottom:8px">
-        <div>
-          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">💵 المبلغ الكلي $</div>
-          <input class="inp" style="margin:0" type="number" id="it-pr-d" placeholder="0" inputmode="decimal" oninput="syncPrice('d')">
-        </div>
-        <div>
-          <div style="font-size:0.66rem;color:var(--mt);margin-bottom:3px;font-family:Tajawal">💴 المبلغ الكلي د.ع</div>
-          <input class="inp" style="margin:0" type="number" id="it-pr-iq" placeholder="0" inputmode="decimal" oninput="syncPrice('iq')">
+      <!-- قائمة المنتجات -->
+      <div class="ct" style="margin-bottom:7px">اختر مادة</div>
+      <div id="prod-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+      <div class="sep"></div>
+      <!-- أو أدخل يدوياً -->
+      <div style="font-size:0.7rem;color:var(--mt);font-family:Tajawal;margin-bottom:5px">أو أدخل يدوياً:</div>
+      <input class="inp" type="text" id="it-name" placeholder="اسم المادة">
+      <div style="font-size:0.66rem;color:var(--mt);margin-bottom:4px;font-family:Tajawal">الكمية (بالألف)</div>
+      <div style="display:flex;gap:7px;align-items:center;margin-bottom:8px">
+        <button class="btn-sm" onclick="adjQty(-1)">−</button>
+        <input class="inp" style="flex:1;margin:0;text-align:center;font-weight:700;font-size:1rem" type="number" id="it-qty" value="1" min="1" inputmode="decimal">
+        <button class="btn-sm" onclick="adjQty(1)">+</button>
+      </div>
+      <div style="font-size:0.66rem;color:var(--mt);margin-bottom:4px;font-family:Tajawal">السعر لكل ألف $ (يحسب الإجمالي تلقائياً)</div>
+      <input class="inp" type="number" id="it-pr-unit" placeholder="سعر الألف الواحد $" inputmode="decimal" oninput="calcItemTotal()">
+      <!-- الإجمالي -->
+      <div style="background:var(--bll);border-radius:9px;padding:9px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center" id="it-total-box">
+        <span style="font-size:0.76rem;color:var(--mt);font-family:Tajawal">الإجمالي:</span>
+        <div style="text-align:left">
+          <span id="it-total-d" style="font-size:1rem;font-weight:900;color:var(--bl)">$0</span>
+          <div id="it-total-iq" style="font-size:0.68rem;color:var(--mt)">0 د.ع</div>
         </div>
       </div>
-      <button class="btn" style="margin-top:0" onclick="addItem()">➕ إضافة المادة</button>
+      <button class="btn" style="margin-top:0" onclick="addItem()">➕ إضافة للفاتورة</button>
     </div>
     <!-- الإجمالي -->
     <div style="background:linear-gradient(135deg,var(--bl),var(--b3));border-radius:10px;padding:11px;margin-top:9px;color:white">
@@ -317,7 +328,22 @@ var S = JSON.parse(localStorage.getItem('acc_v5') || '{}');
 if(!S.clients)  S.clients  = [];
 if(!S.invoices) S.invoices = [];
 if(!S.expenses) S.expenses = [];
-if(!S.products) S.products = ['CNC فول أوتو','CNC إيكو','شريط 6 مراحل','منفكس 1000','رافكس','براين 6','كابينو','صوندا','سايد دريل','كمبريسر','شفاط غبار','جوي نرمادة'];
+if(!S.products) S.products = [
+  {name:'رافكس',     price:90},
+  {name:'منفكس',     price:90},
+  {name:'كابينو',    price:400},
+  {name:'جوي نرمادة',price:110},
+  {name:'CNC فول أوتو', price:0},
+  {name:'CNC إيكو',     price:0},
+  {name:'شريط 6 مراحل',price:0},
+  {name:'براين 6',      price:0},
+  {name:'صوندا',        price:0},
+  {name:'سايد دريل',   price:0},
+  {name:'كمبريسر',     price:0},
+  {name:'شفاط غبار',   price:0}
+];
+// Migrate old string products to new format
+S.products = S.products.map(function(p){ return typeof p==='string'?{name:p,price:0}:p; });
 if(!S.exrate)   S.exrate   = 1520;
 
 var dk  = new Date().toISOString().split('T')[0];
@@ -363,8 +389,17 @@ function fillSel(){
       return '<option value="'+c.id+'">' + c.name + (c.co ? ' — '+c.co : '') + '</option>';
     }).join('');
   var s = gel('inv-cl'); if(s) s.innerHTML = opts;
-  var dl = gel('prod-dl');
-  if(dl) dl.innerHTML = S.products.map(function(p){ return '<option value="'+p+'">'; }).join('');
+  // Product buttons
+  var pb = gel('prod-btns');
+  if(pb){
+    pb.innerHTML = S.products.map(function(p, i){
+      var hasPrice = p.price > 0;
+      return '<button onclick="selectProd('+i+')" style="padding:8px 10px;border-radius:9px;background:'+(hasPrice?'var(--bll)':'var(--bg)')+';border:1.5px solid '+(hasPrice?'var(--bm)':'var(--br)')+';font-family:Cairo;font-size:0.76rem;font-weight:700;cursor:pointer;color:'+(hasPrice?'var(--bl)':'var(--tx)')+';display:flex;flex-direction:column;align-items:center;gap:2px">'+
+        '<span>'+p.name+'</span>'+
+        (hasPrice?'<span style="font-size:0.64rem;color:var(--gn);font-weight:700">$'+p.price+'/ألف</span>':'<span style="font-size:0.6rem;color:var(--mt)">يدوي</span>')+
+        '</button>';
+    }).join('');
+  }
 }
 
 // ===== PRICE SYNC =====
@@ -389,19 +424,61 @@ function invTotalIQ(){
   return _items.reduce(function(s, it){ return s + it.totIQ; }, 0);
 }
 
+// Select product from buttons
+function selectProd(i){
+  var p = S.products[i]; if(!p) return;
+  sval('it-name', p.name);
+  if(p.price > 0) sval('it-pr-unit', p.price);
+  sval('it-qty', '1');
+  calcItemTotal();
+  // Highlight selected button
+  var btns = gel('prod-btns').querySelectorAll('button');
+  btns.forEach(function(b,j){
+    b.style.background = j===i ? 'var(--bl)' : (S.products[j].price>0?'var(--bll)':'var(--bg)');
+    b.style.color = j===i ? 'white' : (S.products[j].price>0?'var(--bl)':'var(--tx)');
+  });
+}
+
+function adjQty(delta){
+  var q = gnum('it-qty') + delta;
+  if(q < 1) q = 1;
+  sval('it-qty', q);
+  calcItemTotal();
+}
+
+function calcItemTotal(){
+  var qty = gnum('it-qty') || 1;
+  var unit = gnum('it-pr-unit');
+  var totD = unit * qty;
+  var totIQ = toIQ(totD);
+  stxt('it-total-d', fD(totD));
+  stxt('it-total-iq', fIQ(totIQ));
+}
+
 function addItem(){
   var name = gval('it-name').trim();
-  if(!name){ toast('⚠️ أدخل اسم المادة', true); return; }
-  var prD  = gnum('it-pr-d');
-  var prIQ = gnum('it-pr-iq');
-  if(!prD && !prIQ){ toast('⚠️ أدخل المبلغ', true); return; }
-  var totD  = prD  > 0 ? prD  : toD(prIQ);
-  var totIQ = prIQ > 0 ? prIQ : toIQ(prD);
-  _items.push({ name:name, totD:totD, totIQ:totIQ });
-  if(S.products.indexOf(name) < 0) S.products.push(name);
-  sval('it-name',''); sval('it-pr-d',''); sval('it-pr-iq','');
+  if(!name){ toast('⚠️ اختر مادة أو أدخل اسمها', true); return; }
+  var unit = gnum('it-pr-unit');
+  if(!unit){ toast('⚠️ أدخل السعر لكل ألف', true); return; }
+  var qty  = gnum('it-qty') || 1;
+  var totD  = unit * qty;
+  var totIQ = toIQ(totD);
+  _items.push({ name:name, qty:qty, unit:unit, totD:totD, totIQ:totIQ });
+  // Save product with price if new
+  var exists = S.products.find(function(p){ return p.name===name; });
+  if(!exists) S.products.push({name:name, price:unit});
+  // Reset
+  sval('it-name',''); sval('it-pr-unit',''); sval('it-qty','1');
+  stxt('it-total-d','$0'); stxt('it-total-iq','0 د.ع');
+  // Reset button highlights
+  var pb = gel('prod-btns');
+  if(pb) pb.querySelectorAll('button').forEach(function(b,j){
+    var p2 = S.products[j];
+    b.style.background = p2&&p2.price>0?'var(--bll)':'var(--bg)';
+    b.style.color = p2&&p2.price>0?'var(--bl)':'var(--tx)';
+  });
   rItems(); calcRem(); fillSel();
-  toast('✅ تمت إضافة المادة');
+  toast('✅ تمت إضافة '+ name +' ('+qty+' ألف)');
 }
 
 function delItem(i){
@@ -415,7 +492,8 @@ function rItems(){
   el.innerHTML = _items.map(function(it, i){
     return '<div class="it-row">'+
       '<div style="flex:1"><div style="font-size:0.88rem;font-weight:700">'+it.name+'</div>'+
-      '<div style="font-size:0.76rem;color:var(--bl);font-weight:700">'+fD(it.totD)+' / '+fIQ(it.totIQ)+'</div></div>'+
+      (it.qty>1?'<div style="font-size:0.72rem;color:var(--mt)">'+it.qty+' ألف × $'+it.unit+'/ألف</div>':'')+
+      '<div style="font-size:0.82rem;color:var(--bl);font-weight:800">'+fD(it.totD)+' <span style="font-size:0.68rem;color:var(--mt)">/ '+fIQ(it.totIQ)+'</span></div></div>'+
       '<button class="btn-del" onclick="delItem('+i+')">×</button></div>';
   }).join('');
   stxt('inv-tot-d', fD(invTotal()));
@@ -512,7 +590,8 @@ function saveInv(){
 
 function printInv(inv, cl){
   var itemsHtml = inv.items.map(function(it){
-    return '<tr><td style="padding:7px;border:1px solid #ddd;font-weight:600">'+it.name+'</td>'+
+    var desc = it.qty>1 ? it.qty+' ألف × $'+it.unit : '';
+    return '<tr><td style="padding:7px;border:1px solid #ddd;font-weight:600">'+it.name+'<br><small style="color:#888;font-weight:400">'+desc+'</small></td>'+
       '<td style="padding:7px;border:1px solid #ddd;text-align:center;font-weight:700;color:#1565C0">'+fD(it.totD)+'</td>'+
       '<td style="padding:7px;border:1px solid #ddd;text-align:center;color:#666">'+fIQ(it.totIQ)+'</td></tr>';
   }).join('');
