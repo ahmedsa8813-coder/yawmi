@@ -11,85 +11,55 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#F0F4FF;--w:#fff;--bl:#1565C0;--b3:#2196F3;
-  --bll:#E3F2FD;--bm:#BBDEFB;--tx:#212121;--mt:#78909C;
-  --gn:#2E7D32;--gl:#E8F5E9;--rd:#B71C1C;--rl:#FFEBEE;
-  --gd:#E65100;--gdl:#FFF3E0;--br:#DDEEFF;
-}
-html,body{height:100%;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx)}
+:root{--bg:#F0F4FF;--w:#fff;--bl:#1565C0;--b3:#2196F3;--bll:#E3F2FD;--bm:#BBDEFB;--tx:#212121;--mt:#78909C;--gn:#2E7D32;--gl:#E8F5E9;--rd:#B71C1C;--rl:#FFEBEE;--gd:#E65100;--gdl:#FFF3E0;--br:#DDEEFF;}
+html,body{height:100%;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--tx);overflow:hidden}
 
-/* ===== LOGIN SCREEN ===== */
-#login-screen{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;padding:20px;
-  background:linear-gradient(135deg,#0D47A1 0%,#1565C0 50%,#1976D2 100%);
-}
-.login-logo{font-size:3rem;margin-bottom:8px}
-.login-title{font-size:1.4rem;font-weight:900;color:white;margin-bottom:4px}
-.login-sub{font-size:0.84rem;color:rgba(255,255,255,0.7);font-family:Tajawal;margin-bottom:32px}
-.login-card{background:white;border-radius:18px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.login-card h2{font-size:1rem;font-weight:700;color:#0D47A1;margin-bottom:20px;text-align:center}
-.role-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.role-btn{padding:14px 8px;border-radius:12px;border:2px solid var(--br);background:var(--bg);font-family:Cairo;font-size:0.82rem;font-weight:700;color:var(--mt);cursor:pointer;text-align:center;transition:all 0.2s}
+/* ── SCREEN SYSTEM ── */
+.screen{display:none;height:100vh;flex-direction:column;overflow:hidden}
+.screen.on{display:flex}
+
+/* ── LOGIN ── */
+#sc-login{background:linear-gradient(135deg,#0D47A1,#1976D2);align-items:center;justify-content:center;padding:20px}
+.login-box{background:white;border-radius:20px;padding:28px 22px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-logo{font-size:2.8rem;text-align:center;margin-bottom:6px}
+.login-brand{font-size:1.1rem;font-weight:900;color:#0D47A1;text-align:center;margin-bottom:2px}
+.login-sub{font-size:0.78rem;color:var(--mt);text-align:center;font-family:Tajawal;margin-bottom:22px}
+.role-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.role-btn{padding:14px 8px;border-radius:13px;border:2px solid var(--br);background:var(--bg);font-family:Cairo;font-size:0.82rem;font-weight:700;color:var(--mt);cursor:pointer;text-align:center}
+.role-btn .ri{font-size:1.6rem;display:block;margin-bottom:5px}
 .role-btn.on{background:var(--bl);border-color:var(--bl);color:white}
-.role-icon{font-size:1.5rem;display:block;margin-bottom:4px}
-.pin-input{width:100%;padding:14px;border:2px solid var(--br);border-radius:11px;font-family:Cairo;font-size:1.3rem;text-align:center;letter-spacing:8px;outline:none;margin-bottom:12px;font-weight:700}
-.pin-input:focus{border-color:var(--bl)}
-.pin-input.err{border-color:var(--rd);background:var(--rl)}
-.login-btn{width:100%;padding:14px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:Cairo;font-size:0.95rem;font-weight:700;cursor:pointer}
-.login-btn:active{opacity:0.85}
-.pin-hint{font-size:0.72rem;color:var(--mt);text-align:center;font-family:Tajawal;margin-top:8px}
+.pin-field{width:100%;padding:14px;border:2px solid var(--br);border-radius:12px;font-family:Cairo;font-size:1.4rem;text-align:center;letter-spacing:10px;outline:none;margin-bottom:12px;font-weight:700;background:var(--bg)}
+.pin-field:focus{border-color:var(--bl);background:white}
+.pin-field.err{border-color:var(--rd);background:var(--rl);animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.login-go{width:100%;padding:14px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:Cairo;font-size:0.95rem;font-weight:700;cursor:pointer}
 
-/* ===== APP LAYOUT ===== */
-#app{display:none;height:100vh;overflow:hidden}
+/* ── HEADER ── */
+.hdr{background:linear-gradient(135deg,#0D47A1,var(--bl));color:white;padding:11px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;min-height:52px}
+.hdr-back{background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:9px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-title{font-size:0.96rem;font-weight:900;flex:1}
+.hdr-sub{font-size:0.64rem;opacity:0.8;font-family:Tajawal}
+.hdr-logout{background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 11px;border-radius:8px;font-family:Cairo;font-size:0.72rem;font-weight:700;cursor:pointer;flex-shrink:0}
 
-/* HEADER */
-.header{background:linear-gradient(135deg,#0D47A1,var(--bl));color:white;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.header-title{font-size:1rem;font-weight:900}
-.header-sub{font-size:0.7rem;opacity:0.8;font-family:Tajawal;margin-top:1px}
-.logout-btn{background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 12px;border-radius:8px;font-family:Cairo;font-size:0.74rem;font-weight:700;cursor:pointer}
+/* ── SCROLLABLE BODY ── */
+.body{flex:1;overflow-y:auto;padding:14px 13px 24px;-webkit-overflow-scrolling:touch}
 
-/* DESKTOP LAYOUT */
-.app-body{display:flex;height:calc(100vh - 52px);overflow:hidden}
-
-/* SIDEBAR (desktop) */
-.sidebar{width:220px;flex-shrink:0;background:var(--w);border-left:1px solid var(--br);overflow-y:auto;padding:12px 8px;display:none}
-.sidebar.show{display:block}
-.sb-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;cursor:pointer;font-size:0.86rem;font-weight:600;color:var(--mt);margin-bottom:4px;transition:all 0.15s;border:none;background:none;width:100%;text-align:right;font-family:Cairo}
-.sb-item:hover{background:var(--bg)}
-.sb-item.on{background:var(--bll);color:var(--bl);font-weight:700}
-.sb-item .si{font-size:1.2rem;flex-shrink:0}
-.sb-divider{height:1px;background:var(--br);margin:8px 4px}
-
-/* CONTENT */
-.main-content{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
-
-/* MOBILE BOTTOM NAV */
-.bnav{display:none;background:var(--w);border-top:1px solid var(--br);flex-shrink:0;padding:5px 0 env(safe-area-inset-bottom,8px);box-shadow:0 -2px 12px rgba(0,0,0,0.08)}
-.bnav.show{display:flex}
-.bb{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:none;cursor:pointer;font-family:Tajawal;font-size:0.58rem;color:var(--mt);padding:5px 0}
-.bb .ni{font-size:1.35rem}.bb.on{color:var(--bl)}
-
-/* PAGES */
-.pg{display:none}.pg.on{display:block}
-
-/* ===== SHARED COMPONENTS ===== */
+/* ── CARDS & COMPONENTS ── */
 .card{background:var(--w);border-radius:14px;padding:14px;margin-bottom:11px;box-shadow:0 2px 10px rgba(21,101,192,0.08)}
-.ct{font-size:0.64rem;letter-spacing:0.8px;color:var(--bl);font-weight:700;margin-bottom:9px;text-transform:uppercase}
-.pt{font-size:1.05rem;font-weight:900;color:#0D47A1;margin-bottom:13px}
+.ct{font-size:0.63rem;letter-spacing:0.8px;color:var(--bl);font-weight:700;margin-bottom:9px;text-transform:uppercase}
+.pt{font-size:1.05rem;font-weight:900;color:#0D47A1;margin-bottom:12px}
 .lbl{font-size:0.72rem;color:var(--mt);font-family:Tajawal;margin-bottom:4px}
-.inp{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:10px;padding:10px 12px;color:var(--tx);font-family:Cairo;font-size:0.86rem;outline:none;display:block;margin-bottom:8px}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:10px;padding:10px 12px;color:var(--tx);font-family:Cairo;font-size:0.86rem;outline:none;display:block;margin-bottom:8px;transition:border 0.2s}
 .inp:focus{border-color:var(--bl);background:white}
 .sel{width:100%;background:var(--bg);border:1.5px solid var(--br);border-radius:10px;padding:9px 12px;color:var(--tx);font-family:Cairo;font-size:0.84rem;outline:none;display:block;margin-bottom:8px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
-.btn{width:100%;padding:12px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:Cairo;font-size:0.9rem;font-weight:700;cursor:pointer;display:block;margin-top:8px}
-.btn:active{opacity:0.85}
-.btn-sm{padding:8px 13px;border-radius:9px;background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:Cairo;font-size:0.76rem;font-weight:700;cursor:pointer}
+.btn{width:100%;padding:13px;border-radius:12px;background:var(--bl);border:none;color:white;font-family:Cairo;font-size:0.9rem;font-weight:700;cursor:pointer;display:block;margin-top:8px}
+.btn:active{opacity:0.82}
+.btn-sm{padding:8px 13px;border-radius:9px;background:var(--bll);border:1.5px solid var(--bm);color:var(--bl);font-family:Cairo;font-size:0.76rem;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn-del{background:none;border:none;color:#B0BEC5;cursor:pointer;font-size:1.1rem;padding:2px 5px}
-.btn-prt{padding:8px 13px;border-radius:9px;background:var(--gdl);border:1.5px solid #FFCC02;color:var(--gd);font-family:Cairo;font-size:0.78rem;font-weight:700;cursor:pointer}
-.tt{padding:11px 6px;border-radius:11px;border:2px solid var(--br);background:var(--bg);font-family:Cairo;font-size:0.8rem;font-weight:700;color:var(--mt);cursor:pointer;text-align:center}
+.btn-prt{padding:8px 13px;border-radius:9px;background:var(--gdl);border:1.5px solid #FFCC02;color:var(--gd);font-family:Cairo;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.tt{padding:11px 6px;border-radius:11px;border:2px solid var(--br);background:var(--bg);font-family:Cairo;font-size:0.8rem;font-weight:700;color:var(--mt);cursor:pointer;text-align:center;width:100%}
 .tt.on{background:var(--bl);border-color:var(--bl);color:white}
 .sc{border-radius:13px;padding:12px;margin-bottom:8px;text-align:center}
 .sc.inc{background:var(--gl)}.sc.exp{background:var(--rl)}.sc.net{background:linear-gradient(135deg,var(--bl),var(--b3));color:white}.sc.info{background:var(--bll)}.sc.warn{background:var(--gdl)}
@@ -102,259 +72,471 @@ html,body{height:100%;font-family:'Cairo',sans-serif;background:var(--bg);color:
 .txr:last-child{border-bottom:none}
 .txi{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
 .cc{background:var(--w);border-radius:12px;padding:12px;margin-bottom:8px;border:1.5px solid var(--br);cursor:pointer}
-.cc:hover{border-color:var(--bl)}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:flex-end;justify-content:center}
-.modal.on{display:flex}
-.mbox{background:var(--w);border-radius:20px 20px 0 0;padding:18px 13px 28px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
-.mt2{font-size:0.96rem;font-weight:900;color:#0D47A1;margin-bottom:12px}
-.toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--bl);color:white;padding:10px 22px;border-radius:99px;font-family:Cairo;font-weight:700;font-size:0.82rem;z-index:9999;transition:top 0.3s;pointer-events:none;white-space:nowrap}
-.toast.on{top:14px}
+.cc:hover,.cc:active{border-color:var(--bl)}
 .empty{text-align:center;color:var(--mt);font-family:Tajawal;padding:18px;font-size:0.84rem}
 
-/* Desktop grid for cards */
-@media(min-width:768px){
-  .d-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .main-content{padding:20px 24px}
-  .card{margin-bottom:14px}
-}
+/* ── ACC HOME MENU ── */
+.acc-menu{display:grid;grid-template-columns:1fr;gap:12px;padding:10px 0}
+.menu-card{background:var(--w);border-radius:16px;padding:22px 18px;border:2px solid var(--br);cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 3px 14px rgba(21,101,192,0.09);transition:all 0.2s}
+.menu-card:active{transform:scale(0.97)}
+.menu-card.rv{border-color:#81C784;background:var(--gl)}
+.menu-card.ex{border-color:#EF9A9A;background:var(--rl)}
+.menu-card.inv{border-color:var(--bm);background:var(--bll)}
+.menu-icon{font-size:2.2rem;flex-shrink:0}
+.menu-text h3{font-size:1rem;font-weight:900;margin-bottom:3px}
+.menu-text p{font-size:0.76rem;font-family:Tajawal;opacity:0.7}
+.menu-card.rv .menu-text h3{color:var(--gn)}
+.menu-card.ex .menu-text h3{color:var(--rd)}
+.menu-card.inv .menu-text h3{color:var(--bl)}
+
+/* ── MGR SIDEBAR LAYOUT ── */
+.mgr-layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:210px;flex-shrink:0;background:var(--w);border-left:1px solid var(--br);overflow-y:auto;padding:10px 8px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:0.84rem;font-weight:600;color:var(--mt);margin-bottom:3px;border:none;background:none;width:100%;text-align:right;font-family:Cairo;transition:all 0.15s}
+.sb-item:hover{background:var(--bg)}
+.sb-item.on{background:var(--bll);color:var(--bl);font-weight:700}
+.sb-item .si{font-size:1.15rem;flex-shrink:0}
+.sb-sep{height:1px;background:var(--br);margin:7px 4px}
+.mgr-content{flex:1;overflow-y:auto;padding:16px 14px 24px}
+.mgr-pg{display:none}.mgr-pg.on{display:block}
+
+/* ── MODAL ── */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:900;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.mbox{background:var(--w);border-radius:20px 20px 0 0;padding:18px 13px 28px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.mt2{font-size:0.96rem;font-weight:900;color:#0D47A1;margin-bottom:12px}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--bl);color:white;padding:10px 22px;border-radius:99px;font-family:Cairo;font-weight:700;font-size:0.82rem;z-index:9999;transition:top 0.3s;pointer-events:none;white-space:nowrap}
+.toast.on{top:14px}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
-<div id="login-screen">
-  <div class="login-logo">🏭</div>
-  <div class="login-title">الاتحاد للمكائن والمعدات</div>
-  <div class="login-sub">نظام المحاسب</div>
-  <div class="login-card">
-    <h2>اختر صلاحيتك وأدخل الباسورد</h2>
-    <div class="role-btns">
-      <button class="role-btn on" id="role-acc" onclick="setRole('acc')">
-        <span class="role-icon">📋</span>محاسب
-      </button>
-      <button class="role-btn" id="role-mgr" onclick="setRole('mgr')">
-        <span class="role-icon">📊</span>مدير مالي
-      </button>
+<!-- ══════════ LOGIN ══════════ -->
+<div class="screen on" id="sc-login">
+  <div class="login-box">
+    <div class="login-logo">🏭</div>
+    <div class="login-brand">الاتحاد للمكائن والمعدات</div>
+    <div class="login-sub">نظام المحاسبة</div>
+    <div class="role-row">
+      <button class="role-btn on" id="r-acc" onclick="selRole('acc')"><span class="ri">📋</span>محاسب</button>
+      <button class="role-btn" id="r-mgr" onclick="selRole('mgr')"><span class="ri">📊</span>مدير مالي</button>
     </div>
-    <input class="pin-input" type="password" id="pin-inp" placeholder="••••••" maxlength="6" inputmode="numeric" onkeydown="if(event.key==='Enter') doLogin()">
-    <button class="login-btn" onclick="doLogin()">🔐 دخول</button>
-    <div class="pin-hint" id="pin-hint">محاسب: 4 أرقام | مدير مالي: 6 أرقام</div>
+    <input class="pin-field" type="password" id="pin" placeholder="••••" maxlength="6" inputmode="numeric">
+    <button class="login-go" onclick="doLogin()">🔐 دخول</button>
   </div>
 </div>
 
-<!-- ===== APP ===== -->
-<div id="app">
-  <!-- HEADER -->
-  <div class="header">
-    <div>
-      <div class="header-title">🏭 الاتحاد للمكائن والمعدات</div>
-      <div class="header-sub" id="role-label">محاسب</div>
+<!-- ══════════ ACC: HOME ══════════ -->
+<div class="screen" id="sc-acc-home">
+  <div class="hdr">
+    <div style="flex:1">
+      <div class="hdr-title">🏭 الاتحاد للمكائن</div>
+      <div class="hdr-sub">📋 محاسب — اختر العملية</div>
     </div>
-    <button class="logout-btn" onclick="logout()">خروج 🔓</button>
+    <button class="hdr-logout" onclick="logout()">خروج 🔓</button>
   </div>
-
-  <div class="app-body">
-    <!-- SIDEBAR (desktop) -->
-    <div class="sidebar" id="sidebar">
-      <div class="sb-item on" id="sb-inv" onclick="showPg('inv',this)"><span class="si">🧾</span>فاتورة بيع</div>
-      <div class="sb-item" id="sb-exp" onclick="showPg('exp',this)"><span class="si">📤</span>تسجيل مصروف</div>
-      <div class="sb-divider" id="sb-div-mgr"></div>
-      <div class="sb-item" id="sb-cl" onclick="showPg('cl',this)"><span class="si">👥</span>الزبائن</div>
-      <div class="sb-item" id="sb-rep" onclick="showPg('rep',this)"><span class="si">📊</span>الجرد والتقارير</div>
+  <div class="body">
+    <div class="acc-menu">
+      <div class="menu-card rv" onclick="go('sc-recv')">
+        <div class="menu-icon">📥</div>
+        <div class="menu-text"><h3>تسجيل مستلم</h3><p>تسجيل مبلغ واصل مع صورة الإيصال</p></div>
+      </div>
+      <div class="menu-card ex" onclick="go('sc-exp')">
+        <div class="menu-icon">📤</div>
+        <div class="menu-text"><h3>تسجيل مصروف</h3><p>تسجيل مصروف على بند معين مع صورة</p></div>
+      </div>
+      <div class="menu-card inv" onclick="go('sc-inv')">
+        <div class="menu-icon">🧾</div>
+        <div class="menu-text"><h3>فاتورة بيع</h3><p>إصدار فاتورة لزبون وتحديد طريقة الدفع</p></div>
+      </div>
     </div>
+    <div style="margin-top:4px">
+      <div style="font-size:0.7rem;color:var(--mt);font-family:Tajawal;margin-bottom:8px;font-weight:700;letter-spacing:0.5px">📊 الجرد والتقارير</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <button onclick="go('sc-rep-rv')" style="padding:14px 8px;border-radius:13px;background:var(--gl);border:2px solid #81C784;font-family:Cairo;font-size:0.76rem;font-weight:700;color:var(--gn);cursor:pointer;text-align:center"><div style="font-size:1.4rem;margin-bottom:4px">📥</div>جرد المستلمات</button>
+        <button onclick="go('sc-rep-ex')" style="padding:14px 8px;border-radius:13px;background:var(--rl);border:2px solid #EF9A9A;font-family:Cairo;font-size:0.76rem;font-weight:700;color:var(--rd);cursor:pointer;text-align:center"><div style="font-size:1.4rem;margin-bottom:4px">📤</div>جرد المصروفات</button>
+        <button onclick="go('sc-rep-cl')" style="padding:14px 8px;border-radius:13px;background:var(--gdl);border:2px solid #FFCC02;font-family:Cairo;font-size:0.76rem;font-weight:700;color:var(--gd);cursor:pointer;text-align:center"><div style="font-size:1.4rem;margin-bottom:4px">👥</div>جرد الزبائن</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
+<!-- ══════════ ACC: تسجيل مستلم ══════════ -->
+<div class="screen" id="sc-recv">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">📥 تسجيل مستلم</div></div>
+  </div>
+  <div class="body">
+    <div class="sc inc"><div class="sl inc">📥 مستلم اليوم</div><div class="sa inc" id="rv-today">$0</div><div class="sub" style="color:var(--gn)" id="rv-today-iq">0 د.ع</div></div>
+    <div class="card" style="border:2px solid #81C784">
+      <div class="ct" style="color:var(--gn)">➕ مستلم جديد</div>
+      <div class="lbl">من؟</div>
+      <input class="inp" type="text" id="rv-from" placeholder="اسم العميل أو المصدر">
+      <div class="lbl">الوصف / التبويب</div>
+      <input class="inp" type="text" id="rv-desc" placeholder="مثال: بيع ماكينة CNC">
+      <div class="lbl">المبلغ</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">💵 دولار $</div><input class="inp" style="margin:0" type="number" id="rv-d" placeholder="0" inputmode="decimal" oninput="sync2('rv-d','rv-iq','d')"></div>
+        <div><div class="lbl">💴 دينار د.ع</div><input class="inp" style="margin:0" type="number" id="rv-iq" placeholder="0" inputmode="decimal" oninput="sync2('rv-d','rv-iq','iq')"></div>
+      </div>
+      <div class="lbl">النوع</div>
+      <select class="sel" id="rv-type"><option value="cash">💵 نقد</option><option value="transfer">🏦 تحويل</option><option value="ajal">📅 آجل محصّل</option><option value="sale">🏭 بيع ماكينة</option></select>
+      <div class="lbl">التاريخ</div>
+      <input class="inp" type="date" id="rv-date">
+      <div class="lbl">📷 صورة الإيصال / الفاتورة (إجباري)</div>
+      <div id="rv-photo-zone" onclick="document.getElementById('rv-photo-inp').click()" style="border:2px dashed #81C784;border-radius:11px;padding:16px;text-align:center;cursor:pointer;margin-bottom:8px;background:var(--gl)">
+        <img id="rv-photo-preview" style="display:none;max-width:100%;max-height:120px;border-radius:8px;object-fit:cover;margin:0 auto 8px;display:none">
+        <div id="rv-photo-placeholder"><div style="font-size:1.8rem;margin-bottom:4px">📷</div><div style="font-size:0.82rem;font-weight:700;color:var(--gn)">اضغط لتصوير الإيصال</div></div>
+        <input type="file" id="rv-photo-inp" accept="image/*" capture="environment" style="display:none" onchange="takePhoto('rv',this)">
+      </div>
+      <button class="btn" style="background:var(--gn)" onclick="saveRv()">💾 تسجيل المستلم</button>
+    </div>
+    <div class="card">
+      <div class="ct">📋 آخر المستلمات</div>
+      <div id="rv-list"><div class="empty">لا توجد مستلمات بعد</div></div>
+    </div>
+  </div>
+</div>
 
-      <!-- PAGE: فاتورة -->
-      <div class="pg on" id="pg-inv">
-        <div class="pt">🧾 فاتورة بيع</div>
-        <div class="d-grid2">
-          <div>
-            <div class="card">
-              <div class="lbl">① الزبون</div>
-              <select class="sel" id="inv-cl" style="font-size:0.9rem;font-weight:700">
-                <option value="">-- اختر زبون --</option>
-              </select>
-              <div style="display:flex;gap:7px">
-                <input class="inp" style="flex:1;margin:0" type="text" id="inv-cl-new" placeholder="أو أضف زبون جديد...">
-                <button class="btn-sm" onclick="quickCl()">➕</button>
-              </div>
-            </div>
-            <div class="card">
-              <div class="lbl">② المبلغ الكلي للفاتورة</div>
-              <div class="g2" style="margin-bottom:8px">
-                <div>
-                  <div class="lbl">💵 دولار $</div>
-                  <input class="inp" style="margin:0;font-size:1.2rem;font-weight:700;text-align:center" type="number" id="inv-d" placeholder="0" inputmode="decimal" oninput="syncAmt('d')">
-                </div>
-                <div>
-                  <div class="lbl">💴 دينار د.ع</div>
-                  <input class="inp" style="margin:0;font-size:1.2rem;font-weight:700;text-align:center" type="number" id="inv-iq" placeholder="0" inputmode="decimal" oninput="syncAmt('iq')">
-                </div>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bll);border-radius:9px;padding:9px 11px;font-size:0.78rem">
-                <span style="color:var(--mt);font-family:Tajawal">سعر الصرف:</span>
-                <div style="display:flex;gap:5px;align-items:center">
-                  <input type="number" id="exrate" value="1520" style="width:68px;padding:5px 7px;border:1.5px solid var(--bm);border-radius:7px;font-family:Cairo;font-size:0.8rem;outline:none;background:white;text-align:center" onchange="S.exrate=parseFloat(this.value)||1520;save()">
-                  <span style="color:var(--mt);font-family:Tajawal">د.ع/$</span>
-                </div>
-              </div>
-            </div>
+<!-- ══════════ ACC: تسجيل مصروف ══════════ -->
+<div class="screen" id="sc-exp">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">📤 تسجيل مصروف</div></div>
+  </div>
+  <div class="body">
+    <div class="sc exp"><div class="sl exp">📤 مصروف اليوم</div><div class="sa exp" id="ex-today">$0</div></div>
+    <div class="card" style="border:2px solid #EF9A9A">
+      <div class="ct" style="color:var(--rd)">➕ مصروف جديد</div>
+      <div class="lbl">البند</div>
+      <select class="sel" id="ex-cat">
+        <option value="shipping">🚢 شحن بحري</option><option value="customs">🏛 جمارك ورسوم</option>
+        <option value="transport">🚚 نقل داخلي</option><option value="salary">👷 رواتب وأجور</option>
+        <option value="rent">🏠 إيجار</option><option value="ads">📢 ترويج وإعلانات</option>
+        <option value="maint">🔧 صيانة</option><option value="loan">💸 سلفة / تمويل</option>
+        <option value="other">📌 متفرقات</option>
+      </select>
+      <div class="lbl">التفاصيل</div>
+      <input class="inp" type="text" id="ex-desc" placeholder="تفاصيل المصروف...">
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">💵 دولار $</div><input class="inp" style="margin:0" type="number" id="ex-d" placeholder="0" inputmode="decimal" oninput="sync2('ex-d','ex-iq','d')"></div>
+        <div><div class="lbl">💴 دينار د.ع</div><input class="inp" style="margin:0" type="number" id="ex-iq" placeholder="0" inputmode="decimal" oninput="sync2('ex-d','ex-iq','iq')"></div>
+      </div>
+      <div class="lbl">التاريخ</div>
+      <input class="inp" type="date" id="ex-date">
+      <div class="lbl">📷 صورة الإيصال / الفاتورة (إجباري)</div>
+      <div id="ex-photo-zone" onclick="document.getElementById('ex-photo-inp').click()" style="border:2px dashed #EF9A9A;border-radius:11px;padding:16px;text-align:center;cursor:pointer;margin-bottom:8px;background:var(--rl)">
+        <img id="ex-photo-preview" style="display:none;max-width:100%;max-height:120px;border-radius:8px;object-fit:cover;margin:0 auto 8px">
+        <div id="ex-photo-placeholder"><div style="font-size:1.8rem;margin-bottom:4px">📷</div><div style="font-size:0.82rem;font-weight:700;color:var(--rd)">اضغط لتصوير الإيصال</div></div>
+        <input type="file" id="ex-photo-inp" accept="image/*" capture="environment" style="display:none" onchange="takePhoto('ex',this)">
+      </div>
+      <button class="btn" style="background:var(--rd)" onclick="saveEx()">💾 تسجيل المصروف</button>
+    </div>
+    <div class="card">
+      <div class="ct">📋 آخر المصروفات</div>
+      <div id="ex-list"><div class="empty">لا توجد مصروفات بعد</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ACC: فاتورة بيع ══════════ -->
+<div class="screen" id="sc-inv">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">🧾 فاتورة بيع</div></div>
+  </div>
+  <div class="body">
+    <div class="card">
+      <div class="lbl">① الزبون</div>
+      <select class="sel" id="inv-cl" style="font-weight:700"><option value="">-- اختر زبون --</option></select>
+      <div style="display:flex;gap:7px">
+        <input class="inp" style="flex:1;margin:0" type="text" id="inv-cl-new" placeholder="أو أضف زبون جديد...">
+        <button class="btn-sm" onclick="quickCl()">➕</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl">② المبلغ الكلي</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">💵 دولار $</div><input class="inp" style="margin:0;font-size:1.1rem;font-weight:700;text-align:center" type="number" id="inv-d" placeholder="0" inputmode="decimal" oninput="sync2('inv-d','inv-iq','d');calcRem()"></div>
+        <div><div class="lbl">💴 دينار د.ع</div><input class="inp" style="margin:0;font-size:1.1rem;font-weight:700;text-align:center" type="number" id="inv-iq" placeholder="0" inputmode="decimal" oninput="sync2('inv-d','inv-iq','iq');calcRem()"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl">③ تفاصيل الفاتورة</div>
+      <textarea class="inp" id="inv-det" rows="3" placeholder="مثال: رافكس 2 ألف + منفكس 500 + كابينو..." style="resize:none;line-height:1.5"></textarea>
+      <div class="lbl">التاريخ</div>
+      <input class="inp" type="date" id="inv-date">
+    </div>
+    <div class="card">
+      <div class="lbl">④ طريقة الدفع</div>
+      <div class="g3" style="margin-bottom:10px">
+        <button class="tt on" id="pay-cash" onclick="setPay('cash')">💵 نقد</button>
+        <button class="tt" id="pay-part" onclick="setPay('part')">💳 جزء</button>
+        <button class="tt" id="pay-ajal" onclick="setPay('ajal')">📅 آجل</button>
+      </div>
+      <div id="div-part" style="display:none">
+        <div class="lbl">المبلغ المدفوع الآن $</div>
+        <input class="inp" type="number" id="paid-d" placeholder="0" inputmode="decimal" oninput="calcRem()">
+        <div id="rem-box" style="background:var(--rl);border-radius:9px;padding:10px;margin-bottom:8px;display:none">
+          <div style="display:flex;justify-content:space-between;font-size:0.86rem">
+            <span style="color:var(--rd);font-weight:700">⏳ المتبقي (دين على الزبون)</span>
+            <span id="rem-d" style="color:var(--rd);font-weight:900">$0</span>
           </div>
-          <div>
-            <div class="card">
-              <div class="lbl">③ تفاصيل الفاتورة</div>
-              <textarea class="inp" id="inv-det" rows="3" placeholder="مثال: رافكس 2 ألف + منفكس 500 + كابينو..." style="resize:none;line-height:1.5"></textarea>
-              <input class="inp" type="date" id="inv-date">
-            </div>
-            <div class="card">
-              <div class="lbl">④ طريقة الدفع</div>
-              <div class="g3" style="margin-bottom:10px">
-                <button class="tt on" id="pay-cash" onclick="setPay('cash')">💵 نقد</button>
-                <button class="tt" id="pay-part" onclick="setPay('part')">💳 جزء</button>
-                <button class="tt" id="pay-ajal" onclick="setPay('ajal')">📅 آجل</button>
-              </div>
-              <div id="div-part" style="display:none">
-                <div class="lbl">المبلغ المدفوع الآن $</div>
-                <input class="inp" type="number" id="paid-d" placeholder="0" inputmode="decimal" oninput="calcRem()">
-                <div id="rem-box" style="background:var(--rl);border-radius:9px;padding:10px;margin-bottom:8px;display:none">
-                  <div style="display:flex;justify-content:space-between;font-size:0.86rem">
-                    <span style="color:var(--rd);font-weight:700">⏳ المتبقي (دين)</span>
-                    <span id="rem-d" style="color:var(--rd);font-weight:900">$0</span>
-                  </div>
-                  <div id="rem-iq" style="font-size:0.68rem;color:var(--rd);text-align:left;margin-top:2px">0 د.ع</div>
-                </div>
-              </div>
-              <div id="div-ajal" style="display:none">
-                <div style="background:var(--rl);border-radius:9px;padding:10px;text-align:center;margin-bottom:8px">
-                  <span style="font-size:0.82rem;color:var(--rd);font-weight:700">📅 كل المبلغ دين على الزبون</span>
-                </div>
-              </div>
-              <button class="btn" style="background:var(--gn)" onclick="saveInv()">🧾 حفظ وطباعة الفاتورة</button>
-            </div>
-          </div>
+          <div id="rem-iq" style="font-size:0.68rem;color:var(--rd);text-align:left;margin-top:2px">0 د.ع</div>
         </div>
       </div>
+      <div id="div-ajal" style="display:none">
+        <div style="background:var(--rl);border-radius:9px;padding:10px;text-align:center;margin-bottom:8px">
+          <span style="font-size:0.82rem;color:var(--rd);font-weight:700">📅 كل المبلغ سيُسجل ديناً على الزبون</span>
+        </div>
+      </div>
+      <button class="btn" style="background:var(--gn)" onclick="saveInv()">🧾 حفظ وطباعة الفاتورة</button>
+    </div>
+  </div>
+</div>
 
-      <!-- PAGE: مصروف -->
-      <div class="pg" id="pg-exp">
-        <div class="pt">📤 تسجيل مصروف</div>
+
+<!-- ══════════ ACC: جرد المستلمات ══════════ -->
+<div class="screen" id="sc-rep-rv">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">📥 جرد المستلمات</div></div>
+    <button class="btn-prt" style="margin:0" onclick="printRep('rv')">🖨️</button>
+  </div>
+  <div class="body">
+    <div class="sc inc"><div class="sl inc">📥 إجمالي المستلمات</div><div class="sa inc" id="arv-tot">$0</div></div>
+    <div class="card">
+      <div class="ct">فلتر بالتاريخ</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">من</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="arv-from" onchange="rAccRepRv()"></div>
+        <div><div class="lbl">إلى</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="arv-to" onchange="rAccRepRv()"></div>
+      </div>
+      <div id="arv-list"><div class="empty">لا توجد مستلمات</div></div>
+      <div id="arv-sub" style="font-weight:700;color:var(--gn);text-align:left;padding:8px 0;border-top:2px solid var(--br);margin-top:5px;display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ACC: جرد المصروفات ══════════ -->
+<div class="screen" id="sc-rep-ex">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">📤 جرد المصروفات</div></div>
+    <button class="btn-prt" style="margin:0" onclick="printRep('ex')">🖨️</button>
+  </div>
+  <div class="body">
+    <div class="sc exp"><div class="sl exp">📤 إجمالي المصروفات</div><div class="sa exp" id="aex-tot">$0</div></div>
+    <div class="card">
+      <div class="ct">فلتر بالتاريخ</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">من</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="aex-from" onchange="rAccRepEx()"></div>
+        <div><div class="lbl">إلى</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="aex-to" onchange="rAccRepEx()"></div>
+      </div>
+      <div id="aex-list"><div class="empty">لا توجد مصروفات</div></div>
+      <div id="aex-sub" style="font-weight:700;color:var(--rd);text-align:left;padding:8px 0;border-top:2px solid var(--br);margin-top:5px;display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ACC: جرد الزبائن ══════════ -->
+<div class="screen" id="sc-rep-cl">
+  <div class="hdr">
+    <button class="hdr-back" onclick="back('sc-acc-home')">→</button>
+    <div style="flex:1"><div class="hdr-title">👥 جرد الزبائن والديون</div></div>
+    <button class="btn-prt" style="margin:0" onclick="printRep('cl')">🖨️</button>
+  </div>
+  <div class="body">
+    <div class="sc warn"><div class="sl warn">💳 إجمالي الديون</div><div class="sa warn" id="acl-tot">$0</div></div>
+    <div class="card">
+      <div class="ct">كشف ديون الزبائن</div>
+      <div id="acl-list"><div class="empty">لا توجد ديون</div></div>
+    </div>
+    <div class="card">
+      <div class="ct">🧾 الفواتير</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><div class="lbl">من</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="ainv-from" onchange="rAccRepCl()"></div>
+        <div><div class="lbl">إلى</div><input class="inp" style="margin:0;font-size:0.78rem" type="date" id="ainv-to" onchange="rAccRepCl()"></div>
+      </div>
+      <div id="ainv-list"><div class="empty">لا توجد فواتير</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MANAGER SCREEN ══════════ -->
+<div class="screen" id="sc-mgr">
+  <div class="hdr">
+    <div style="flex:1"><div class="hdr-title">🏭 الاتحاد للمكائن</div><div class="hdr-sub">📊 مدير مالي</div></div>
+    <button class="hdr-logout" onclick="logout()">خروج 🔓</button>
+  </div>
+  <div class="mgr-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-item on" id="sb-dash" onclick="mgrPg('dash',this)"><span class="si">🏠</span>الرئيسية</div>
+      <div class="sb-sep"></div>
+      <div class="sb-item" id="sb-inv" onclick="mgrPg('inv',this)"><span class="si">🧾</span>فاتورة بيع</div>
+      <div class="sb-item" id="sb-cl" onclick="mgrPg('cl',this)"><span class="si">👥</span>الزبائن</div>
+      <div class="sb-sep"></div>
+      <div class="sb-item" id="sb-rep-rv" onclick="mgrPg('rep-rv',this)"><span class="si">📥</span>جرد المستلمات</div>
+      <div class="sb-item" id="sb-rep-ex" onclick="mgrPg('rep-ex',this)"><span class="si">📤</span>جرد المصروفات</div>
+      <div class="sb-item" id="sb-rep-cl" onclick="mgrPg('rep-cl',this)"><span class="si">💳</span>جرد الزبائن</div>
+    </div>
+    <!-- CONTENT -->
+    <div class="mgr-content">
+
+      <!-- الرئيسية -->
+      <div class="mgr-pg on" id="mpg-dash">
+        <div class="pt">🏠 نظرة عامة</div>
         <div class="g2">
-          <div class="sc exp"><div class="sl exp">📤 اليوم</div><div class="sa exp" id="ex-today">$0</div></div>
-          <div class="sc warn"><div class="sl warn">📊 الإجمالي</div><div class="sa warn" id="ex-tot">$0</div></div>
+          <div class="sc inc"><div class="sl inc">📥 إجمالي مستلم</div><div class="sa inc" id="d-rv">$0</div></div>
+          <div class="sc exp"><div class="sl exp">📤 إجمالي مصروف</div><div class="sa exp" id="d-ex">$0</div></div>
         </div>
-        <div class="d-grid2">
-          <div class="card">
-            <div class="ct">➕ مصروف جديد</div>
-            <div class="lbl">البند</div>
-            <select class="sel" id="ex-cat">
-              <option value="shipping">🚢 شحن بحري</option>
-              <option value="customs">🏛 جمارك ورسوم</option>
-              <option value="transport">🚚 نقل داخلي</option>
-              <option value="salary">👷 رواتب وأجور</option>
-              <option value="rent">🏠 إيجار</option>
-              <option value="ads">📢 ترويج وإعلانات</option>
-              <option value="maint">🔧 صيانة</option>
-              <option value="loan">💸 سلفة / تمويل</option>
-              <option value="other">📌 متفرقات</option>
-            </select>
-            <div class="lbl">التفاصيل</div>
-            <input class="inp" type="text" id="ex-desc" placeholder="تفاصيل المصروف...">
-            <div class="g2" style="margin-bottom:8px">
-              <div><div class="lbl">المبلغ $</div><input class="inp" style="margin:0" type="number" id="ex-d" placeholder="دولار" inputmode="decimal" oninput="sxSync('d')"></div>
-              <div><div class="lbl">المبلغ د.ع</div><input class="inp" style="margin:0" type="number" id="ex-iq" placeholder="دينار" inputmode="decimal" oninput="sxSync('iq')"></div>
-            </div>
-            <input class="inp" type="date" id="ex-date">
-            <button class="btn" style="background:var(--rd)" onclick="saveEx()">💾 تسجيل المصروف</button>
-          </div>
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-              <div class="ct" style="margin:0">📋 سجل المصروفات</div>
-              <button class="btn-prt" onclick="printEx()">🖨️ طباعة</button>
-            </div>
-            <div class="g2" style="margin-bottom:7px">
-              <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="exf-from">
-              <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="exf-to">
-            </div>
-            <div id="ex-list"><div class="empty">لا توجد مصروفات بعد</div></div>
-            <div id="ex-tot-lbl" style="font-weight:700;color:var(--rd);text-align:left;padding:8px 0;border-top:2px solid var(--br);margin-top:5px;display:none"></div>
+        <div class="g2">
+          <div class="sc warn"><div class="sl warn">💳 ديون الزبائن</div><div class="sa warn" id="d-debt">$0</div></div>
+          <div class="sc net"><div class="sl net">💎 صافي</div><div class="sa net" id="d-net">$0</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">📊 سعر الصرف</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="number" id="exrate" value="1520" style="flex:1;padding:10px;border:1.5px solid var(--bm);border-radius:9px;font-family:Cairo;font-size:0.9rem;outline:none;background:var(--bg);text-align:center" onchange="S.exrate=parseFloat(this.value)||1520;save()">
+            <span style="color:var(--mt);font-family:Tajawal;font-size:0.82rem">د.ع / $</span>
           </div>
         </div>
       </div>
 
-      <!-- PAGE: زبائن -->
-      <div class="pg" id="pg-cl">
+      <!-- فاتورة - داخل MGR -->
+      <div class="mgr-pg" id="mpg-inv">
+        <div class="pt">🧾 فاتورة بيع</div>
+        <div class="card">
+          <div class="lbl">① الزبون</div>
+          <select class="sel" id="m-inv-cl" style="font-weight:700"><option value="">-- اختر زبون --</option></select>
+          <div style="display:flex;gap:7px"><input class="inp" style="flex:1;margin:0" type="text" id="m-inv-cl-new" placeholder="أو أضف زبون جديد..."><button class="btn-sm" onclick="mQuickCl()">➕</button></div>
+        </div>
+        <div class="card">
+          <div class="lbl">② المبلغ الكلي</div>
+          <div class="g2" style="margin-bottom:8px">
+            <div><div class="lbl">💵 دولار $</div><input class="inp" style="margin:0;font-size:1.1rem;font-weight:700;text-align:center" type="number" id="m-inv-d" placeholder="0" inputmode="decimal" oninput="sync2('m-inv-d','m-inv-iq','d');mCalcRem()"></div>
+            <div><div class="lbl">💴 دينار د.ع</div><input class="inp" style="margin:0;font-size:1.1rem;font-weight:700;text-align:center" type="number" id="m-inv-iq" placeholder="0" inputmode="decimal" oninput="sync2('m-inv-d','m-inv-iq','iq');mCalcRem()"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="lbl">③ تفاصيل الفاتورة</div>
+          <textarea class="inp" id="m-inv-det" rows="3" placeholder="مثال: رافكس 2 ألف + منفكس 500..." style="resize:none;line-height:1.5"></textarea>
+          <div class="lbl">التاريخ</div>
+          <input class="inp" type="date" id="m-inv-date">
+        </div>
+        <div class="card">
+          <div class="lbl">④ طريقة الدفع</div>
+          <div class="g3" style="margin-bottom:10px">
+            <button class="tt on" id="m-pay-cash" onclick="mSetPay('cash')">💵 نقد</button>
+            <button class="tt" id="m-pay-part" onclick="mSetPay('part')">💳 جزء</button>
+            <button class="tt" id="m-pay-ajal" onclick="mSetPay('ajal')">📅 آجل</button>
+          </div>
+          <div id="m-div-part" style="display:none">
+            <div class="lbl">المبلغ المدفوع الآن $</div>
+            <input class="inp" type="number" id="m-paid-d" placeholder="0" inputmode="decimal" oninput="mCalcRem()">
+            <div id="m-rem-box" style="background:var(--rl);border-radius:9px;padding:10px;margin-bottom:8px;display:none">
+              <div style="display:flex;justify-content:space-between;font-size:0.86rem">
+                <span style="color:var(--rd);font-weight:700">⏳ المتبقي (دين)</span>
+                <span id="m-rem-d" style="color:var(--rd);font-weight:900">$0</span>
+              </div>
+            </div>
+          </div>
+          <div id="m-div-ajal" style="display:none"><div style="background:var(--rl);border-radius:9px;padding:10px;text-align:center;margin-bottom:8px"><span style="font-size:0.82rem;color:var(--rd);font-weight:700">📅 كل المبلغ دين على الزبون</span></div></div>
+          <button class="btn" style="background:var(--gn)" onclick="mSaveInv()">🧾 حفظ وطباعة الفاتورة</button>
+        </div>
+      </div>
+
+      <!-- الزبائن -->
+      <div class="mgr-pg" id="mpg-cl">
         <div class="pt">👥 الزبائن</div>
         <div class="g2" style="margin-bottom:11px">
           <div class="sc info"><div class="sl info">💰 إجمالي الديون</div><div class="sa info" id="cl-tot">$0</div></div>
-          <div class="sc inc"><div class="sl inc">👥 الزبائن</div><div class="sa inc" id="cl-cnt">0</div></div>
+          <div class="sc inc"><div class="sl inc">👥 العدد</div><div class="sa inc" id="cl-cnt">0</div></div>
         </div>
-        <div class="d-grid2">
-          <div class="card">
-            <div class="ct">➕ زبون جديد</div>
-            <input class="inp" type="text" id="cl-name" placeholder="اسم الزبون *">
-            <input class="inp" type="tel" id="cl-phone" placeholder="📞 رقم الموبايل">
-            <input class="inp" type="text" id="cl-co" placeholder="🏭 الورشة / الشركة">
-            <input class="inp" type="text" id="cl-addr" placeholder="📍 المنطقة / العنوان">
-            <button class="btn" onclick="addCl()">💾 إضافة الزبون</button>
-          </div>
-          <div class="card">
-            <div class="ct">📋 قائمة الزبائن</div>
-            <input class="inp" type="text" id="cl-srch" placeholder="🔍 ابحث..." oninput="rCl()">
-            <div id="cl-list"><div class="empty">لا توجد زبائن بعد</div></div>
-          </div>
+        <div class="card">
+          <div class="ct">➕ زبون جديد</div>
+          <input class="inp" type="text" id="cl-name" placeholder="اسم الزبون *">
+          <input class="inp" type="tel" id="cl-phone" placeholder="📞 رقم الموبايل">
+          <input class="inp" type="text" id="cl-co" placeholder="🏭 الورشة / الشركة">
+          <input class="inp" type="text" id="cl-addr" placeholder="📍 المنطقة / العنوان">
+          <button class="btn" onclick="addCl()">💾 إضافة الزبون</button>
+        </div>
+        <div class="card">
+          <div class="ct">📋 قائمة الزبائن</div>
+          <input class="inp" type="text" id="cl-srch" placeholder="🔍 ابحث..." oninput="rCl()">
+          <div id="cl-list"><div class="empty">لا توجد زبائن بعد</div></div>
         </div>
       </div>
 
-      <!-- PAGE: جرد -->
-      <div class="pg" id="pg-rep">
-        <div class="pt">📊 الجرد والتقارير</div>
-        <div class="g2" style="margin-bottom:0">
-          <div class="sc inc"><div class="sl inc">🧾 فواتير</div><div class="sa inc" id="rep-inv">$0</div></div>
-          <div class="sc exp"><div class="sl exp">📤 مصروفات</div><div class="sa exp" id="rep-ex">$0</div></div>
-        </div>
-        <div class="g2" style="margin-bottom:11px">
-          <div class="sc warn"><div class="sl warn">💳 ديون</div><div class="sa warn" id="rep-debt">$0</div></div>
-          <div class="sc net"><div class="sl net">💎 صافي</div><div class="sa net" id="rep-net">$0</div></div>
-        </div>
-        <div class="d-grid2">
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-              <div class="ct" style="margin:0">🧾 جرد الفواتير</div>
-              <button class="btn-prt" onclick="printRep('inv')">🖨️ طباعة</button>
-            </div>
-            <div class="g2" style="margin-bottom:7px">
-              <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="repf-from">
-              <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="repf-to">
-            </div>
-            <div id="rep-inv-list"></div>
+      <!-- جرد المستلمات -->
+      <div class="mgr-pg" id="mpg-rep-rv">
+        <div class="pt">📥 جرد المستلمات</div>
+        <div class="sc inc" style="margin-bottom:11px"><div class="sl inc">📥 إجمالي المستلمات</div><div class="sa inc" id="rrv-tot">$0</div></div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <div class="ct" style="margin:0">فلتر بالتاريخ</div>
+            <button class="btn-prt" onclick="printRep('rv')">🖨️ طباعة</button>
           </div>
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-              <div class="ct" style="margin:0">💳 ديون الزبائن</div>
-              <button class="btn-prt" onclick="printRep('debt')">🖨️ طباعة</button>
-            </div>
-            <div id="rep-debt-list"></div>
+          <div class="g2" style="margin-bottom:7px">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rrv-from">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rrv-to">
           </div>
+          <div id="rrv-list"></div>
+          <div id="rrv-sub" style="font-weight:700;color:var(--gn);text-align:left;padding:8px 0;border-top:2px solid var(--br);margin-top:5px;display:none"></div>
         </div>
       </div>
 
-    </div><!-- /main-content -->
-  </div><!-- /app-body -->
+      <!-- جرد المصروفات -->
+      <div class="mgr-pg" id="mpg-rep-ex">
+        <div class="pt">📤 جرد المصروفات</div>
+        <div class="sc exp" style="margin-bottom:11px"><div class="sl exp">📤 إجمالي المصروفات</div><div class="sa exp" id="rex-tot">$0</div></div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <div class="ct" style="margin:0">فلتر بالتاريخ</div>
+            <button class="btn-prt" onclick="printRep('ex')">🖨️ طباعة</button>
+          </div>
+          <div class="g2" style="margin-bottom:7px">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rex-from">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rex-to">
+          </div>
+          <div id="rex-list"></div>
+          <div id="rex-sub" style="font-weight:700;color:var(--rd);text-align:left;padding:8px 0;border-top:2px solid var(--br);margin-top:5px;display:none"></div>
+        </div>
+      </div>
 
-  <!-- MOBILE BOTTOM NAV -->
-  <nav class="bnav" id="bnav">
-    <button class="bb on" id="mb-inv" onclick="showPg('inv',this)"><span class="ni">🧾</span>فاتورة</button>
-    <button class="bb" id="mb-exp" onclick="showPg('exp',this)"><span class="ni">📤</span>مصروف</button>
-    <button class="bb mgr-only" id="mb-cl" onclick="showPg('cl',this)"><span class="ni">👥</span>زبائن</button>
-    <button class="bb mgr-only" id="mb-rep" onclick="showPg('rep',this)"><span class="ni">📊</span>جرد</button>
-  </nav>
-</div><!-- /app -->
+      <!-- جرد الزبائن / الديون -->
+      <div class="mgr-pg" id="mpg-rep-cl">
+        <div class="pt">💳 جرد الزبائن والديون</div>
+        <div class="sc warn" style="margin-bottom:11px"><div class="sl warn">💳 إجمالي الديون</div><div class="sa warn" id="rcl-tot">$0</div></div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <div class="ct" style="margin:0">كشف الديون</div>
+            <button class="btn-prt" onclick="printRep('cl')">🖨️ طباعة</button>
+          </div>
+          <div id="rcl-list"></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <div class="ct" style="margin:0">🧾 الفواتير</div>
+            <button class="btn-prt" onclick="printRep('inv')">🖨️ طباعة</button>
+          </div>
+          <div class="g2" style="margin-bottom:7px">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rinv-from">
+            <input class="inp" style="margin:0;font-size:0.76rem" type="date" id="rinv-to">
+          </div>
+          <div id="rinv-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /mgr-content -->
+  </div><!-- /mgr-layout -->
+</div><!-- /sc-mgr -->
 
 <!-- MODAL: تفاصيل زبون -->
 <div class="modal" id="cl-modal"><div class="mbox" id="cl-modal-body"></div></div>
-
 <!-- MODAL: تعديل زبون -->
 <div class="modal" id="edit-modal">
   <div class="mbox">
@@ -371,180 +553,293 @@ html,body{height:100%;font-family:'Cairo',sans-serif;background:var(--bg);color:
 <div class="toast" id="toast"></div>
 
 <script>
-var S = JSON.parse(localStorage.getItem('acc_v7') || '{}');
-if(!S.clients)  S.clients  = [];
-if(!S.invoices) S.invoices = [];
-if(!S.expenses) S.expenses = [];
-if(!S.exrate)   S.exrate   = 1520;
+var S=JSON.parse(localStorage.getItem('acc_v8')||'{}');
+if(!S.clients)  S.clients=[];
+if(!S.invoices) S.invoices=[];
+if(!S.recv)     S.recv=[];
+if(!S.expenses) S.expenses=[];
+if(!S.exrate)   S.exrate=1520;
 
-var dk  = new Date().toISOString().split('T')[0];
-var _role = null; // 'acc' or 'mgr'
-var _pay  = 'cash';
-var _editId = null;
-var _clTxType = 'dr';
-var PINS = { acc:'1234', mgr:'123456' };
+var dk=new Date().toISOString().split('T')[0];
+var _role=null,_pay='cash',_mPay='cash',_editId=null,_clTxType='dr';
+var _rvPhoto=false,_exPhoto=false;
+var PINS={acc:'1234',mgr:'123456'};
+var _selRole='acc';
 
-// ===== UTILS =====
-function rate(){ return S.exrate||1520; }
-function toD(iq){ return iq/rate(); }
-function toIQ(d){ return d*rate(); }
-function fD(v){ return '$'+Math.round(v).toLocaleString(); }
-function fIQ(v){ return Math.round(v).toLocaleString()+' د.ع'; }
-function gel(id){ return document.getElementById(id); }
-function gval(id){ var e=gel(id); return e?e.value:''; }
-function sval(id,v){ var e=gel(id); if(e) e.value=v; }
-function stxt(id,v){ var e=gel(id); if(e) e.textContent=v; }
-function gnum(id){ return parseFloat(gval(id))||0; }
-function save(){ localStorage.setItem('acc_v7',JSON.stringify(S)); }
+function rate(){return S.exrate||1520;}
+function toD(iq){return iq/rate();}
+function toIQ(d){return d*rate();}
+function fD(v){return '$'+Math.round(v).toLocaleString();}
+function fIQ(v){return Math.round(v).toLocaleString()+' د.ع';}
+function gel(id){return document.getElementById(id);}
+function gval(id){var e=gel(id);return e?e.value:'';}
+function sval(id,v){var e=gel(id);if(e)e.value=v;}
+function stxt(id,v){var e=gel(id);if(e)e.textContent=v;}
+function gnum(id){return parseFloat(gval(id))||0;}
+function save(){localStorage.setItem('acc_v8',JSON.stringify(S));}
 function toast(msg,err){
-  var t=gel('toast'); if(!t)return;
-  t.textContent=msg; t.style.background=err?'var(--rd)':'var(--bl)';
+  var t=gel('toast');if(!t)return;
+  t.textContent=msg;t.style.background=err?'var(--rd)':'var(--bl)';
   t.classList.remove('on');
-  setTimeout(function(){ t.classList.add('on'); },10);
-  setTimeout(function(){ t.classList.remove('on'); },2700);
+  setTimeout(function(){t.classList.add('on');},10);
+  setTimeout(function(){t.classList.remove('on');},2700);
 }
-function closeMod(){ document.querySelectorAll('.modal').forEach(function(m){ m.classList.remove('on'); }); }
+function closeMod(){document.querySelectorAll('.modal').forEach(function(m){m.classList.remove('on');});}
+document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeMod();});});
 
-// ===== LOGIN =====
-var _selRole = 'acc';
-function setRole(r){
+function sync2(did,iqid,src){
+  var d=gnum(did),iq=gnum(iqid);
+  if(src==='d'&&d>0)sval(iqid,Math.round(d*rate()));
+  if(src==='iq'&&iq>0)sval(did,(iq/rate()).toFixed(2));
+}
+
+// ── SCREENS ──
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+  var s=gel(id);if(s)s.classList.add('on');
+}
+function go(id){
+  showScreen(id);
+  if(id==='sc-rep-rv') rAccRepRv();
+  if(id==='sc-rep-ex') rAccRepEx();
+  if(id==='sc-rep-cl') rAccRepCl();
+}
+function back(id){showScreen(id);}
+function logout(){_role=null;showScreen('sc-login');sval('pin','');}
+
+// ── LOGIN ──
+function selRole(r){
   _selRole=r;
-  gel('role-acc').className='role-btn'+(r==='acc'?' on':'');
-  gel('role-mgr').className='role-btn'+(r==='mgr'?' on':'');
-  sval('pin-inp','');
-  gel('pin-inp').classList.remove('err');
+  gel('r-acc').className='role-btn'+(r==='acc'?' on':'');
+  gel('r-mgr').className='role-btn'+(r==='mgr'?' on':'');
+  sval('pin','');
 }
-
 function doLogin(){
-  var pin = gval('pin-inp');
-  if(pin !== PINS[_selRole]){
-    gel('pin-inp').classList.add('err');
-    setTimeout(function(){ gel('pin-inp').classList.remove('err'); sval('pin-inp',''); },800);
-    toast('⚠️ الباسورد غير صحيح',true);
-    return;
+  var pin=gval('pin');
+  if(pin!==PINS[_selRole]){
+    var pf=gel('pin');pf.classList.add('err');
+    setTimeout(function(){pf.classList.remove('err');sval('pin','');},600);
+    toast('⚠️ الباسورد غير صحيح',true);return;
   }
-  _role = _selRole;
-  gel('login-screen').style.display='none';
-  gel('app').style.display='block';
-  setupRole();
-  initApp();
-}
-
-function setupRole(){
-  var isMgr = _role==='mgr';
-  var isDesktop = window.innerWidth >= 768;
-
-  // Header label
-  stxt('role-label', isMgr?'🏆 مدير مالي':'📋 محاسب');
-
-  // Show/hide mgr-only elements
-  document.querySelectorAll('.mgr-only').forEach(function(el){
-    el.style.display = isMgr ? '' : 'none';
-  });
-
-  // Sidebar only on desktop
-  var sb = gel('sidebar');
-  if(sb) sb.className = 'sidebar' + (isDesktop?' show':'');
-
-  // Bottom nav only on mobile
-  var bn = gel('bnav');
-  if(bn) bn.className = 'bnav' + (!isDesktop?' show':'');
-
-  // Sidebar mgr items
-  var div_mgr = gel('sb-div-mgr');
-  var sb_cl = gel('sb-cl');
-  var sb_rep = gel('sb-rep');
-  if(!isMgr){
-    if(div_mgr) div_mgr.style.display='none';
-    if(sb_cl)  sb_cl.style.display='none';
-    if(sb_rep) sb_rep.style.display='none';
+  _role=_selRole;
+  if(_role==='acc'){
+    showScreen('sc-acc-home');
+    sval('rv-date',dk);sval('ex-date',dk);sval('inv-date',dk);
+    rRvList();rExList();fillSel();
+  } else {
+    showScreen('sc-mgr');
+    sval('m-inv-date',dk);sval('exrate',S.exrate);
+    fillSel();rCl();rDash();rRepRv();rRepEx();rRepCl();
   }
 }
+gel('pin').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 
-function logout(){
-  _role=null;
-  gel('app').style.display='none';
-  gel('login-screen').style.display='flex';
-  sval('pin-inp','');
+// ── MGR PAGES ──
+function mgrPg(id,btn){
+  document.querySelectorAll('.mgr-pg').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.sb-item').forEach(function(b){b.classList.remove('on');});
+  var pg=gel('mpg-'+id);if(pg)pg.classList.add('on');
+  if(btn)btn.classList.add('on');
+  if(id==='rep-rv')rRepRv();
+  if(id==='rep-ex')rRepEx();
+  if(id==='rep-cl')rRepCl();
+  if(id==='dash')rDash();
+  if(id==='cl')rCl();
 }
 
-// ===== NAVIGATION =====
-function showPg(id, btn){
-  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
-  // Clear all nav active states
-  document.querySelectorAll('.sb-item,.bb').forEach(function(b){ b.classList.remove('on'); });
-  var pg = gel('pg-'+id); if(pg) pg.classList.add('on');
-  // Activate sidebar item
-  var sb = gel('sb-'+id); if(sb) sb.classList.add('on');
-  // Activate mobile nav item
-  var mb = gel('mb-'+id); if(mb) mb.classList.add('on');
-  if(id==='rep') rRep();
-  if(id==='exp') rEx();
-}
-
+// ── FILL SELECTS ──
 function fillSel(){
   var opts='<option value="">-- اختر زبون --</option>'+
-    S.clients.map(function(c){ return '<option value="'+c.id+'">'+(c.name+(c.co?' — '+c.co:''))+'</option>'; }).join('');
-  var s=gel('inv-cl'); if(s) s.innerHTML=opts;
+    S.clients.map(function(c){return '<option value="'+c.id+'">'+(c.name+(c.co?' — '+c.co:''))+'</option>';}).join('');
+  ['inv-cl','m-inv-cl'].forEach(function(id){var s=gel(id);if(s)s.innerHTML=opts;});
 }
 
-// ===== INVOICE =====
-function syncAmt(src){
-  var d=gnum('inv-d'),iq=gnum('inv-iq');
-  if(src==='d'&&d>0) sval('inv-iq',Math.round(d*rate()));
-  if(src==='iq'&&iq>0) sval('inv-d',(iq/rate()).toFixed(2));
-  calcRem();
+// ── PHOTO ──
+function takePhoto(type,input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var prev=gel(type+'-photo-preview'),ph=gel(type+'-photo-placeholder'),zone=gel(type+'-photo-zone');
+    if(prev){prev.src=e.target.result;prev.style.display='block';}
+    if(ph)ph.style.display='none';
+    if(zone)zone.style.borderStyle='solid';
+    if(type==='rv')_rvPhoto=true;
+    if(type==='ex')_exPhoto=true;
+  };
+  reader.readAsDataURL(file);
 }
+function resetPhoto(type){
+  var prev=gel(type+'-photo-preview'),ph=gel(type+'-photo-placeholder'),zone=gel(type+'-photo-zone'),inp=gel(type+'-photo-inp');
+  if(prev){prev.src='';prev.style.display='none';}
+  if(ph)ph.style.display='block';
+  if(zone)zone.style.borderStyle='dashed';
+  if(inp)inp.value='';
+  if(type==='rv')_rvPhoto=false;
+  if(type==='ex')_exPhoto=false;
+}
+
+// ── RECV ──
+function saveRv(){
+  if(!_rvPhoto){toast('📷 صوّر الإيصال أولاً!',true);return;}
+  var from=gval('rv-from').trim();
+  if(!from){toast('⚠️ أدخل المصدر',true);return;}
+  var d=gnum('rv-d'),iq=gnum('rv-iq');
+  var amt=d>0?d:toD(iq),amtIQ=iq>0?iq:toIQ(d);
+  if(!amt){toast('⚠️ أدخل المبلغ',true);return;}
+  S.recv.push({id:Date.now(),from:from,desc:gval('rv-desc'),amt:amt,amtIQ:amtIQ,type:gval('rv-type'),date:gval('rv-date')||dk});
+  ['rv-from','rv-desc','rv-d','rv-iq'].forEach(function(id){sval(id,'');});
+  sval('rv-date',dk);resetPhoto('rv');
+  save();rRvList();rDash();
+  toast('📥 تم تسجيل المستلم!');
+}
+function delRv(id){S.recv=S.recv.filter(function(r){return r.id!==id;});save();rRvList();rDash();rRepRv();}
+function rRvList(){
+  var td=S.recv.filter(function(r){return r.date===dk;}).reduce(function(s,r){return s+r.amt;},0);
+  stxt('rv-today',fD(td));
+  stxt('rv-today-iq',fIQ(S.recv.filter(function(r){return r.date===dk;}).reduce(function(s,r){return s+r.amtIQ;},0)));
+  var el=gel('rv-list');if(!el)return;
+  var tL={cash:'💵 نقد',transfer:'🏦 تحويل',ajal:'📅 آجل',sale:'🏭 بيع'};
+  var list=S.recv.slice().reverse().slice(0,20);
+  el.innerHTML=list.length?list.map(function(r){
+    return '<div class="txr"><div class="txi" style="background:var(--gl)">📥</div>'+
+      '<div style="flex:1"><div style="font-size:0.84rem;font-weight:700;color:var(--gn)">'+r.from+'</div>'+
+      (r.desc?'<div style="font-size:0.7rem;color:var(--mt)">'+r.desc+'</div>':'')+
+      '<div style="font-size:0.67rem;color:var(--mt)">'+(tL[r.type]||r.type)+' | '+r.date+'</div></div>'+
+      '<div style="text-align:left"><div style="font-weight:700;color:var(--gn)">'+fD(r.amt)+'</div>'+
+      '<div style="font-size:0.64rem;color:var(--mt)">'+fIQ(r.amtIQ)+'</div></div>'+
+      '<button class="btn-del" onclick="delRv('+r.id+')">×</button></div>';
+  }).join(''):'<div class="empty">لا توجد مستلمات بعد</div>';
+}
+
+// ── EXP ──
+function saveEx(){
+  if(!_exPhoto){toast('📷 صوّر الإيصال أولاً!',true);return;}
+  var d=gnum('ex-d'),iq=gnum('ex-iq');
+  var amt=d>0?d:toD(iq),amtIQ=iq>0?iq:toIQ(d);
+  if(!amt){toast('⚠️ أدخل المبلغ',true);return;}
+  S.expenses.push({id:Date.now(),cat:gval('ex-cat'),desc:gval('ex-desc'),amt:amt,amtIQ:amtIQ,date:gval('ex-date')||dk});
+  ['ex-desc','ex-d','ex-iq'].forEach(function(id){sval(id,'');});
+  sval('ex-date',dk);resetPhoto('ex');
+  save();rExList();rDash();
+  toast('📤 تم تسجيل المصروف!');
+}
+function delEx(id){S.expenses=S.expenses.filter(function(e){return e.id!==id;});save();rExList();rDash();rRepEx();}
+function rExList(){
+  var td=S.expenses.filter(function(e){return e.date===dk;}).reduce(function(s,e){return s+e.amt;},0);
+  stxt('ex-today',fD(td));
+  var el=gel('ex-list');if(!el)return;
+  var cats={shipping:'🚢',customs:'🏛',transport:'🚚',salary:'👷',rent:'🏠',ads:'📢',maint:'🔧',loan:'💸',other:'📌'};
+  var list=S.expenses.slice().reverse().slice(0,20);
+  el.innerHTML=list.length?list.map(function(e){
+    return '<div class="txr"><div class="txi" style="background:var(--gdl)">'+(cats[e.cat]||'📌')+'</div>'+
+      '<div style="flex:1"><div style="font-size:0.84rem;font-weight:700;color:var(--rd)">'+gval('ex-cat')||e.cat+'</div>'+
+      (e.desc?'<div style="font-size:0.7rem;color:var(--mt)">'+e.desc+'</div>':'')+
+      '<div style="font-size:0.67rem;color:var(--mt)">'+e.date+'</div></div>'+
+      '<div style="text-align:left"><div style="font-weight:700;color:var(--rd)">-'+fD(e.amt)+'</div>'+
+      '<div style="font-size:0.64rem;color:var(--mt)">'+fIQ(e.amtIQ)+'</div></div>'+
+      '<button class="btn-del" onclick="delEx('+e.id+')">×</button></div>';
+  }).join(''):'<div class="empty">لا توجد مصروفات بعد</div>';
+}
+
+// ── INVOICE (ACC) ──
 function setPay(m){
   _pay=m;
   ['cash','part','ajal'].forEach(function(x){
-    var btn=gel('pay-'+x); if(btn) btn.className='tt'+(x===m?' on':'');
-    var div=gel('div-'+x); if(div) div.style.display=x===m?'block':'none';
+    var b=gel('pay-'+x);if(b)b.className='tt'+(x===m?' on':'');
+    var d=gel('div-'+x);if(d)d.style.display=x===m?'block':'none';
   });
   calcRem();
 }
 function calcRem(){
-  if(_pay!=='part') return;
-  var totD=gnum('inv-d'), paidD=gnum('paid-d');
-  var remD=Math.max(0,totD-paidD);
-  var rb=gel('rem-box'); if(rb) rb.style.display=remD>0?'block':'none';
-  stxt('rem-d',fD(remD)); stxt('rem-iq',fIQ(remD*rate()));
+  if(_pay!=='part')return;
+  var totD=gnum('inv-d'),paidD=gnum('paid-d'),remD=Math.max(0,totD-paidD);
+  var rb=gel('rem-box');if(rb)rb.style.display=remD>0?'block':'none';
+  stxt('rem-d',fD(remD));stxt('rem-iq',fIQ(remD*rate()));
 }
 function quickCl(){
   var name=gval('inv-cl-new').trim();
-  if(!name){ toast('⚠️ أدخل اسم الزبون',true); return; }
-  if(S.clients.find(function(c){ return c.name===name; })){ toast('⚠️ الزبون موجود',true); return; }
+  if(!name){toast('⚠️ أدخل اسم الزبون',true);return;}
+  if(S.clients.find(function(c){return c.name===name;})){toast('⚠️ الزبون موجود',true);return;}
   var id=Date.now();
   S.clients.push({id:id,name:name,phone:'',co:'',addr:'',txs:[]});
-  sval('inv-cl-new',''); save(); fillSel(); rCl();
-  sval('inv-cl',String(id));
+  sval('inv-cl-new','');save();fillSel();rCl();sval('inv-cl',String(id));
   toast('👤 تم إضافة الزبون!');
 }
 function saveInv(){
   var clId=parseInt(gval('inv-cl'));
-  if(!clId){ toast('⚠️ اختر الزبون أولاً',true); return; }
+  if(!clId){toast('⚠️ اختر الزبون أولاً',true);return;}
   var totD=gnum('inv-d');
-  if(!totD){ toast('⚠️ أدخل المبلغ',true); return; }
+  if(!totD){toast('⚠️ أدخل المبلغ',true);return;}
   var det=gval('inv-det').trim();
-  if(!det){ toast('⚠️ أدخل تفاصيل الفاتورة',true); return; }
-  var cl=S.clients.find(function(c){ return c.id===clId; }); if(!cl) return;
+  if(!det){toast('⚠️ أدخل تفاصيل الفاتورة',true);return;}
+  var cl=S.clients.find(function(c){return c.id===clId;});if(!cl)return;
   var totIQ=gnum('inv-iq')||Math.round(totD*rate());
   var date=gval('inv-date')||dk;
   var paidD=0,paidIQ=0,remD=0,remIQ=0;
-  if(_pay==='cash'){ paidD=totD; paidIQ=totIQ; }
-  else if(_pay==='ajal'){ remD=totD; remIQ=totIQ; }
-  else { paidD=gnum('paid-d'); paidIQ=Math.round(paidD*rate()); remD=Math.max(0,totD-paidD); remIQ=Math.round(remD*rate()); }
+  if(_pay==='cash'){paidD=totD;paidIQ=totIQ;}
+  else if(_pay==='ajal'){remD=totD;remIQ=totIQ;}
+  else{paidD=gnum('paid-d');paidIQ=Math.round(paidD*rate());remD=Math.max(0,totD-paidD);remIQ=Math.round(remD*rate());}
   var invId=Date.now();
-  var inv={id:invId,clId:clId,clName:cl.name,totD:totD,totIQ:totIQ,paidD:paidD,paidIQ:paidIQ,remD:remD,remIQ:remIQ,pay:_pay,date:date,details:det};
-  S.invoices.push(inv);
+  S.invoices.push({id:invId,clId:clId,clName:cl.name,totD:totD,totIQ:totIQ,paidD:paidD,paidIQ:paidIQ,remD:remD,remIQ:remIQ,pay:_pay,date:date,details:det});
   cl.txs.push({id:invId,type:'dr',desc:'فاتورة: '+det,amt:totD,amtIQ:totIQ,date:date});
-  if(paidD>0) cl.txs.push({id:invId+1,type:'cr',desc:'دفعة نقدية',amt:paidD,amtIQ:paidIQ,date:date});
-  sval('inv-cl',''); sval('inv-d',''); sval('inv-iq',''); sval('inv-det',''); sval('inv-date',dk); sval('paid-d','');
-  var rb=gel('rem-box'); if(rb) rb.style.display='none';
-  save(); rCl(); rRep();
+  if(paidD>0)cl.txs.push({id:invId+1,type:'cr',desc:'دفعة نقدية',amt:paidD,amtIQ:paidIQ,date:date});
+  sval('inv-cl','');sval('inv-d','');sval('inv-iq','');sval('inv-det','');sval('inv-date',dk);sval('paid-d','');
+  var rb=gel('rem-box');if(rb)rb.style.display='none';
+  save();rCl();rDash();
   toast('🧾 تم حفظ الفاتورة!');
-  printInv(inv,cl);
+  printInv(S.invoices[S.invoices.length-1],cl);
 }
+
+// ── INVOICE (MGR) ──
+function mSetPay(m){
+  _mPay=m;
+  ['cash','part','ajal'].forEach(function(x){
+    var b=gel('m-pay-'+x);if(b)b.className='tt'+(x===m?' on':'');
+    var d=gel('m-div-'+x);if(d)d.style.display=x===m?'block':'none';
+  });
+  mCalcRem();
+}
+function mCalcRem(){
+  if(_mPay!=='part')return;
+  var totD=gnum('m-inv-d'),paidD=gnum('m-paid-d'),remD=Math.max(0,totD-paidD);
+  var rb=gel('m-rem-box');if(rb)rb.style.display=remD>0?'block':'none';
+  stxt('m-rem-d',fD(remD));
+}
+function mQuickCl(){
+  var name=gval('m-inv-cl-new').trim();
+  if(!name){toast('⚠️ أدخل اسم الزبون',true);return;}
+  if(S.clients.find(function(c){return c.name===name;})){toast('⚠️ الزبون موجود',true);return;}
+  var id=Date.now();
+  S.clients.push({id:id,name:name,phone:'',co:'',addr:'',txs:[]});
+  sval('m-inv-cl-new','');save();fillSel();rCl();sval('m-inv-cl',String(id));
+  toast('👤 تم إضافة الزبون!');
+}
+function mSaveInv(){
+  var clId=parseInt(gval('m-inv-cl'));
+  if(!clId){toast('⚠️ اختر الزبون أولاً',true);return;}
+  var totD=gnum('m-inv-d');
+  if(!totD){toast('⚠️ أدخل المبلغ',true);return;}
+  var det=gval('m-inv-det').trim();
+  if(!det){toast('⚠️ أدخل تفاصيل الفاتورة',true);return;}
+  var cl=S.clients.find(function(c){return c.id===clId;});if(!cl)return;
+  var totIQ=gnum('m-inv-iq')||Math.round(totD*rate());
+  var date=gval('m-inv-date')||dk;
+  var paidD=0,paidIQ=0,remD=0,remIQ=0;
+  if(_mPay==='cash'){paidD=totD;paidIQ=totIQ;}
+  else if(_mPay==='ajal'){remD=totD;remIQ=totIQ;}
+  else{paidD=gnum('m-paid-d');paidIQ=Math.round(paidD*rate());remD=Math.max(0,totD-paidD);remIQ=Math.round(remD*rate());}
+  var invId=Date.now();
+  S.invoices.push({id:invId,clId:clId,clName:cl.name,totD:totD,totIQ:totIQ,paidD:paidD,paidIQ:paidIQ,remD:remD,remIQ:remIQ,pay:_mPay,date:date,details:det});
+  cl.txs.push({id:invId,type:'dr',desc:'فاتورة: '+det,amt:totD,amtIQ:totIQ,date:date});
+  if(paidD>0)cl.txs.push({id:invId+1,type:'cr',desc:'دفعة نقدية',amt:paidD,amtIQ:paidIQ,date:date});
+  sval('m-inv-cl','');sval('m-inv-d','');sval('m-inv-iq','');sval('m-inv-det','');sval('m-inv-date',dk);sval('m-paid-d','');
+  var rb=gel('m-rem-box');if(rb)rb.style.display='none';
+  save();rCl();rDash();rRepCl();
+  toast('🧾 تم حفظ الفاتورة!');
+  printInv(S.invoices[S.invoices.length-1],cl);
+}
+
+// ── PRINT INVOICE ──
 function printInv(inv,cl){
   var pT=inv.pay==='cash'?'نقد كلياً':inv.pay==='ajal'?'آجل كلياً':'جزء نقد + جزء آجل';
   var html='<div style="font-family:Cairo,Tajawal,sans-serif;padding:24px;direction:rtl;max-width:400px;margin:0 auto">'+
@@ -574,24 +869,24 @@ function printInv(inv,cl){
   w.document.close();
 }
 
-// ===== CLIENTS =====
+// ── CLIENTS ──
 function addCl(){
   var name=gval('cl-name').trim();
-  if(!name){ toast('⚠️ أدخل اسم الزبون',true); return; }
-  if(S.clients.find(function(c){ return c.name===name; })){ toast('⚠️ الزبون موجود',true); return; }
+  if(!name){toast('⚠️ أدخل اسم الزبون',true);return;}
+  if(S.clients.find(function(c){return c.name===name;})){toast('⚠️ الزبون موجود',true);return;}
   S.clients.push({id:Date.now(),name:name,phone:gval('cl-phone'),co:gval('cl-co'),addr:gval('cl-addr'),txs:[]});
-  ['cl-name','cl-phone','cl-co','cl-addr'].forEach(function(id){ sval(id,''); });
-  save(); rCl(); fillSel(); toast('👤 تم إضافة الزبون!');
+  ['cl-name','cl-phone','cl-co','cl-addr'].forEach(function(id){sval(id,'');});
+  save();rCl();fillSel();toast('👤 تم إضافة الزبون!');
 }
 function rCl(){
-  var tot=S.clients.reduce(function(s,c){ var b=c.txs.reduce(function(s2,t){ return s2+(t.type==='dr'?t.amt:-t.amt); },0); return s+(b>0?b:0); },0);
-  stxt('cl-tot',fD(tot)); stxt('cl-cnt',S.clients.length);
-  var el=gel('cl-list'); if(!el)return;
+  var tot=S.clients.reduce(function(s,c){var b=c.txs.reduce(function(s2,t){return s2+(t.type==='dr'?t.amt:-t.amt);},0);return s+(b>0?b:0);},0);
+  stxt('cl-tot',fD(tot));stxt('cl-cnt',S.clients.length);
+  var el=gel('cl-list');if(!el)return;
   var q=gval('cl-srch').toLowerCase();
-  var list=q?S.clients.filter(function(c){ return c.name.toLowerCase().indexOf(q)>=0||(c.co&&c.co.toLowerCase().indexOf(q)>=0); }):S.clients;
-  if(!list.length){ el.innerHTML='<div class="empty">لا توجد زبائن</div>'; return; }
+  var list=q?S.clients.filter(function(c){return c.name.toLowerCase().indexOf(q)>=0||(c.co&&c.co.toLowerCase().indexOf(q)>=0);}):S.clients;
+  if(!list.length){el.innerHTML='<div class="empty">لا توجد زبائن</div>';return;}
   el.innerHTML=list.map(function(c){
-    var bal=c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0);
+    var bal=c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0);
     var col=bal>0?'var(--rd)':bal<0?'var(--gn)':'var(--mt)';
     var lbl=bal>0?'🔴 عليه':bal<0?'🟢 له':'✅ مصفى';
     return '<div class="cc" onclick="openCl('+c.id+')">'+
@@ -604,26 +899,26 @@ function rCl(){
   }).join('');
 }
 function openCl(id){
-  var c=S.clients.find(function(x){ return x.id===id; }); if(!c)return;
-  var bal=c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0);
+  var c=S.clients.find(function(x){return x.id===id;});if(!c)return;
+  var bal=c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0);
   var bc=bal>0?'exp':bal<0?'inc':'info';
   var bl=bal>0?'🔴 متبقي عليه':bal<0?'🟢 متبقي له':'✅ مصفى';
   _clTxType='dr';
   var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="mt2" style="margin:0">👤 '+c.name+'</div><button class="btn-del" onclick="closeMod()" style="font-size:1.5rem">×</button></div>';
   if(c.co||c.phone||c.addr){
     h+='<div class="card" style="background:var(--bll);padding:10px;margin-bottom:9px">';
-    if(c.co) h+='<div style="font-size:0.76rem;color:var(--mt)">🏭 '+c.co+'</div>';
-    if(c.phone) h+='<div style="font-size:0.76rem;color:var(--mt)">📞 '+c.phone+'</div>';
-    if(c.addr) h+='<div style="font-size:0.76rem;color:var(--mt)">📍 '+c.addr+'</div>';
+    if(c.co)h+='<div style="font-size:0.76rem;color:var(--mt)">🏭 '+c.co+'</div>';
+    if(c.phone)h+='<div style="font-size:0.76rem;color:var(--mt)">📞 '+c.phone+'</div>';
+    if(c.addr)h+='<div style="font-size:0.76rem;color:var(--mt)">📍 '+c.addr+'</div>';
     h+='</div>';
   }
   h+='<div class="sc '+bc+'" style="margin-bottom:9px"><div class="sl '+bc+'">'+bl+'</div><div class="sa '+bc+'">'+fD(Math.abs(bal))+'</div><div class="sub">'+fIQ(Math.abs(bal)*rate())+'</div></div>';
   h+='<div style="display:flex;gap:7px;margin-bottom:10px"><button class="btn-prt" style="flex:1;justify-content:center" onclick="printClSt('+c.id+')">🖨️ طباعة كشف الحساب</button></div>';
   h+='<div class="card"><div class="ct">💳 إضافة دفعة أو حركة</div>'+
     '<div class="g3" style="margin-bottom:7px">'+
-    '<button id="bt-dr" class="tt" style="background:var(--rl);border-color:#EF9A9A;color:var(--rd)" onclick="setCT(\'dr\')">📤 مدين</button>'+
+    '<button id="bt-dr" class="tt" style="border-color:#EF9A9A;background:var(--rl);color:var(--rd)" onclick="setCT(\'dr\')">📤 مدين</button>'+
     '<button id="bt-cr" class="tt" onclick="setCT(\'cr\')">📥 دائن</button>'+
-    '<button id="bt-op" class="tt" style="background:var(--gdl);border-color:#FFCC02;color:var(--gd)" onclick="setCT(\'open\')">🏦 سابق</button>'+
+    '<button id="bt-op" class="tt" style="border-color:#FFCC02;background:var(--gdl);color:var(--gd)" onclick="setCT(\'open\')">🏦 رصيد سابق</button>'+
     '</div>'+
     '<input class="inp" type="text" id="ct-desc" placeholder="البيان (دفعة / رصيد سابق...)">'+
     '<div class="g2" style="margin-bottom:7px">'+
@@ -636,7 +931,8 @@ function openCl(id){
     h+='<div class="card"><div class="ct">📋 كشف الحساب ('+c.txs.length+' حركة)</div>';
     h+=c.txs.slice().reverse().map(function(t){
       return '<div class="txr"><div class="txi" style="background:'+(t.type==='dr'?'var(--rl)':'var(--gl)')+'">'+(t.type==='dr'?'📤':'📥')+'</div>'+
-        '<div style="flex:1"><div style="font-size:0.82rem;font-weight:600">'+(t.desc||'—')+'</div><div style="font-size:0.67rem;color:var(--mt)">'+t.date+'</div></div>'+
+        '<div style="flex:1"><div style="font-size:0.82rem;font-weight:600">'+(t.desc||'—')+'</div>'+
+        '<div style="font-size:0.67rem;color:var(--mt)">'+t.date+'</div></div>'+
         '<div style="font-weight:700;font-size:0.9rem;color:'+(t.type==='dr'?'var(--rd)':'var(--gn)')+';">'+(t.type==='dr'?'+':'-')+fD(t.amt)+'</div>'+
         '<button class="btn-del" onclick="delCT('+c.id+','+t.id+')">×</button></div>';
     }).join('');
@@ -650,57 +946,51 @@ function openCl(id){
 }
 function setCT(t){
   _clTxType=t;
-  ['dr','cr','op'].forEach(function(x){
-    var b=gel('bt-'+x); if(!b)return;
-    if(x==='dr') b.className='tt'+(t==='dr'?' on':'')+' '; b.style.cssText=t==='dr'&&x==='dr'?'background:var(--rd);border-color:#EF9A9A;color:var(--rd)':'';
-    if(x==='cr') b.className='tt'+(t==='cr'?' on':'');
-    if(x==='op') b.style.cssText=t==='open'?'background:var(--bl);border-color:var(--bl);color:white':'background:var(--gdl);border-color:#FFCC02;color:var(--gd)';
-  });
   var desc=gel('ct-desc');
-  if(desc) desc.placeholder=t==='open'?'رصيد سابق قبل النظام':t==='cr'?'دفعة نقدية / تحويل...':'بضاعة / آجل...';
+  if(desc)desc.placeholder=t==='open'?'رصيد سابق قبل النظام':t==='cr'?'دفعة نقدية / تحويل...':'بضاعة / آجل...';
 }
 function addCT(cid){
-  var c=S.clients.find(function(x){ return x.id===cid; }); if(!c)return;
+  var c=S.clients.find(function(x){return x.id===cid;});if(!c)return;
   var d=gnum('ct-d'),iq=gnum('ct-iq');
-  var amt=d>0?d:toD(iq), amtIQ=iq>0?iq:toIQ(d);
-  if(!amt){ toast('⚠️ أدخل المبلغ',true); return; }
+  var amt=d>0?d:toD(iq),amtIQ=iq>0?iq:toIQ(d);
+  if(!amt){toast('⚠️ أدخل المبلغ',true);return;}
   var type=_clTxType==='open'?'dr':_clTxType;
   var desc=gval('ct-desc')||(_clTxType==='open'?'رصيد سابق قبل النظام':type==='cr'?'دفعة':'حركة');
   var entry={id:Date.now(),type:type,desc:desc,amt:amt,amtIQ:amtIQ,date:gval('ct-dt')||dk};
-  if(_clTxType==='open') c.txs.unshift(entry); else c.txs.push(entry);
-  save(); closeMod(); openCl(cid); rCl();
+  if(_clTxType==='open')c.txs.unshift(entry);else c.txs.push(entry);
+  save();closeMod();openCl(cid);rCl();
   toast(_clTxType==='open'?'🏦 تم تسجيل الرصيد السابق!':'✅ تمت الإضافة!');
 }
 function delCT(cid,tid){
-  var c=S.clients.find(function(x){ return x.id===cid; }); if(!c)return;
-  c.txs=c.txs.filter(function(x){ return x.id!==tid; });
-  save(); closeMod(); openCl(cid); rCl();
+  var c=S.clients.find(function(x){return x.id===cid;});if(!c)return;
+  c.txs=c.txs.filter(function(x){return x.id!==tid;});
+  save();closeMod();openCl(cid);rCl();
 }
 function delCl(id){
   if(!confirm('حذف هذا الزبون وكل سجلاته؟'))return;
-  S.clients=S.clients.filter(function(x){ return x.id!==id; });
-  closeMod(); rCl(); fillSel(); save(); toast('🗑 تم الحذف');
+  S.clients=S.clients.filter(function(x){return x.id!==id;});
+  closeMod();rCl();fillSel();save();toast('🗑 تم الحذف');
 }
 function openEdit(id){
-  var c=S.clients.find(function(x){ return x.id===id; }); if(!c)return;
+  var c=S.clients.find(function(x){return x.id===id;});if(!c)return;
   _editId=id;
-  sval('ed-name',c.name||''); sval('ed-phone',c.phone||''); sval('ed-co',c.co||''); sval('ed-addr',c.addr||'');
-  gel('cl-modal').classList.remove('on');
-  gel('edit-modal').classList.add('on');
+  sval('ed-name',c.name||'');sval('ed-phone',c.phone||'');sval('ed-co',c.co||'');sval('ed-addr',c.addr||'');
+  gel('cl-modal').classList.remove('on');gel('edit-modal').classList.add('on');
 }
 function saveEdit(){
-  var c=S.clients.find(function(x){ return x.id===_editId; }); if(!c)return;
+  var c=S.clients.find(function(x){return x.id===_editId;});if(!c)return;
   var name=gval('ed-name').trim();
-  if(!name){ toast('⚠️ أدخل الاسم',true); return; }
-  c.name=name; c.phone=gval('ed-phone'); c.co=gval('ed-co'); c.addr=gval('ed-addr');
-  save(); closeMod(); rCl(); fillSel(); toast('✅ تم!');
+  if(!name){toast('⚠️ أدخل الاسم',true);return;}
+  c.name=name;c.phone=gval('ed-phone');c.co=gval('ed-co');c.addr=gval('ed-addr');
+  save();closeMod();rCl();fillSel();toast('✅ تم!');
 }
 function printClSt(id){
-  var c=S.clients.find(function(x){ return x.id===id; }); if(!c)return;
-  var bal=c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0);
+  var c=S.clients.find(function(x){return x.id===id;});if(!c)return;
+  var bal=c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0);
   var rows=c.txs.map(function(t){
     return '<tr><td style="padding:7px;border:1px solid #ddd">'+t.date+'</td><td style="padding:7px;border:1px solid #ddd">'+(t.desc||'—')+'</td>'+
-      (t.type==='dr'?'<td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(t.amt)+'</td><td></td>':'<td></td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:green;font-weight:700">'+fD(t.amt)+'</td>')+'</tr>';
+      (t.type==='dr'?'<td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(t.amt)+'</td><td></td>':
+      '<td></td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:green;font-weight:700">'+fD(t.amt)+'</td>')+'</tr>';
   }).join('');
   var html='<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:500px;margin:0 auto">'+
     '<div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px">'+
@@ -718,86 +1008,121 @@ function printClSt(id){
   w.document.close();
 }
 
-// ===== EXPENSES =====
-function sxSync(src){ var d=gnum('ex-d'),iq=gnum('ex-iq'); if(src==='d'&&d>0) sval('ex-iq',Math.round(d*rate())); if(src==='iq'&&iq>0) sval('ex-d',(iq/rate()).toFixed(2)); }
-function saveEx(){
-  var d=gnum('ex-d'),iq=gnum('ex-iq');
-  var amt=d>0?d:toD(iq), amtIQ=iq>0?iq:toIQ(d);
-  if(!amt){ toast('⚠️ أدخل المبلغ',true); return; }
-  S.expenses.push({id:Date.now(),cat:gval('ex-cat'),desc:gval('ex-desc'),amt:amt,amtIQ:amtIQ,date:gval('ex-date')||dk});
-  ['ex-desc','ex-d','ex-iq'].forEach(function(id){ sval(id,''); }); sval('ex-date',dk);
-  save(); rEx(); rRep(); toast('📤 تم تسجيل المصروف!');
+// ── DASHBOARD ──
+function rDash(){
+  var totRv=S.recv.reduce(function(s,r){return s+r.amt;},0);
+  var totEx=S.expenses.reduce(function(s,e){return s+e.amt;},0);
+  var totDebt=S.clients.reduce(function(s,c){var b=c.txs.reduce(function(s2,t){return s2+(t.type==='dr'?t.amt:-t.amt);},0);return s+(b>0?b:0);},0);
+  stxt('d-rv',fD(totRv));stxt('d-ex',fD(totEx));stxt('d-debt',fD(totDebt));stxt('d-net',fD(totRv-totEx));
 }
-function delEx(id){ S.expenses=S.expenses.filter(function(e){ return e.id!==id; }); save(); rEx(); rRep(); }
-function rEx(){
-  var cats={shipping:'🚢 شحن',customs:'🏛 جمارك',transport:'🚚 نقل',salary:'👷 رواتب',rent:'🏠 إيجار',ads:'📢 ترويج',maint:'🔧 صيانة',loan:'💸 سلفة',other:'📌 متفرقات'};
-  var from=gval('exf-from'),to=gval('exf-to');
-  var filtered=S.expenses.filter(function(e){ return (!from||e.date>=from)&&(!to||e.date<=to); });
-  stxt('ex-today',fD(S.expenses.filter(function(e){ return e.date===dk; }).reduce(function(s,e){ return s+e.amt; },0)));
-  stxt('ex-tot',fD(S.expenses.reduce(function(s,e){ return s+e.amt; },0)));
-  var el=gel('ex-list'); if(!el)return;
-  el.innerHTML=filtered.length?filtered.slice().reverse().map(function(e){
-    return '<div class="txr"><div class="txi" style="background:var(--gdl)">'+(cats[e.cat]||'📌').split(' ')[0]+'</div>'+
-      '<div style="flex:1"><div style="font-size:0.84rem;font-weight:700">'+(cats[e.cat]||e.cat)+(e.desc?' — '+e.desc:'')+'</div>'+
-      '<div style="font-size:0.67rem;color:var(--mt)">'+e.date+'</div></div>'+
-      '<div style="text-align:left"><div style="font-weight:700;color:var(--rd)">-'+fD(e.amt)+'</div><div style="font-size:0.64rem;color:var(--mt)">'+fIQ(e.amtIQ)+'</div></div>'+
-      '<button class="btn-del" onclick="delEx('+e.id+')">×</button></div>';
-  }).join(''):'<div class="empty">لا توجد مصروفات</div>';
-  var tl=gel('ex-tot-lbl');
-  if(tl){ var tot=filtered.reduce(function(s,e){ return s+e.amt; },0); tl.style.display=filtered.length?'block':'none'; tl.textContent='الإجمالي: '+fD(tot)+' / '+fIQ(Math.round(tot*rate())); }
+
+// ── REPORTS ──
+function rRepRv(){
+  var from=gval('rrv-from'),to=gval('rrv-to');
+  var list=S.recv.filter(function(r){return(!from||r.date>=from)&&(!to||r.date<=to);});
+  var tot=list.reduce(function(s,r){return s+r.amt;},0);
+  stxt('rrv-tot',fD(S.recv.reduce(function(s,r){return s+r.amt;},0)));
+  var el=gel('rrv-list');if(el){
+    var tL={cash:'💵 نقد',transfer:'🏦 تحويل',ajal:'📅 آجل',sale:'🏭 بيع'};
+    el.innerHTML=list.length?list.slice().reverse().map(function(r){
+      return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.84rem;font-weight:700">'+r.from+(r.desc?' — '+r.desc:'')+'</div>'+
+        '<div style="font-size:0.67rem;color:var(--mt)">'+(tL[r.type]||r.type)+' | '+r.date+'</div></div>'+
+        '<div style="font-weight:700;color:var(--gn)">'+fD(r.amt)+'</div></div>';
+    }).join(''):'<div class="empty">لا توجد مستلمات</div>';
+    var sub=gel('rrv-sub');if(sub){sub.style.display=list.length?'block':'none';sub.textContent='الإجمالي: '+fD(tot)+' / '+fIQ(Math.round(tot*rate()));}
+  }
 }
-function printEx(){
+function rRepEx(){
   var cats={shipping:'🚢 شحن بحري',customs:'🏛 جمارك',transport:'🚚 نقل',salary:'👷 رواتب',rent:'🏠 إيجار',ads:'📢 ترويج',maint:'🔧 صيانة',loan:'💸 سلفة',other:'📌 متفرقات'};
-  var from=gval('exf-from'),to=gval('exf-to');
-  var list=S.expenses.filter(function(e){ return (!from||e.date>=from)&&(!to||e.date<=to); });
-  var tot=list.reduce(function(s,e){ return s+e.amt; },0);
-  var rows=list.map(function(e){ return '<tr><td style="padding:7px;border:1px solid #ddd">'+e.date+'</td><td style="padding:7px;border:1px solid #ddd">'+(cats[e.cat]||e.cat)+'</td><td style="padding:7px;border:1px solid #ddd">'+(e.desc||'—')+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(e.amt)+'</td></tr>'; }).join('');
-  var html='<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:500px;margin:0 auto"><div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px"><div style="font-size:1.3rem;font-weight:900;color:#1565C0">الاتحاد للمكائن والمعدات</div><div style="font-weight:700;margin-top:5px">جرد المصروفات</div>'+(from||to?'<div style="font-size:0.78rem;color:#666;margin-top:3px">'+(from?'من: '+from:'')+' '+(to?'إلى: '+to:'')+'</div>':'')+'</div><table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px"><tr style="background:#FFEBEE"><th style="padding:7px;border:1px solid #ddd">التاريخ</th><th style="padding:7px;border:1px solid #ddd">البند</th><th style="padding:7px;border:1px solid #ddd">التفاصيل</th><th style="padding:7px;border:1px solid #ddd">المبلغ</th></tr>'+rows+'<tr style="background:#FFEBEE;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:red">'+fD(tot)+'</td></tr></table></div>';
-  var w=window.open('','_blank');
-  w.document.write('<html><head><meta charset="UTF-8"><title>جرد المصروفات</title><style>@import url(\'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap\');</style></head><body>'+html+'<script>window.onload=function(){window.print();};<\/script></body></html>');
+  var from=gval('rex-from'),to=gval('rex-to');
+  var list=S.expenses.filter(function(e){return(!from||e.date>=from)&&(!to||e.date<=to);});
+  var tot=list.reduce(function(s,e){return s+e.amt;},0);
+  stxt('rex-tot',fD(S.expenses.reduce(function(s,e){return s+e.amt;},0)));
+  var el=gel('rex-list');if(el){
+    el.innerHTML=list.length?list.slice().reverse().map(function(e){
+      return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.84rem;font-weight:700">'+(cats[e.cat]||e.cat)+(e.desc?' — '+e.desc:'')+'</div>'+
+        '<div style="font-size:0.67rem;color:var(--mt)">'+e.date+'</div></div>'+
+        '<div style="font-weight:700;color:var(--rd)">-'+fD(e.amt)+'</div></div>';
+    }).join(''):'<div class="empty">لا توجد مصروفات</div>';
+    var sub=gel('rex-sub');if(sub){sub.style.display=list.length?'block':'none';sub.textContent='الإجمالي: '+fD(tot)+' / '+fIQ(Math.round(tot*rate()));}
+  }
+}
+function rRepCl(){
+  var debtors=S.clients.filter(function(c){return c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0)>0;});
+  var tot=debtors.reduce(function(s,c){return s+c.txs.reduce(function(s2,t){return s2+(t.type==='dr'?t.amt:-t.amt);},0);},0);
+  stxt('rcl-tot',fD(tot));
+  var el=gel('rcl-list');if(el){
+    el.innerHTML=debtors.length?debtors.map(function(c){
+      var bal=c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0);
+      return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.88rem;font-weight:800">'+c.name+'</div>'+
+        (c.phone?'<div style="font-size:0.68rem;color:var(--mt)">📞 '+c.phone+'</div>':'')+
+        (c.co?'<div style="font-size:0.68rem;color:var(--mt)">🏭 '+c.co+'</div>':'')+
+        '</div><div style="font-weight:900;color:var(--rd);font-size:1rem">'+fD(bal)+'</div></div>';
+    }).join(''):'<div class="empty">لا توجد ديون ✅</div>';
+  }
+  // Invoices
+  var from=gval('rinv-from'),to=gval('rinv-to');
+  var invList=S.invoices.filter(function(i){return(!from||i.date>=from)&&(!to||i.date<=to);});
+  var el2=gel('rinv-list');if(el2){
+    el2.innerHTML=invList.length?invList.slice().reverse().map(function(inv){
+      return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.86rem;font-weight:800">'+inv.clName+'</div>'+
+        '<div style="font-size:0.72rem;color:var(--mt)">'+inv.details+'</div>'+
+        '<div style="font-size:0.67rem;color:var(--mt)">'+inv.date+'</div></div>'+
+        '<div style="text-align:left"><div style="font-weight:700;color:var(--bl)">'+fD(inv.totD)+'</div>'+
+        (inv.remD>0?'<div style="font-size:0.68rem;color:var(--rd)">متبقي: '+fD(inv.remD)+'</div>':'<div style="font-size:0.68rem;color:var(--gn)">✅</div>')+
+        '</div></div>';
+    }).join(''):'<div class="empty">لا توجد فواتير</div>';
+  }
+}
+
+// ── PRINT REPORTS ──
+function printRep(type){
+  var html='',title='',w;
+  if(type==='rv'){
+    var from=gval('rrv-from'),to=gval('rrv-to');
+    var list=S.recv.filter(function(r){return(!from||r.date>=from)&&(!to||r.date<=to);});
+    var tL={cash:'💵 نقد',transfer:'🏦 تحويل',ajal:'📅 آجل',sale:'🏭 بيع'};
+    var tot=list.reduce(function(s,r){return s+r.amt;},0);
+    var rows=list.map(function(r){return '<tr><td style="padding:7px;border:1px solid #ddd">'+r.date+'</td><td style="padding:7px;border:1px solid #ddd">'+r.from+'</td><td style="padding:7px;border:1px solid #ddd">'+(r.desc||'—')+'</td><td style="padding:7px;border:1px solid #ddd">'+(tL[r.type]||r.type)+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:green;font-weight:700">'+fD(r.amt)+'</td></tr>';}).join('');
+    html='<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px"><tr style="background:#E8F5E9"><th style="padding:7px;border:1px solid #ddd">التاريخ</th><th style="padding:7px;border:1px solid #ddd">المصدر</th><th style="padding:7px;border:1px solid #ddd">الوصف</th><th style="padding:7px;border:1px solid #ddd">النوع</th><th style="padding:7px;border:1px solid #ddd">المبلغ</th></tr>'+rows+'<tr style="background:#E8F5E9;font-weight:900"><td colspan="4" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:green">'+fD(tot)+'</td></tr></table>';
+    title='جرد المستلمات'+(from||to?' ('+(from?'من: '+from:'')+' '+(to?'إلى: '+to:'')+'）':'');
+  } else if(type==='ex'){
+    var cats={shipping:'🚢 شحن بحري',customs:'🏛 جمارك',transport:'🚚 نقل',salary:'👷 رواتب',rent:'🏠 إيجار',ads:'📢 ترويج',maint:'🔧 صيانة',loan:'💸 سلفة',other:'📌 متفرقات'};
+    var from2=gval('rex-from'),to2=gval('rex-to');
+    var list2=S.expenses.filter(function(e){return(!from2||e.date>=from2)&&(!to2||e.date<=to2);});
+    var tot2=list2.reduce(function(s,e){return s+e.amt;},0);
+    var rows2=list2.map(function(e){return '<tr><td style="padding:7px;border:1px solid #ddd">'+e.date+'</td><td style="padding:7px;border:1px solid #ddd">'+(cats[e.cat]||e.cat)+'</td><td style="padding:7px;border:1px solid #ddd">'+(e.desc||'—')+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(e.amt)+'</td></tr>';}).join('');
+    html='<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px"><tr style="background:#FFEBEE"><th style="padding:7px;border:1px solid #ddd">التاريخ</th><th style="padding:7px;border:1px solid #ddd">البند</th><th style="padding:7px;border:1px solid #ddd">التفاصيل</th><th style="padding:7px;border:1px solid #ddd">المبلغ</th></tr>'+rows2+'<tr style="background:#FFEBEE;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:red">'+fD(tot2)+'</td></tr></table>';
+    title='جرد المصروفات'+(from2||to2?' ('+(from2?'من: '+from2:'')+' '+(to2?'إلى: '+to2:'')+'）':'');
+  } else if(type==='cl'){
+    var debtors=S.clients.filter(function(c){return c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0)>0;});
+    var tot3=debtors.reduce(function(s,c){return s+c.txs.reduce(function(s2,t){return s2+(t.type==='dr'?t.amt:-t.amt);},0);},0);
+    var rows3=debtors.map(function(c){var bal=c.txs.reduce(function(s,t){return s+(t.type==='dr'?t.amt:-t.amt);},0);return '<tr><td style="padding:7px;border:1px solid #ddd;font-weight:700">'+c.name+'</td><td style="padding:7px;border:1px solid #ddd">'+(c.phone||'—')+'</td><td style="padding:7px;border:1px solid #ddd">'+(c.co||'—')+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(bal)+'</td></tr>';}).join('');
+    html='<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px"><tr style="background:#FFF3E0"><th style="padding:7px;border:1px solid #ddd">الزبون</th><th style="padding:7px;border:1px solid #ddd">الموبايل</th><th style="padding:7px;border:1px solid #ddd">الورشة</th><th style="padding:7px;border:1px solid #ddd">المتبقي</th></tr>'+rows3+'<tr style="background:#FFF3E0;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:red">'+fD(tot3)+'</td></tr></table>';
+    title='كشف ديون الزبائن — تاريخ: '+dk;
+  } else if(type==='inv'){
+    var from4=gval('rinv-from'),to4=gval('rinv-to');
+    var list4=S.invoices.filter(function(i){return(!from4||i.date>=from4)&&(!to4||i.date<=to4);});
+    var tot4=list4.reduce(function(s,i){return s+i.totD;},0);
+    var rows4=list4.map(function(inv){return '<tr><td style="padding:7px;border:1px solid #ddd">'+inv.date+'</td><td style="padding:7px;border:1px solid #ddd;font-weight:700">'+inv.clName+'</td><td style="padding:7px;border:1px solid #ddd;font-size:0.78rem">'+inv.details+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:#1565C0;font-weight:700">'+fD(inv.totD)+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:'+(inv.remD>0?'red':'green')+'">'+(inv.remD>0?fD(inv.remD):'✅')+'</td></tr>';}).join('');
+    html='<table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:12px"><tr style="background:#E3F2FD"><th style="padding:6px;border:1px solid #ddd">التاريخ</th><th style="padding:6px;border:1px solid #ddd">الزبون</th><th style="padding:6px;border:1px solid #ddd">التفاصيل</th><th style="padding:6px;border:1px solid #ddd">الإجمالي</th><th style="padding:6px;border:1px solid #ddd">المتبقي</th></tr>'+rows4+'<tr style="background:#E3F2FD;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:#1565C0">'+fD(tot4)+'</td><td></td></tr></table>';
+    title='جرد الفواتير'+(from4||to4?' ('+(from4?'من: '+from4:'')+' '+(to4?'إلى: '+to4:'')+'）':'');
+  }
+  var full='<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:600px;margin:0 auto">'+
+    '<div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px">'+
+    '<div style="font-size:1.3rem;font-weight:900;color:#1565C0">الاتحاد للمكائن والمعدات</div>'+
+    '<div style="font-weight:700;margin-top:5px">'+title+'</div></div>'+html+
+    '<div style="text-align:center;font-size:0.74rem;color:#999;margin-top:10px">تاريخ الطباعة: '+dk+'</div></div>';
+  w=window.open('','_blank');
+  w.document.write('<html><head><meta charset="UTF-8"><title>'+title+'</title><style>@import url(\'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap\');</style></head><body>'+full+'<script>window.onload=function(){window.print();};<\/script></body></html>');
   w.document.close();
 }
 
-// ===== REPORTS =====
-function rRep(){
-  var totInv=S.invoices.reduce(function(s,i){ return s+i.totD; },0);
-  var totEx=S.expenses.reduce(function(s,e){ return s+e.amt; },0);
-  var totDebt=S.clients.reduce(function(s,c){ var b=c.txs.reduce(function(s2,t){ return s2+(t.type==='dr'?t.amt:-t.amt); },0); return s+(b>0?b:0); },0);
-  stxt('rep-inv',fD(totInv)); stxt('rep-ex',fD(totEx)); stxt('rep-debt',fD(totDebt)); stxt('rep-net',fD(totInv-totEx));
-  var from=gval('repf-from'),to=gval('repf-to');
-  var invL=S.invoices.filter(function(i){ return (!from||i.date>=from)&&(!to||i.date<=to); });
-  var el1=gel('rep-inv-list'); if(el1) el1.innerHTML=invL.length?invL.slice().reverse().map(function(inv){ return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.86rem;font-weight:800">'+inv.clName+'</div><div style="font-size:0.72rem;color:var(--mt);margin:2px 0">'+inv.details+'</div><div style="font-size:0.67rem;color:var(--mt)">'+inv.date+'</div></div><div style="text-align:left"><div style="font-weight:700;color:var(--bl)">'+fD(inv.totD)+'</div>'+(inv.remD>0?'<div style="font-size:0.68rem;color:var(--rd)">متبقي: '+fD(inv.remD)+'</div>':'<div style="font-size:0.68rem;color:var(--gn)">✅ مسددة</div>')+'</div></div>'; }).join(''):'<div class="empty">لا توجد فواتير</div>';
-  var debtors=S.clients.filter(function(c){ return c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0)>0; });
-  var el2=gel('rep-debt-list'); if(el2) el2.innerHTML=debtors.length?debtors.map(function(c){ var bal=c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0); return '<div class="txr" style="padding:8px"><div style="flex:1"><div style="font-size:0.88rem;font-weight:800">'+c.name+'</div>'+(c.phone?'<div style="font-size:0.68rem;color:var(--mt)">📞 '+c.phone+'</div>':'')+'</div><div style="font-weight:900;color:var(--rd);font-size:1rem">'+fD(bal)+'</div></div>'; }).join(''):'<div class="empty">لا توجد ديون ✅</div>';
-}
-function printRep(type){
-  if(type==='debt'){
-    var debtors=S.clients.filter(function(c){ return c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0)>0; });
-    var tot=debtors.reduce(function(s,c){ return s+c.txs.reduce(function(s2,t){ return s2+(t.type==='dr'?t.amt:-t.amt); },0); },0);
-    var rows=debtors.map(function(c){ var bal=c.txs.reduce(function(s,t){ return s+(t.type==='dr'?t.amt:-t.amt); },0); return '<tr><td style="padding:7px;border:1px solid #ddd;font-weight:700">'+c.name+'</td><td style="padding:7px;border:1px solid #ddd">'+(c.phone||'—')+'</td><td style="padding:7px;border:1px solid #ddd">'+(c.co||'—')+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:red;font-weight:700">'+fD(bal)+'</td></tr>'; }).join('');
-    var html='<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:500px;margin:0 auto"><div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px"><div style="font-size:1.3rem;font-weight:900;color:#1565C0">الاتحاد للمكائن والمعدات</div><div style="font-weight:700;margin-top:5px">كشف ديون الزبائن</div><div style="font-size:0.74rem;color:#666;margin-top:3px">تاريخ: '+dk+'</div></div><table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:12px"><tr style="background:#FFF3E0"><th style="padding:7px;border:1px solid #ddd">الزبون</th><th style="padding:7px;border:1px solid #ddd">الموبايل</th><th style="padding:7px;border:1px solid #ddd">الورشة</th><th style="padding:7px;border:1px solid #ddd">المتبقي</th></tr>'+rows+'<tr style="background:#FFF3E0;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:red">'+fD(tot)+'</td></tr></table></div>';
-    var w=window.open('','_blank'); w.document.write('<html><head><meta charset="UTF-8"><title>ديون</title><style>@import url(\'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap\');</style></head><body>'+html+'<script>window.onload=function(){window.print();};<\/script></body></html>'); w.document.close(); return;
-  }
-  if(type==='inv'){
-    var from=gval('repf-from'),to=gval('repf-to');
-    var list=S.invoices.filter(function(i){ return (!from||i.date>=from)&&(!to||i.date<=to); });
-    var tot2=list.reduce(function(s,i){ return s+i.totD; },0);
-    var rows2=list.map(function(inv){ return '<tr><td style="padding:7px;border:1px solid #ddd">'+inv.date+'</td><td style="padding:7px;border:1px solid #ddd;font-weight:700">'+inv.clName+'</td><td style="padding:7px;border:1px solid #ddd;font-size:0.78rem">'+inv.details+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:#1565C0;font-weight:700">'+fD(inv.totD)+'</td><td style="padding:7px;border:1px solid #ddd;text-align:center;color:'+(inv.remD>0?'red':'green')+'">'+(inv.remD>0?fD(inv.remD):'✅')+'</td></tr>'; }).join('');
-    var html2='<div style="font-family:Cairo,Tajawal,sans-serif;padding:20px;direction:rtl;max-width:600px;margin:0 auto"><div style="text-align:center;border-bottom:2px solid #1565C0;padding-bottom:12px;margin-bottom:15px"><div style="font-size:1.3rem;font-weight:900;color:#1565C0">الاتحاد للمكائن والمعدات</div><div style="font-weight:700;margin-top:5px">جرد فواتير البيع</div>'+(from||to?'<div style="font-size:0.78rem;color:#666;margin-top:3px">'+(from?'من: '+from:'')+' '+(to?'إلى: '+to:'')+'</div>':'')+'</div><table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:12px"><tr style="background:#E3F2FD"><th style="padding:6px;border:1px solid #ddd">التاريخ</th><th style="padding:6px;border:1px solid #ddd">الزبون</th><th style="padding:6px;border:1px solid #ddd">التفاصيل</th><th style="padding:6px;border:1px solid #ddd">الإجمالي</th><th style="padding:6px;border:1px solid #ddd">المتبقي</th></tr>'+rows2+'<tr style="background:#E3F2FD;font-weight:900"><td colspan="3" style="padding:9px;border:1px solid #ddd">الإجمالي</td><td style="padding:9px;border:1px solid #ddd;text-align:center;color:#1565C0">'+fD(tot2)+'</td><td></td></tr></table></div>';
-    var w2=window.open('','_blank'); w2.document.write('<html><head><meta charset="UTF-8"><title>جرد الفواتير</title><style>@import url(\'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap\');</style></head><body>'+html2+'<script>window.onload=function(){window.print();};<\/script></body></html>'); w2.document.close();
-  }
-}
-
-// ===== INIT =====
-function initApp(){
-  sval('inv-date',dk); sval('ex-date',dk); sval('exrate',S.exrate);
-  rCl(); rEx(); fillSel();
-  ['repf-from','repf-to','exf-from','exf-to'].forEach(function(id){ var el=gel(id); if(el) el.addEventListener('change',function(){ rEx(); rRep(); }); });
-}
-document.querySelectorAll('.modal').forEach(function(m){ m.addEventListener('click',function(e){ if(e.target===m) closeMod(); }); });
-// Enter key on login
-gel('pin-inp').addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+// ── FILTER LISTENERS ──
+['rrv-from','rrv-to'].forEach(function(id){var el=gel(id);if(el)el.addEventListener('change',rRepRv);});
+['rex-from','rex-to'].forEach(function(id){var el=gel(id);if(el)el.addEventListener('change',rRepEx);});
+['rinv-from','rinv-to'].forEach(function(id){var el=gel(id);if(el)el.addEventListener('change',rRepCl);});
 </script>
-<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>
